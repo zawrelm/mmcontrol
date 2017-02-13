@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:icecore="http://www.icefaces.org/icefaces/core"
+      xmlns:ace="http://www.icefaces.org/icefaces/components"
+      xmlns:mc="http://java.sun.com/jsf/composite/mycomponents">
+    <h:body>
+        <ui:composition template="./WEB-INF/includes/template.xhtml">
+            <ui:define name="accessibility_menu">
+                <ul class="accessibility">
+                        <li><a href="#name" accesskey="0">#{msg.email}</a></li>
+                        <li><a href="#password" accesskey="1">#{msg.password}</a></li>
+                        <li><a href="#login" accesskey="2">#{msg.login}</a></li>
+                </ul>
+            </ui:define>
+            <ui:define name="content">
+                <p>
+                    <mc:login password="#{loginCtrl.password}" username="#{loginCtrl.email}" action="#{loginCtrl.login}" />
+                    <h:outputText style="padding:10px; color:red;" value="#{msg.wrongpwd}" rendered="#{loginCtrl.loginfailed}" />
+                    <h:messages style="color: blue"/>
+                </p>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

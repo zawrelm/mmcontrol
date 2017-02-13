@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:composite="http://java.sun.com/jsf/composite"
+        xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+  <composite:interface>
+      <composite:attribute name="username" required="false"/>
+      <composite:attribute name="password" required="false"/>
+      <composite:attribute name="action" required="true" method-signature="java.lang.String f()"/>
+  </composite:interface>
+
+  <!-- IMPLEMENTATION -->
+  <composite:implementation>
+      <h:form style="padding:10px;" id="form">
+        <h:outputLabel value="#{msg.username}:" for="name" /><br />
+        <h:inputText label="#{msg.username}" id="name" value="#{cc.attrs.username}" /><br />
+        <h:outputLabel value="#{msg.password}:" for="password" /><br />
+        <h:inputSecret label="#{msg.password}" id="password" value="#{cc.attrs.password}" /><br />
+        <h:commandButton id="login" value="#{msg.login}" action="#{cc.attrs.action}"/>
+    </h:form>
+  </composite:implementation>
+</html>

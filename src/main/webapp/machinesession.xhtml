@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:icecore="http://www.icefaces.org/icefaces/core"
+      xmlns:ace="http://www.icefaces.org/icefaces/components">
+    <h:body>
+        <ui:composition template="./WEB-INF/includes/template.xhtml">
+
+            <ui:define name="content">
+                <div id="main">
+                    <h2>#{msg.session}</h2>
+                        <h:form id="session">
+                            <span>#{msg.user}: #{loginCtrl.user.title}, #{loginCtrl.user.firstname} #{loginCtrl.user.lastname}" 
+                                (#{msg.since} #{loginCtrl.user.currentSession.beginTime})</span><br/>
+                            <!--span>#{msg.observers} (#{msg.invite}): Dr. Jorge Bauer, Dr. Numan Durakbasa </span><br/-->
+                            <!--span>
+                                <h:outputLabel value="#{msg.whichprobinghead}" for="probinghead" />
+                                <h:selectOneMenu id="probinghead" label="#{msg.whichprobinghead}" required="true"> <value="#{sessionCtrl.head}"> converter="ProbingHeadConverter">
+                                    <f:selectItems value="#{inventoryCtrl.heads}" />
+                                </h:selectOneMenu><br />
+                            </span-->
+                            <span>
+                                <h:outputLabel value="#{msg.machine}:" for="machineselection" />
+                                <h:selectOneMenu id="machineselection" label="#{msg.machine}" required="true" value="#{loginCtrl.selectedMachine}" converter="MachineConverter">
+                                    <f:selectItems value="#{mainCtrl.machineMgmt.listOfConnectedMachines}" />
+                                </h:selectOneMenu><br />
+                            </span>
+                            <span>#{msg.mountobject}</span><br/>
+                        </h:form>
+                    <div id="controlpanel">
+                        #{msg.calibrar}<br/>
+                        <ul>
+                            <li>#{msg.probe_norecord}</li>
+                            <li>#{msg.probe_withrecord}</li>
+                            <li>#{msg.probe_automatically}</li>
+                        </ul>
+                        <hr/>
+                        <h2>#{msg.probefunctions}</h2>
+                        <h:form>
+                            <div id="buttons">
+                                <h:commandButton value="#{msg.plane_in3}" /><br/>
+                                <h:commandButton value="#{msg.insidediameter_in3}" /><br/>
+                                <h:commandButton value="#{msg.outsidediameter_in3}" /><br/>
+                                <h:commandButton value="#{msg.point_in3}" /><br/>
+                                <h:commandButton value="#{msg.distancepointplane_in3}" /><br/>
+                                <h:commandButton value="#{msg.distanceparallelplanes_in3}" /><br/>
+                            </div>
+                        </h:form>
+                        <div class="points">
+                            #{msg.point} 1:<br/>
+                            #{msg.point} 2:<br/>
+                            #{msg.point} 3:<br/>
+                            ...<br/>
+                        </div>
+                        <h:form>
+                            <div id="buttons">
+                                <h:commandButton value="#{msg.buttonfast}" /><br/>
+                                <h:commandButton value="X-" /><br/>
+                                <h:commandButton value="X+" /><br/>
+                                <h:commandButton value="Y-" /><br/>
+                                <h:commandButton value="Y+" /><br/>
+                                <h:commandButton value="Z-" /><br/>
+                                <h:commandButton value="Z+" /><br/>
+                                <h:commandButton value="#{msg.buttonmeasure}" /><br/>
+                                <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
+                            </div>
+                        </h:form>
+                        <div class="position">
+                            X:<br/>
+                            Y:<br/>
+                            Z:<br/>
+                            #{msg.contact}: 0
+                        </div>
+                    </div>
+                    <div class="protocol">
+                        <h2>#{msg.protocol}</h2>
+                        0:<br/>
+                        1:<br/>
+                        ..<br/>
+                    </div>
+                    <hr/>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

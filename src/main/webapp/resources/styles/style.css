@@ -1,0 +1,126 @@
+/* Inspired by https://wiki.selfhtml.org/wiki/CSS/Templates/Template1 */
+
+/* ======================= GLOBAL DEFINITIONS (classes) ======================= */
+
+.accessibility {
+	visibility:hidden;
+	width:0;
+	height:0;
+	position:absolute;
+	left:-999px;
+	top:-999px;
+}
+
+html {
+	padding: 5px 0%;
+        background-color: #FFFFFF;
+}
+
+body {
+	width: 950px;
+	margin: 0px auto;
+	font-size: 0.75em; /* 80%? */
+	font-weight: normal;
+	font-family: Arial; /*sans-serif?*/
+	/*color: #4B4B4B;*/
+	 background: #FFFFFF;
+}
+
+a {
+	color: #843953;
+	font-weight: bold;
+}
+
+a:hover,
+a:focus {
+	color: #8F8F90;
+}
+
+/* ======================= HEADER ======================= */
+
+#header {
+        margin-bottom: 80px;
+}
+
+#header h1 {
+	text-indent: -999em;
+	height: 140px;
+        margin: 0px;
+        background: #EAEAEA;
+}
+
+#logo {
+	float: left;
+	margin: 0px 0px 0px 10px;
+	padding: 50px 0 50px 400px;
+	background: url('../img/logo_calibri.png') no-repeat left;
+	text-decoration: none;
+}
+
+
+/* ======================= NAVIGATION ======================= */
+
+#navigation {
+	float: left;
+	width: 100%;
+	list-style-type: none;
+	box-shadow: 0 10px 5px 0 rgba(0, 0, 0, 0.75);
+	position: relative;
+	display: block;
+	text-align: center;
+	margin: 0 auto 0px;
+}
+
+#navigation ul {
+	float: left;
+	width: 100%;
+        margin: 0px 0 0 0;
+	list-style-type: none;
+	background: #7C2D48;
+}
+
+#navigation ul li {
+	float: left;
+}
+
+#navigation ul li:first-child {
+	/*margin-left: 2%;*/
+}
+
+#navigation ul li a {
+	float: left;
+	padding: 16px 0 16px 16px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#navigation ul li a:after {
+	content: " | ";
+	color: #ffa323;
+	margin-left: 20px;
+}
+
+#navigation li a:hover,
+#navigation li a:focus {
+	background: #6D273F;
+}
+
+/* ======================= CONTENT ======================= */
+
+#main {
+	display: block;
+	position: relative;
+	width: 100%;
+        background: #F8F8F8;
+        box-shadow: 0 10px 5px 0 rgba(0, 0, 0, 0.75);
+        border-style: solid;
+        border-width: 1px;
+        border-color: #EAEAEA;
+}
+
+
+/* ======================= FOOTER ======================= */
+
+#footer {
+        margin-top: 20px;
+}

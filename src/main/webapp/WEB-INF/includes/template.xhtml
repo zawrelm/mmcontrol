@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+	<h:head>
+		<title>#{msg.pagetitle}</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8"/>
+		<meta name="description" content="#{msg.description}"/>
+		<meta name="keywords" content="#{msg.keywords}"/>
+                <meta name="author" content="zawrelm"/>
+                <!--http://stackoverflow.com/questions/8367421/how-to-reference-css-js-image-resource-in-facelets-template-->
+                <h:outputStylesheet name="styles/style.css" />
+	</h:head>
+	<h:body>
+                <div id="header">
+			<h1>
+                            <h:link id="logo" title="#{msg.pagetitle}" outcome="/start.xhtml" value="#{msg.pagetitle}"/>
+                        </h1>
+                        <div id="navigation">
+                            <h2 class="accessibility">#{msg.navigation}</h2>
+                            <ul>
+                                <li><h:link outcome="/machinesession.xhtml" value="#{msg.menu_connect}"/></li>
+                                <!--li><h:link outcome="/administration.xhtml" value="#{msg.menu_configure}"/></li-->
+                                <!--li><h:link outcome="/logs.xhtml" value="#{msg.menu_logs}"/></li-->
+                            </ul>
+                        </div>
+                </div>
+                <ui:insert name="accessibility_menu" />
+		<hr class="accessibility" />
+                <ui:insert name="content" />								
+		<div id="footer">
+                        <p>&copy; 2016 #{msg.pagetitle}</p>
+		</div>
+        </h:body>
+</html>

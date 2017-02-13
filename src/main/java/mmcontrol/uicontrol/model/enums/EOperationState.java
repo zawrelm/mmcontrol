@@ -1,0 +1,19 @@
+package mmcontrol.uicontrol.model.enums;
+
+/**
+ *
+ * @author Michael Zawrel
+ */
+public enum EOperationState {
+    
+    WAITING,
+    SHAPE1_0_POINTS_MEASURED,
+    SHAPE1_1_POINT_MEASURED,
+    SHAPE1_2_POINTS_MEASURED,
+    SHAPE1_SUFFICIENT_POINTS_MEASURED,
+    SHAPE2_0_POINTS_MEASURED,
+    SHAPE2_1_POINT_MEASURED,
+    SHAPE2_2_POINTS_MEASURED,
+    SHAPE2_SUFFICIENT_POINTS_MEASURED
+    
+}
