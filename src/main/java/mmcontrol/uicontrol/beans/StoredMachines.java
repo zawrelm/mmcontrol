@@ -21,7 +21,6 @@ import mmcontrol.uicontrol.impl.MachineStateUpdateServiceImpl;
 import mmcontrol.uicontrol.model.Machine;
 import mmcontrol.uicontrol.model.User;
 import mmcontrol.uicontrol.model.enums.EMachineState;
-import org.icefaces.application.PushRenderer;
 
 /**
  * This class stores all the registered Machines and manages MachineSessions.
@@ -156,7 +155,6 @@ public class StoredMachines {
                 } catch (NotBoundException | IOException ex) {
                     throw new MachineUnreachableException();
                 }
-                PushRenderer.render("machines");
                 return;
             }
         }
@@ -179,7 +177,6 @@ public class StoredMachines {
             } catch(NullPointerException | UserNotFoundException ex) {}
 
             this.machines.get(machineId).endSession();
-            PushRenderer.render("machines");
         }
         else {
             System.out.println("Error at ending session for machine with ID " +machineId);

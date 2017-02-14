@@ -36,19 +36,23 @@ public class ProbeSessionCtrl {
 
     }
 
-    public void startProbeWithoutRecording(long machineId) {
+    public void startProbeWithoutRecording() {
+        long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new Probe(machineId));
         this.main.getMachineMgmt().getMachines().get(machineId).setState(EMachineState.PROBING_WITHOUT_RECORDING);
+        System.out.println("Probe started on machine: " +machineId);
         PushRenderer.render("session");
     }
     
-    public void startProbeWithRecording(long machineId) {
+    public void startProbeWithRecording() {
+        long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgram(machineId));
         this.main.getMachineMgmt().getMachines().get(machineId).setState(EMachineState.PROBING_AND_RECORDING);
         PushRenderer.render("session");
     }
 
-    public void startProbeProgramExecution(long machineId, ProbeProgram program) {
+    public void startProbeProgramExecution(ProbeProgram program) {
+        long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgramExecution(machineId));
         this.main.getMachineMgmt().getMachines().get(machineId).setState(EMachineState.PROBING_PROGRAM_RUNNING);
         PushRenderer.render("session");

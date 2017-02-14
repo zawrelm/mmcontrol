@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:icecore="http://www.icefaces.org/icefaces/core"
-      xmlns:ace="http://www.icefaces.org/icefaces/components">
+      xmlns:ace="http://www.icefaces.org/icefaces/components"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:body>
         <ui:composition template="./WEB-INF/includes/template.xhtml">
 
@@ -24,22 +25,30 @@
                             </span-->
                             <span>
                                 <h:outputLabel value="#{msg.machine}:" for="machineselection" />
-                                <h:selectOneMenu id="machineselection" label="#{msg.machine}" required="true" value="#{loginCtrl.selectedMachine}" converter="MachineConverter">
-                                    <f:selectItems value="#{mainCtrl.machineMgmt.listOfConnectedMachines}" />
-                                </h:selectOneMenu><br />
+                                <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" value="#{loginCtrl.selectedMachine}">
+                                    <ace:ajax />
+                                    <f:converter converterId="#{machineConverter}"/>
+                                    <f:selectItem itemLabel="-Select-" itemValue="None" noSelectionOption="true" />
+                                    <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
+                                        <f:selectItem itemValue="#{currentMachine}"/>
+                                    </c:forEach>
+                                    <!--f:selectItems value="#{mainCtrl.machineMgmt.listOfConnectedMachines}" /-->
+                                </ace:simpleSelectOneMenu><br />
                             </span>
                             <span>#{msg.mountobject}</span><br/>
+                            <ul>
+                                <li><h:commandButton id="startProbeNoRec" value="#{msg.probe_norecord}" 
+                                                     action="#{sessionCtrl.startProbeWithoutRecording()}" 
+                                                     rendered="#{!empty loginCtrl.selectedMachine}" /></li>
+                                <li>Not implemented: #{msg.probe_withrecord}</li>
+                                <li>Not implemented: #{msg.probe_automatically}</li>
+                            </ul>
+                        <hr/>
                         </h:form>
                     <div id="controlpanel">
                         #{msg.calibrar}<br/>
-                        <ul>
-                            <li>#{msg.probe_norecord}</li>
-                            <li>#{msg.probe_withrecord}</li>
-                            <li>#{msg.probe_automatically}</li>
-                        </ul>
-                        <hr/>
                         <h2>#{msg.probefunctions}</h2>
-                        <h:form>
+                        <h:form id="control">
                             <div id="buttons">
                                 <h:commandButton value="#{msg.plane_in3}" /><br/>
                                 <h:commandButton value="#{msg.insidediameter_in3}" /><br/>

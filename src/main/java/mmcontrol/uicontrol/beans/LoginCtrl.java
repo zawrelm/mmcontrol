@@ -128,6 +128,8 @@ public class LoginCtrl implements Serializable {
 
     public void setSelectedMachine(Machine selectedMachine) {
         this.selectedMachine = selectedMachine;
+        System.out.println("Machine selected!");
+        PushRenderer.render("session");
     }
 
     public void setMain(MainCtrl main) {

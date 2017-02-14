@@ -59,6 +59,7 @@ public class Machine implements Serializable {
         //TODO: read from database of config file!
         this.id = id;
         this.name = "NUMEREX simuliert";
+        this.type = "Numerex";
         this.state = EMachineState.INACTIVE;
         this.operation = EOperation.WAITING_FOR_CALIBRATION;
         this.operationState = EOperationState.WAITING;
@@ -236,6 +237,10 @@ public class Machine implements Serializable {
 
     @Override
     public String toString() {
+        return "ID: " +this.id +", " +this.name + " (" +this.type +")";
+    }
+    
+    public String getStateAsString() {
         String text = this.name + ":\n";
         for(MachineComponent component : this.components) {
             text += component.getName() + ": " + component.getValueAsString() +"\n";
