@@ -151,7 +151,7 @@ public class StoredMachines {
                     System.out.println(names);
                     
                     this.machines.get(machineId).startSession((IMachineCommunicationService) registry.lookup(this.bindingNameCS + machineId));
-                    System.out.println("so2");
+                    System.out.println("Session with machine " +machineId +" established!");
                 } catch (NotBoundException | IOException ex) {
                     throw new MachineUnreachableException();
                 }

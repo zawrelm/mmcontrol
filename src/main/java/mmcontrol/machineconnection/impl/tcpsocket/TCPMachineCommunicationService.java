@@ -37,10 +37,10 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
     private Socket socket;
     private IMachineConnectionService cs;
     
-    Registry registry;
-    String bindingNameCS; //CS = CommunicationService
-    String bindingNameSUS; //SUS = StateUpdateService
-    IMachineStateUpdateService stateUpdateService;
+    private Registry registry;
+    private String bindingNameCS; //CS = CommunicationService
+    private String bindingNameSUS; //SUS = StateUpdateService
+    private IMachineStateUpdateService stateUpdateService;
     
     public TCPMachineCommunicationService() throws RemoteException { }
     
@@ -76,7 +76,7 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
                     registry = LocateRegistry.getRegistry(host, port);
 
                     registry.rebind(bindingNameCS+this.machineId, this);
-                    System.out.println(bindingNameCS+this.machineId +" running!");
+                    System.out.print(bindingNameCS+this.machineId +" running!");
                     
                     try {
                         String response;

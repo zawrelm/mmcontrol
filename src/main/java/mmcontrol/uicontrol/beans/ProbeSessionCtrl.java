@@ -5,6 +5,7 @@
  */
 package mmcontrol.uicontrol.beans;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -21,7 +22,7 @@ import org.icefaces.application.PushRenderer;
  */
 @ManagedBean(name="sessionCtrl")
 @SessionScoped
-public class ProbeSessionCtrl {
+public class ProbeSessionCtrl implements Serializable {
     
     @ManagedProperty(value="#{loginCtrl}")
     private LoginCtrl loginCtrl;

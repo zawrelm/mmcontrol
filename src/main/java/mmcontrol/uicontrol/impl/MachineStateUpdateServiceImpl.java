@@ -31,18 +31,16 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
     }
 
     @Override
-    public void informActiveMachines(HashSet<Long> machineIds) throws RemoteException { //TODO: Change to, Long[]???)
+    public void informActiveMachines(HashSet<Long> machineIds) throws RemoteException {
         if(machineIds != null) {
             for(Long mid : machineIds) {
-                System.out.println("aha");
+                System.out.println("Activate: " +mid);
                 this.activateMachine(mid);
             }
         }
-        System.out.println("aha1");
-        for(Long mid : this.control.getMachines().keySet()) { //TODO: test initialization of control
-            System.out.println("aha2");
+        for(Long mid : this.control.getMachines().keySet()) {
             if(machineIds == null || !machineIds.contains(mid)){
-                System.out.println("aha3");
+                System.out.println("Deactivate: " +mid);
                 this.deactivateMachine(mid);
             }
         }
@@ -85,7 +83,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
         System.out.println("CHANGE IN STATE OF MACHINE " + machineId + " RECEIVED VIA RMI!");
     }
 
-    private boolean activateMachine(Long mid) {
+    private boolean activateMachine(Long mid) throws MachineUnreachableException {
         Machine temp = this.control.getMachines().get(mid);
                 
         //TODO: when DB, don't create new Machines (only create session)
@@ -98,7 +96,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
             try {
                 this.control.createMachineSession(mid);
                 return true;
-            } catch (MachineUnreachableException | MachineOperationTemporarilyForbiddenException ex) {
+            } catch (MachineOperationTemporarilyForbiddenException ex) {
                 Logger.getLogger(MachineStateUpdateServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

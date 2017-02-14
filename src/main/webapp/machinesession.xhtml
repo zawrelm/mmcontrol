@@ -27,7 +27,7 @@
                                 <h:outputLabel value="#{msg.machine}:" for="machineselection" />
                                 <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" value="#{loginCtrl.selectedMachine}">
                                     <ace:ajax />
-                                    <f:converter converterId="#{machineConverter}"/>
+                                    <f:converter binding="#{machineConverter}"/>
                                     <f:selectItem itemLabel="-Select-" itemValue="None" noSelectionOption="true" />
                                     <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
                                         <f:selectItem itemValue="#{currentMachine}"/>

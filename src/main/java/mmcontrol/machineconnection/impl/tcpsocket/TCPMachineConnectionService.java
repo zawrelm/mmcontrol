@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mmcontrol.common.exceptions.MachineUnreachableException;
 import mmcontrol.common.interfaces.machineconnection.IMachineCommunicationService;
 import mmcontrol.common.interfaces.machineconnection.IPullMachineStateUpdateService;
@@ -258,10 +260,20 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
         }
 
         try {
-            switch (event) { //TODO: find source of remoteException in this switch-statement!!!
+            switch (event) {
                 case MACHINE_CONNECTED:
                     System.out.print("SUS: inform connect...");
-                    stateUpdateService.informMachineConnected(machineId);
+                    for(int i = 0; i < 10; i++) { // Retry until CommunicationService is registered
+                        try {
+                            stateUpdateService.informMachineConnected(machineId);
+                            continue;
+                        } catch (MachineUnreachableException e) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException ex) { }
+                            System.out.printf("retry...");
+                        }
+                    }
                     break;
                 case MACHINE_DISCONNECTED:
                     System.out.print("SUS: inform disconnect...");
@@ -276,7 +288,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                     }
                     break;
             }
-            System.out.println("informed!");
+            System.out.println(" ...informed!");
         } catch (NoSuchObjectException e) {
             stateUpdateService = null;
             System.out.println("SUS NOT FOUND! Object has been reset!\n");
