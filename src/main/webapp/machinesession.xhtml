@@ -25,14 +25,14 @@
                             </span-->
                             <span>
                                 <h:outputLabel value="#{msg.machine}:" for="machineselection" />
-                                <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" value="#{loginCtrl.selectedMachine}">
+                                <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
+                                                         value="#{loginCtrl.selectedMachine}" rendered="#{empty loginCtrl.selectedMachine}">
                                     <ace:ajax />
                                     <f:converter binding="#{machineConverter}"/>
                                     <f:selectItem itemLabel="-Select-" itemValue="None" noSelectionOption="true" />
                                     <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
                                         <f:selectItem itemValue="#{currentMachine}"/>
                                     </c:forEach>
-                                    <!--f:selectItems value="#{mainCtrl.machineMgmt.listOfConnectedMachines}" /-->
                                 </ace:simpleSelectOneMenu><br />
                             </span>
                             <span>#{msg.mountobject}</span><br/>
@@ -48,7 +48,7 @@
                     <div id="controlpanel">
                         #{msg.calibrar}<br/>
                         <h2>#{msg.probefunctions}</h2>
-                        <h:form id="control">
+                        <h:form id="control" rendered="#{!empty operationCtrl.session.endTime}">
                             <div id="buttons">
                                 <h:commandButton value="#{msg.plane_in3}" /><br/>
                                 <h:commandButton value="#{msg.insidediameter_in3}" /><br/>
@@ -57,14 +57,15 @@
                                 <h:commandButton value="#{msg.distancepointplane_in3}" /><br/>
                                 <h:commandButton value="#{msg.distanceparallelplanes_in3}" /><br/>
                             </div>
+                            <div class="points">
+                                #{msg.point} 1:<br/>
+                                #{msg.point} 2:<br/>
+                                #{msg.point} 3:<br/>
+                                ...<br/>
+                            </div>
                         </h:form>
-                        <div class="points">
-                            #{msg.point} 1:<br/>
-                            #{msg.point} 2:<br/>
-                            #{msg.point} 3:<br/>
-                            ...<br/>
-                        </div>
-                        <h:form>
+                        <hr/>
+                        <h:form rendered="#{loginCtrl.selectedMachine.operation == EOperationState.WAITING_ALREADY_CALIBRATED}">
                             <div id="buttons">
                                 <h:commandButton value="#{msg.buttonfast}" /><br/>
                                 <h:commandButton value="X-" /><br/>
@@ -76,13 +77,13 @@
                                 <h:commandButton value="#{msg.buttonmeasure}" /><br/>
                                 <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
                             </div>
+                            <div class="position">
+                                X:<br/>
+                                Y:<br/>
+                                Z:<br/>
+                                #{msg.contact}: 0
+                            </div>
                         </h:form>
-                        <div class="position">
-                            X:<br/>
-                            Y:<br/>
-                            Z:<br/>
-                            #{msg.contact}: 0
-                        </div>
                     </div>
                     <div class="protocol">
                         <h2>#{msg.protocol}</h2>

@@ -34,22 +34,15 @@ import org.icefaces.application.PushRenderer;
 @SessionScoped
 public class OperationCtrl implements Serializable, IMachineControlService {
     
-    private final UserMachineSession session;
-
-    @ManagedProperty(value="#{mainCtrl}")
-    private MainCtrl main;
+    @ManagedProperty(value="#{loginCtrl}")
+    private LoginCtrl loginCtrl;
     
-    private IMachineCommunicationService communicationService;
     private int xfLastMove, xsLastMove, yfLastMove, ysLastMove, zfLastMove, zsLastMove; //protocol line number of last move; negative when still moving
 
     private ArrayList<Position> measuredPoints;
     
-    public OperationCtrl(UserMachineSession session) {
+    public OperationCtrl() {
 
-        this.session = session;
-
-        this.communicationService = this.getMachine().getCurrentSession().getCommunicationService();
-        
         this.xfLastMove = 0;
         this.xsLastMove = 0;
         this.yfLastMove = 0;
@@ -78,14 +71,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
-                this.xfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
+                this.xfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
             
-            this.communicationService.setDigitalPin(0, move);
+            this.getCommunicationService().setDigitalPin(0, move);
 
             if(this.xfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
+                this.getSession().getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
             
@@ -114,14 +107,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
-                this.xfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
+                this.xfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(1, move);
+            this.getCommunicationService().setDigitalPin(1, move);
 
             if(this.xfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
+                this.getSession().getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
 
@@ -136,7 +129,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveXSlowForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException(); //TODO: remove this check where useless
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException(); //TODO: remove this check where useless
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -149,14 +142,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
-                this.xsLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
+                this.xsLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
             
-            this.communicationService.setDigitalPin(2, move);
+            this.getCommunicationService().setDigitalPin(2, move);
 
             if(this.xsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
+                this.getSession().getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
 
@@ -171,7 +164,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveXSlowBackwards(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -184,14 +177,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
-                this.xsLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
+                this.xsLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(3, move);
+            this.getCommunicationService().setDigitalPin(3, move);
 
             if(this.xsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
+                this.getSession().getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
 
@@ -206,7 +199,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveYFastForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -220,14 +213,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
-                this.yfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
+                this.yfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(4, move);
+            this.getCommunicationService().setDigitalPin(4, move);
 
             if(this.yfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
+                this.getSession().getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
                 this.yfLastMove = -this.yfLastMove;
             }
 
@@ -242,7 +235,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveYFastBackwards(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -256,14 +249,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
-                this.yfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
+                this.yfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(5, move);
+            this.getCommunicationService().setDigitalPin(5, move);
 
             if(this.yfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
+                this.getSession().getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
                 this.yfLastMove = -this.yfLastMove;
             }
 
@@ -278,7 +271,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveYSlowForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -291,14 +284,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
-                this.ysLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
+                this.ysLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(6, move);
+            this.getCommunicationService().setDigitalPin(6, move);
 
             if(this.ysLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
+                this.getSession().getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
                 this.ysLastMove = -this.ysLastMove;
             }
 
@@ -313,7 +306,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveYSlowBackwards(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -326,14 +319,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
-                this.ysLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
+                this.ysLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(7, move);
+            this.getCommunicationService().setDigitalPin(7, move);
             
             if(this.ysLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
+                this.getSession().getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
                 this.ysLastMove = -this.ysLastMove;
             }
 
@@ -348,7 +341,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveZFastForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -362,14 +355,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
-                this.zfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
+                this.zfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(8, move);
+            this.getCommunicationService().setDigitalPin(8, move);
             
             if(this.zfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
+                this.getSession().getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
                 this.zfLastMove = -this.zfLastMove;
             }
 
@@ -384,7 +377,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveZFastBackwards(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -398,14 +391,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
-                this.zfLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
+                this.zfLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(9, move);
+            this.getCommunicationService().setDigitalPin(9, move);
             
             if(this.zfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
+                this.getSession().getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
                 this.zfLastMove = -this.zfLastMove;
             }
 
@@ -420,7 +413,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveZSlowForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -433,14 +426,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
-                this.zsLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
+                this.zsLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(10, move);
+            this.getCommunicationService().setDigitalPin(10, move);
             
             if(this.zsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
+                this.getSession().getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
                 this.zsLastMove = -this.zsLastMove;
             }
 
@@ -455,7 +448,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveZSlowBackwards(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(move) {
@@ -468,14 +461,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
-                this.zsLastMove = -(this.session.getProtocol().getLength()-1);
+                this.getSession().getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
+                this.zsLastMove = -(this.getSession().getProtocol().getLength()-1);
             }
 
-            this.communicationService.setDigitalPin(11, move);
+            this.getCommunicationService().setDigitalPin(11, move);
             
             if(this.zsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
+                this.getSession().getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
                 this.zsLastMove = -this.zsLastMove;
             }
 
@@ -490,26 +483,26 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setXFastConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(0).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
                 if(!comp.get(1).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                this.communicationService.setDigitalPin(2, false);             /* STOP slow moving forward */
+                this.getCommunicationService().setDigitalPin(2, false);             /* STOP slow moving forward */
                 Thread.sleep(100);  //TODO: instead of a fixed sleep timer, check machine state for success before performing next step
-                this.communicationService.setDigitalPin(3, false);             /* STOP slow moving backwards */
+                this.getCommunicationService().setDigitalPin(3, false);             /* STOP slow moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(0, false);
+                this.getCommunicationService().setDigitalPin(0, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(1, false);
+                this.getCommunicationService().setDigitalPin(1, false);
                 Thread.sleep(100);
             }
             
-            this.communicationService.setDigitalPin(12, connected);
+            this.getCommunicationService().setDigitalPin(12, connected);
             
             return true;
 
@@ -522,26 +515,26 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setXSlowConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(2).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
                 if(!comp.get(3).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                this.communicationService.setDigitalPin(0, false);             /* STOP fast moving forward */
+                this.getCommunicationService().setDigitalPin(0, false);             /* STOP fast moving forward */
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(1, false);             /* STOP fast moving backwards */
+                this.getCommunicationService().setDigitalPin(1, false);             /* STOP fast moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(2, false);
+                this.getCommunicationService().setDigitalPin(2, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(3, false);
+                this.getCommunicationService().setDigitalPin(3, false);
                 Thread.sleep(100);
             }
             
-            this.communicationService.setDigitalPin(13, connected);
+            this.getCommunicationService().setDigitalPin(13, connected);
             
             return true;
 
@@ -554,27 +547,27 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setYFastConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(4).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
                 if(!comp.get(5).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                this.communicationService.setDigitalPin(6, false);             /* STOP slow moving forward */
+                this.getCommunicationService().setDigitalPin(6, false);             /* STOP slow moving forward */
                 
                 Thread.sleep(100);  //TODO: instead of a fixed sleep timer, check machine state for success before performing next step
-                this.communicationService.setDigitalPin(7, false);             /* STOP slow moving backwards */
+                this.getCommunicationService().setDigitalPin(7, false);             /* STOP slow moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(4, false);
+                this.getCommunicationService().setDigitalPin(4, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(5, false);
+                this.getCommunicationService().setDigitalPin(5, false);
                 Thread.sleep(100);
             }
             
-            this.communicationService.setDigitalPin(14, connected);
+            this.getCommunicationService().setDigitalPin(14, connected);
             
             return true;
 
@@ -587,26 +580,26 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setYSlowConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(6).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
                 if(!comp.get(7).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                this.communicationService.setDigitalPin(4, false);             /* STOP fast moving forward */
+                this.getCommunicationService().setDigitalPin(4, false);             /* STOP fast moving forward */
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(5, false);             /* STOP fast moving backwards */
+                this.getCommunicationService().setDigitalPin(5, false);             /* STOP fast moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(6, false);
+                this.getCommunicationService().setDigitalPin(6, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(7, false);
+                this.getCommunicationService().setDigitalPin(7, false);
                 Thread.sleep(100);
             }
             
-            this.communicationService.setDigitalPin(15, connected);
+            this.getCommunicationService().setDigitalPin(15, connected);
             
             return true;
 
@@ -619,22 +612,22 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setZFastConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(8).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
                 if(!comp.get(9).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                this.communicationService.setDigitalPin(10, false);             /* STOP slow moving forward */
+                this.getCommunicationService().setDigitalPin(10, false);             /* STOP slow moving forward */
                 Thread.sleep(100);  //TODO: instead of a fixed sleep timer, check machine state for success before performing next step
-                this.communicationService.setDigitalPin(11, false);             /* STOP slow moving backwards */
+                this.getCommunicationService().setDigitalPin(11, false);             /* STOP slow moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(8, false);
+                this.getCommunicationService().setDigitalPin(8, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(9, false);
+                this.getCommunicationService().setDigitalPin(9, false);
                 Thread.sleep(100);
                 if(comp.get(25).getValueAsString().equals("0")) {
                     //THIS ENSURES THAT NOT BOTH CLIPS GET DISCONNECTED AT THE SAME TIME OR THE AXIS WILL FALL AND BREAK!!!
@@ -643,7 +636,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 }
             }
             
-            this.communicationService.setDigitalPin(16, connected);
+            this.getCommunicationService().setDigitalPin(16, connected);
             
             return true;
 
@@ -656,22 +649,22 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean setZSlowConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             if(connected) {
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
                 if(!comp.get(10).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
                 if(!comp.get(11).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                this.communicationService.setDigitalPin(8, false);             /* STOP fast moving forward */
+                this.getCommunicationService().setDigitalPin(8, false);             /* STOP fast moving forward */
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(9, false);             /* STOP fast moving backwards */
+                this.getCommunicationService().setDigitalPin(9, false);             /* STOP fast moving backwards */
                 Thread.sleep(100);
             }
             else {
-                this.communicationService.setDigitalPin(10, false);
+                this.getCommunicationService().setDigitalPin(10, false);
                 Thread.sleep(100);
-                this.communicationService.setDigitalPin(11, false);
+                this.getCommunicationService().setDigitalPin(11, false);
                 Thread.sleep(100);
                 if(comp.get(24).getValueAsString().equals("0")) {
                     //THIS ENSURES THAT NOT BOTH CLIPS GET DISCONNECTED AT THE SAME TIME OR THE AXIS WILL FALL AND BREAK!!!
@@ -680,7 +673,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 }
             }
             
-            this.communicationService.setDigitalPin(17, connected);
+            this.getCommunicationService().setDigitalPin(17, connected);
             
             return true;
 
@@ -693,7 +686,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveXToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             
@@ -704,13 +697,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!comp.get(2).getValueAsString().equals("0")) { System.out.println("D"); return false; }    /* CHECK slow moving forward */
             if(!comp.get(3).getValueAsString().equals("0")) { System.out.println("E"); return false; }    /* CHECK slow moving backwards */
 
-            this.communicationService.setDigitalPin(12, true);
+            this.getCommunicationService().setDigitalPin(12, true);
             Thread.sleep(100);
-            this.communicationService.setDigitalPin(13, false);
+            this.getCommunicationService().setDigitalPin(13, false);
             Thread.sleep(100);
-            this.communicationService.setAnalogValue("X", position);
+            this.getCommunicationService().setAnalogValue("X", position);
 
-            this.session.getProtocol().addLine("move x-position from " +this.getComponentValue(26) +" to " +position);
+            this.getSession().getProtocol().addLine("move x-position from " +this.getComponentValue(26) +" to " +position);
 
             return true;
 
@@ -723,7 +716,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveYToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             
@@ -734,13 +727,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!comp.get(6).getValueAsString().equals("0")) { System.out.println("D"); return false; }    /* CHECK slow moving forward */
             if(!comp.get(7).getValueAsString().equals("0")) { System.out.println("E"); return false; }    /* CHECK slow moving backwards */
 
-            this.communicationService.setDigitalPin(14, true);
+            this.getCommunicationService().setDigitalPin(14, true);
             Thread.sleep(100);
-            this.communicationService.setDigitalPin(15, false);
+            this.getCommunicationService().setDigitalPin(15, false);
             Thread.sleep(100);
-            this.communicationService.setAnalogValue("Y", position);
+            this.getCommunicationService().setAnalogValue("Y", position);
 
-            this.session.getProtocol().addLine("move y-position from " +this.getComponentValue(27) +" to " +position);
+            this.getSession().getProtocol().addLine("move y-position from " +this.getComponentValue(27) +" to " +position);
 
             return true;
 
@@ -753,7 +746,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean moveZToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communicationService == null) throw new MachineUnreachableException();
+        if(this.getCommunicationService() == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.getMachine().getComponents();
             
@@ -764,13 +757,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!comp.get(10).getValueAsString().equals("0")) { System.out.println("D"); return false; }    /* CHECK slow moving forward */
             if(!comp.get(11).getValueAsString().equals("0")) { System.out.println("E"); return false; }    /* CHECK slow moving backwards */
 
-            this.communicationService.setDigitalPin(16, true);
+            this.getCommunicationService().setDigitalPin(16, true);
             Thread.sleep(100);
-            this.communicationService.setDigitalPin(17, false);
+            this.getCommunicationService().setDigitalPin(17, false);
             Thread.sleep(100);
-            this.communicationService.setAnalogValue("Z", position);
+            this.getCommunicationService().setAnalogValue("Z", position);
 
-            this.session.getProtocol().addLine("move z-position from " +this.getComponentValue(28) +" to " +position);
+            this.getSession().getProtocol().addLine("move z-position from " +this.getComponentValue(28) +" to " +position);
             
             return true;
 
@@ -865,7 +858,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         //TODO: ?IMPLEMENT A PROTOCOL COMMAND "DEF" THAT RE-SETS ALL MACHINE-ACTUATORS TO THEIR DEFAULT VALUES?
         this.measuredPoints.clear();
         this.getMachine().setOperationState(EOperationState.WAITING);
-        this.session.getProtocol().addLine("THE OPERATION HAS BEEN CANCELED!");
+        this.getSession().getProtocol().addLine("THE OPERATION HAS BEEN CANCELED!");
         return true;
     }
 
@@ -883,14 +876,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                     this.getMachine().setPosXZero(this.measuredPoints.get(0).getX());
                     this.getMachine().setPosYZero(this.measuredPoints.get(1).getY());
                     this.getMachine().setPosZZero(this.measuredPoints.get(2).getZ());
-                    this.session.getProtocol().addLine("Calibration finished, machines 0-positions set to (" 
+                    this.getSession().getProtocol().addLine("Calibration finished, machines 0-positions set to (" 
                             +this.getMachine().getPosXZero() +" | " +this.getMachine().getPosYZero() 
                             +" | " +this.getMachine().getPosZZero() +")!");
                 }
                 break;
             case P3_PROBE_POINT:
                 if(this.getMachine().getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
-                    this.session.getProtocol().addLine("Point probed, coordinates (" 
+                    this.getSession().getProtocol().addLine("Point probed, coordinates (" 
                             +this.measuredPoints.get(0).getX() +" | " +this.measuredPoints.get(1).getY()
                             +" | " +this.measuredPoints.get(2).getZ() +")!");
                 }                
@@ -957,7 +950,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                     /* Step 6: Calculate radius of outer circle */
                     double radius = a.getValue() / (2 * Math.sin(alpha));
                     
-                    this.session.getProtocol().addLine("Diameter measured, circle with center (" +centerpoint.getX() +", "
+                    this.getSession().getProtocol().addLine("Diameter measured, circle with center (" +centerpoint.getX() +", "
                             +centerpoint.getY() +", " +centerpoint.getZ() +") and diameter " +(radius*2) +"!");
                 }
                 break;
@@ -1047,13 +1040,17 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public UserMachineSession getSession() {
-        return this.session;
+        return this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
     }
 
     private Machine getMachine() {
-        return this.main.getMachineMgmt().getMachines().get(this.session.getMachineId());
+        return this.loginCtrl.getSelectedMachine();
     }
     
+    private IMachineCommunicationService getCommunicationService() {
+        return this.getMachine().getCurrentSession().getCommunicationService();
+    }
+
     private String getComponentValue(int index) {
         ArrayList<MachineComponent> comp = this.getMachine().getComponents();
         if(index >= comp.size())
@@ -1061,8 +1058,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return comp.get(index).getValueAsString();
     }
 
-    public void setMain(MainCtrl main) {
-        this.main = main;
+    public void setLoginCtrl(LoginCtrl loginCtrl) {
+        this.loginCtrl = loginCtrl;
     }
 
 }
