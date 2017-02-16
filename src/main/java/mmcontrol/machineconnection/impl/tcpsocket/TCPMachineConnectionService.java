@@ -266,12 +266,12 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                     for(int i = 0; i < 10; i++) { // Retry until CommunicationService is registered
                         try {
                             stateUpdateService.informMachineConnected(machineId);
-                            continue;
-                        } catch (MachineUnreachableException e) {
+                            i = 10;
+                        } catch (RemoteException e) {
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(1000);
                             } catch (InterruptedException ex) { }
-                            System.out.printf("retry...");
+                            System.out.print("retry...");
                         }
                     }
                     break;

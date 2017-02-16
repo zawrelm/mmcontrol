@@ -24,7 +24,7 @@
                                 </h:selectOneMenu><br />
                             </span-->
                             <span>
-                                <h:outputLabel value="#{msg.machine}:" for="machineselection" />
+                                <h:outputLabel value="#{msg.machine}: " for="machineselection" />
                                 <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
                                                          value="#{loginCtrl.selectedMachine}" rendered="#{empty loginCtrl.selectedMachine}">
                                     <ace:ajax />
@@ -33,7 +33,9 @@
                                     <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
                                         <f:selectItem itemValue="#{currentMachine}"/>
                                     </c:forEach>
-                                </ace:simpleSelectOneMenu><br />
+                                </ace:simpleSelectOneMenu>
+                                <h:outputText value="#{loginCtrl.selectedMachine}" rendered="#{!empty loginCtrl.selectedMachine}" />
+                                <br />
                             </span>
                             <span>#{msg.mountobject}</span><br/>
                             <ul>
@@ -42,13 +44,16 @@
                                                      rendered="#{!empty loginCtrl.selectedMachine}" /></li>
                                 <li>Not implemented: #{msg.probe_withrecord}</li>
                                 <li>Not implemented: #{msg.probe_automatically}</li>
+                                <li><h:commandButton id="stopProbe" value="#{msg.probe_stop}" 
+                                                     action="#{sessionCtrl.stopProbe()}" 
+                                                     rendered="#{!empty sessionCtrl.activeSession}" /></li>
                             </ul>
-                        <hr/>
                         </h:form>
                     <div id="controlpanel">
-                        #{msg.calibrar}<br/>
-                        <h2>#{msg.probefunctions}</h2>
-                        <h:form id="control" rendered="#{!empty operationCtrl.session.endTime}">
+                        <hr/>
+                        <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">
+                            #{msg.probe_state} <h:outputText value="#{currentMachine.operation} - #{currentMachine.operationState}" /><br/>
+                            <h3>#{msg.probefunctions}</h3>
                             <div id="buttons">
                                 <h:commandButton value="#{msg.plane_in3}" /><br/>
                                 <h:commandButton value="#{msg.insidediameter_in3}" /><br/>
@@ -63,27 +68,27 @@
                                 #{msg.point} 3:<br/>
                                 ...<br/>
                             </div>
+                            <h:form id="moves" rendered="#{!empty sessionCtrl.activeSession}">
+                                <div id="buttons">
+                                    <h:commandButton value="#{msg.buttonfast}" /><br/>
+                                    <h:commandButton value="X-" /><br/>
+                                    <h:commandButton value="X+" /><br/>
+                                    <h:commandButton value="Y-" /><br/>
+                                    <h:commandButton value="Y+" /><br/>
+                                    <h:commandButton value="Z-" /><br/>
+                                    <h:commandButton value="Z+" /><br/>
+                                    <h:commandButton value="#{msg.buttonmeasure}" /><br/>
+                                    <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
+                                </div>
+                                <div class="position">
+                                    X:<br/>
+                                    Y:<br/>
+                                    Z:<br/>
+                                    #{msg.contact}: 0
+                                </div>
+                            </h:form>
                         </h:form>
                         <hr/>
-                        <h:form rendered="#{loginCtrl.selectedMachine.operation == EOperationState.WAITING_ALREADY_CALIBRATED}">
-                            <div id="buttons">
-                                <h:commandButton value="#{msg.buttonfast}" /><br/>
-                                <h:commandButton value="X-" /><br/>
-                                <h:commandButton value="X+" /><br/>
-                                <h:commandButton value="Y-" /><br/>
-                                <h:commandButton value="Y+" /><br/>
-                                <h:commandButton value="Z-" /><br/>
-                                <h:commandButton value="Z+" /><br/>
-                                <h:commandButton value="#{msg.buttonmeasure}" /><br/>
-                                <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
-                            </div>
-                            <div class="position">
-                                X:<br/>
-                                Y:<br/>
-                                Z:<br/>
-                                #{msg.contact}: 0
-                            </div>
-                        </h:form>
                     </div>
                     <div class="protocol">
                         <h2>#{msg.protocol}</h2>

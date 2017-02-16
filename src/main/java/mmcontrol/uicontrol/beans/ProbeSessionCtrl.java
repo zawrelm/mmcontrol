@@ -12,6 +12,7 @@ import javax.faces.bean.SessionScoped;
 import mmcontrol.uicontrol.model.Probe;
 import mmcontrol.uicontrol.model.ProbeProgram;
 import mmcontrol.uicontrol.model.ProbeProgramExecution;
+import mmcontrol.uicontrol.model.UserMachineSession;
 import mmcontrol.uicontrol.model.enums.EMachineState;
 import org.icefaces.application.PushRenderer;
 
@@ -27,6 +28,8 @@ public class ProbeSessionCtrl implements Serializable {
     @ManagedProperty(value="#{loginCtrl}")
     private LoginCtrl loginCtrl;
     
+    private UserMachineSession activeSession = null;
+    
     public ProbeSessionCtrl() {
 
         // on load, add this session to the session push group
@@ -38,6 +41,7 @@ public class ProbeSessionCtrl implements Serializable {
         long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new Probe(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_WITHOUT_RECORDING);
+        this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
         System.out.println("Probe started on machine: " +machineId);
         PushRenderer.render("session");
     }
@@ -46,6 +50,7 @@ public class ProbeSessionCtrl implements Serializable {
         long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgram(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_AND_RECORDING);
+        this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
         PushRenderer.render("session");
     }
 
@@ -53,6 +58,7 @@ public class ProbeSessionCtrl implements Serializable {
         long machineId = this.loginCtrl.selectedMachine.getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgramExecution(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_PROGRAM_RUNNING);
+        this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
         PushRenderer.render("session");
     }
     
@@ -60,11 +66,16 @@ public class ProbeSessionCtrl implements Serializable {
         this.loginCtrl.getUser().getCurrentSession().endUserMachineSession();
         this.loginCtrl.getSelectedMachine().setState(EMachineState.CONNECTED);
         this.loginCtrl.setSelectedMachine(null);
+        this.activeSession = null;
         PushRenderer.render("session");
     }
 
     public void setLoginCtrl(LoginCtrl loginCtrl) {
         this.loginCtrl = loginCtrl;
+    }
+
+    public UserMachineSession getActiveSession() {
+        return activeSession;
     }
 
 }
