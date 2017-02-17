@@ -52,7 +52,7 @@
                     <div id="controlpanel">
                         <hr/>
                         <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">
-                            #{msg.probe_state} <h:outputText value="#{currentMachine.operation} - #{currentMachine.operationState}" /><br/>
+                            #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
                             <h3>#{msg.probefunctions}</h3>
                             <div id="buttons">
                                 <h:commandButton value="#{msg.plane_in3}" /><br/>
@@ -71,8 +71,8 @@
                             <h:form id="moves" rendered="#{!empty sessionCtrl.activeSession}">
                                 <div id="buttons">
                                     <h:commandButton value="#{msg.buttonfast}" /><br/>
-                                    <h:commandButton value="X-" /><br/>
-                                    <h:commandButton value="X+" /><br/>
+                                    <h:commandButton value="X-" action="#{operationCtrl.moveXSlowBackwards(true)}" /><br/>
+                                    <h:commandButton value="X+" action="#{operationCtrl.moveXSlowForward(true)}" /><br/>
                                     <h:commandButton value="Y-" /><br/>
                                     <h:commandButton value="Y+" /><br/>
                                     <h:commandButton value="Z-" /><br/>

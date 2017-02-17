@@ -16,7 +16,7 @@ import mmcontrol.uicontrol.model.UserMachineSession;
 public interface IMachineControlService {
 
     /* FUNCTION GROUP 1: SESSION FUNCTIONS (General functions before starting a probe) */
-    public UserMachineSession getSession(); //TODO: really necessary?
+    //public UserMachineSession getSession(); //TODO: really necessary?
     //public void inviteObserverToSession(User user) throws MachineUnreachableException;
     //public void joinSessionAsObserver(User user);
     //public void startProbeWithoutRecording() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
