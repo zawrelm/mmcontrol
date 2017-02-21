@@ -1054,6 +1054,30 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return true;
     }
 
+    public boolean isXFastMoving() {
+        return this.xfLastMove < 0;
+    }
+    
+    public boolean isXSlowMoving() {
+        return this.xsLastMove < 0;
+    }
+
+    public boolean isYFastMoving() {
+        return this.yfLastMove < 0;
+    }
+    
+    public boolean isYSlowMoving() {
+        return this.ysLastMove < 0;
+    }
+
+    public boolean isZFastMoving() {
+        return this.zfLastMove < 0;
+    }
+    
+    public boolean isZSlowMoving() {
+        return this.zsLastMove < 0;
+    }
+
     public Machine getMachine() {
         return this.machine;
     }

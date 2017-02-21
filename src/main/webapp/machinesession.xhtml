@@ -52,17 +52,18 @@
                     <div id="controlpanel">
                         <hr/>
                         <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">
-                            #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
                             <h3>#{msg.probefunctions}</h3>
                             <div id="buttons">
-                                <h:commandButton value="#{msg.plane_in3}" /><br/>
-                                <h:commandButton value="#{msg.insidediameter_in3}" /><br/>
-                                <h:commandButton value="#{msg.outsidediameter_in3}" /><br/>
-                                <h:commandButton value="#{msg.point_in3}" /><br/>
-                                <h:commandButton value="#{msg.distancepointplane_in3}" /><br/>
-                                <h:commandButton value="#{msg.distanceparallelplanes_in3}" /><br/>
+                                <h:commandButton value="#{msg.point_in3}" />
+                                <h:commandButton value="#{msg.plane_in3}" />
+                                <h:commandButton value="#{msg.insidediameter_in3}" />
+                                <!--What's different to inside? h:commandButton value="#{msg.outsidediameter_in3}" /-->
+                                <h:commandButton value="#{msg.distancepointplane_in3}" />
+                                <!--h:commandButton value="#{msg.distanceparallelplanes_in3}" /-->
+                                <h:commandButton value="#{msg.cancel_operation}" />
                             </div>
-                            <div class="points">
+                            <div class="state">
+                                #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
                                 #{msg.point} 1:<br/>
                                 #{msg.point} 2:<br/>
                                 #{msg.point} 3:<br/>
@@ -73,12 +74,12 @@
                                     <h:commandButton value="#{msg.buttonfast}" /><br/>
                                     <h:commandButton value="X-" action="#{operationCtrl.moveXSlowBackwards(true)}" /><br/>
                                     <h:commandButton value="X+" action="#{operationCtrl.moveXSlowForward(true)}" /><br/>
-                                    <h:commandButton value="Y-" /><br/>
-                                    <h:commandButton value="Y+" /><br/>
-                                    <h:commandButton value="Z-" /><br/>
-                                    <h:commandButton value="Z+" /><br/>
+                                    <h:commandButton value="Y-" action="#{operationCtrl.moveYSlowBackwards(operationCtrl.YSlowMoving)}"/><br/>
+                                    <h:commandButton value="Y+" action="#{operationCtrl.moveYSlowForward(operationCtrl.YSlowMoving)}"/><br/>
+                                    <h:commandButton value="Z-" action="#{operationCtrl.moveZSlowBackwards(operationCtrl.ZSlowMoving)}"/><br/>
+                                    <h:commandButton value="Z+" action="#{operationCtrl.moveZSlowForward(operationCtrl.ZSlowMoving)}"/><br/>
                                     <h:commandButton value="#{msg.buttonmeasure}" /><br/>
-                                    <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
+                                    <!--h:commandButton value="#{msg.buttonstoreposition}" /><br/-->
                                 </div>
                                 <div class="position">
                                     X:<br/>
