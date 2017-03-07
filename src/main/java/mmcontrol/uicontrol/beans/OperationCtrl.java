@@ -1,15 +1,20 @@
 package mmcontrol.uicontrol.beans;
 
+
+import java.util.Iterator;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import mmcontrol.uicontrol.interfaces.IMachineControlService;
 import mmcontrol.common.exceptions.IncompatiblePinException;
 import mmcontrol.common.exceptions.MachineOperationTemporarilyForbiddenException;
@@ -23,6 +28,10 @@ import mmcontrol.uicontrol.model.Vector;
 import mmcontrol.uicontrol.model.enums.EOperation;
 import mmcontrol.uicontrol.model.enums.EOperationState;
 import org.icefaces.application.PushRenderer;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import mmcontrol.uicontrol.model.Trace;
+
 
 //TODO: Implement more functionality (geometric calculations); suggestion: use a geometry library!
 
@@ -50,8 +59,35 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     private ArrayList<Position> measuredPoints;
     
-    public OperationCtrl() {
+    private Boolean movingX;
+    
+    private Boolean movingY;
+    
+    private Boolean movingZ;
+    
+    private String currentAction;
+    
+    private Double goPosX;
+    
+    private Double goPosY;
+    
+    private Double goPosZ;
+    
+    private List<Trace> traces;
+    
+    private FacesMessage facesMessageX;
 
+    private FacesMessage facesMessageY;
+
+    private FacesMessage facesMessageZ;
+
+    
+    public OperationCtrl() {
+        this.movingX = false;
+        this.movingY = false;
+        this.movingZ = false;
+        this.currentAction = null;
+        this.traces = new ArrayList<>();
         this.xfLastMove = 0;
         this.xsLastMove = 0;
         this.yfLastMove = 0;
@@ -59,15 +95,19 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         this.zfLastMove = 0;
         this.zsLastMove = 0;
         
+        this.facesMessageX = null;
+        this.facesMessageY = null;
+        this.facesMessageZ = null;
+        
         this.measuredPoints = new ArrayList<>();
     }
 
     @PostConstruct
     private void init() {
-        System.out.println("OperationCtrl constructed!");
-        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
-        this.machine = this.mainCtrl.getMachineMgmt().getMachines().get(this.session.getMachineId());
-        this.communication = this.machine.getCurrentSession().getCommunicationService();
+        
+//TODO descomentar        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
+//        this.machine = this.mainCtrl.getMachineMgmt().getMachines().get(this.session.getMachineId());
+//        this.communication = this.machine.getCurrentSession().getCommunicationService();
     }
     
     @Override
@@ -146,6 +186,23 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     @Override
     public boolean moveXSlowForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         if(this.communication == null) throw new MachineUnreachableException(); //TODO: remove this check where useless
+        
+            
+        /*
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        // remove existing messages
+        Iterator<FacesMessage> i = facesContext.getMessages();
+        while (i.hasNext()) {
+            i.next();
+            i.remove();
+        }        
+        
+        //UIComponent component = event.getComponent();
+        String message = "Info Sample";
+        FacesMessage facesMessage = new FacesMessage((FacesMessage.Severity) FacesMessage.VALUES.get(0), message, message);
+        facesContext.addMessage(component.getClientId() null, facesMessage);
+        */
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             if(move) {
@@ -355,40 +412,124 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return false;
     }
 
+    public void move(ActionEvent event) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+        String axis;
+        String orientation;
+        //String speed;
+        System.out.println("Movimiento 1");
+        axis = (String)event.getComponent().getAttributes().get("axis");
+        orientation = (String)event.getComponent().getAttributes().get("orientation");
+
+        FacesMessage facesMessage; // = (axis == "x") ? this.facesMessageX : (axis == "y") ? this.facesMessageY : this.facesMessageZ;
+        //speed = (String)event.getComponent().getAttributes().get("speed");
+
+        System.out.println("Movimiento " + orientation + axis );
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if ( (0 == axis.compareTo("x") && movingX) 
+           ||(0 == axis.compareTo("y") && movingY) 
+           ||(0 == axis.compareTo("z") && movingZ)) {
+            // remove existing messages
+            //Iterator<FacesMessage> i = facesContext.getMessages();
+            //while (i.hasNext()) {
+            //    i.next();
+            //    i.remove();
+            //}
+            facesMessage = null;
+
+        } else {
+            // add messages
+//            FacesContext context = FacesContext.getCurrentInstance();
+//            String movingAxisMessage = context.getApplication().evaluateExpressionGet(context, "#{text['some.movingAxis']}", String.class);
+            UIComponent component = event.getComponent();
+            String message = "#{msg.movingAxis1} " + orientation + axis + ".\n" + "#{msg.movingAxis2}";
+            facesMessage = new FacesMessage((FacesMessage.Severity) FacesMessage.VALUES.get(0), message, message);
+            facesContext.addMessage(component.getClientId(), facesMessage);
+
+        }
+        switch (axis) {
+            case "x":
+                this.facesMessageX = facesMessage;
+                this.movingX = !this.movingX;
+                break;
+            case "y":
+                this.facesMessageY = facesMessage;
+                this.movingY = !this.movingY;
+                break;
+            case "z":
+                this.facesMessageZ = facesMessage;
+                this.movingZ = !this.movingZ;
+                break;
+        }
+
+        
+    }
+    
     @Override
     public boolean moveZFastForward(boolean move) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        if(this.communication == null) throw new MachineUnreachableException();
-        try {
-            ArrayList<MachineComponent> comp = this.machine.getComponents();
-            if(move) {
-                if(!comp.get(19).getValueAsString().equals("0")) return false;    /* CHECK sensing head contact */
-                if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(9).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                if(!comp.get(10).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
-                if(!comp.get(11).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                if(comp.get(24).getValueAsString().equals("0")) return false;     /* CHECK clip fast opened */
-                if(!comp.get(25).getValueAsString().equals("0")) return false;    /* CHECK clip slow closed */
-            }
-            
-            if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
-                this.zfLastMove = -(this.session.getProtocol().getLength()-1);
-            }
-
-            this.communication.setDigitalPin(8, move);
-            
-            if(this.zfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
-                this.zfLastMove = -this.zfLastMove;
-            }
-
-            return true;
-
-        } catch (IncompatiblePinException | RemoteException ex) {
-            Logger.getLogger(OperationCtrl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return false;
+        System.out.println("Movimiento 2");
+        return true;
+//        if(this.communication == null) throw new MachineUnreachableException();
+//        //boolean move = true;
+//        
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//                       
+//        
+//        try {
+//            ArrayList<MachineComponent> comp = this.machine.getComponents();
+//            
+////            if ( 0 == moving.compareTo("true") ) {
+////                moving = "false";
+////                // remove existing messages
+////                Iterator<FacesMessage> i = facesContext.getMessages();
+////                while (i.hasNext()) {
+////                    i.next();
+////                    i.remove();
+////                }
+////
+////            } else {
+////                // add messages
+////                UIComponent component = event.getComponent();
+////                String message = "Moviendo +Z";
+////                FacesMessage facesMessage = new FacesMessage((FacesMessage.Severity) FacesMessage.VALUES.get(0), message, message);
+////                facesContext.addMessage(component.getClientId(), facesMessage);
+////
+////                moving = "true";
+////            }
+//            
+//            
+//            
+//            
+//            if(move) {
+//                if(!comp.get(19).getValueAsString().equals("0")) return false;    /* CHECK sensing head contact */
+//                if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
+//                if(!comp.get(9).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
+//                if(!comp.get(10).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
+//                if(!comp.get(11).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
+//                if(comp.get(24).getValueAsString().equals("0")) return false;     /* CHECK clip fast opened */
+//                if(!comp.get(25).getValueAsString().equals("0")) return false;    /* CHECK clip slow closed */
+//            }
+//            
+//            if(this.zfLastMove >= 0 && move) {
+//                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
+//                this.zfLastMove = -(this.session.getProtocol().getLength()-1);
+//            }
+//
+//            this.communication.setDigitalPin(8, move);
+//            
+//            if(this.zfLastMove < 0 && !move) {
+//                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
+//                this.zfLastMove = -this.zfLastMove;
+//            }
+//
+//            return true;
+//
+//        } catch (IncompatiblePinException | RemoteException ex) {
+//            Logger.getLogger(OperationCtrl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return false;
     }
 
     @Override
@@ -832,6 +973,9 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean probePlane() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+                System.out.println("moveZFastForward"); // TODO eliminar
+                this.currentAction="probePlane";
+                if ( null == this.machine ) return true;
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_PLANE);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
@@ -1054,30 +1198,6 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return true;
     }
 
-    public boolean isXFastMoving() {
-        return this.xfLastMove < 0;
-    }
-    
-    public boolean isXSlowMoving() {
-        return this.xsLastMove < 0;
-    }
-
-    public boolean isYFastMoving() {
-        return this.yfLastMove < 0;
-    }
-    
-    public boolean isYSlowMoving() {
-        return this.ysLastMove < 0;
-    }
-
-    public boolean isZFastMoving() {
-        return this.zfLastMove < 0;
-    }
-    
-    public boolean isZSlowMoving() {
-        return this.zsLastMove < 0;
-    }
-
     public Machine getMachine() {
         return this.machine;
     }
@@ -1096,5 +1216,73 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public void setMainCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
+
+    public List<Trace> getTraces() {
+        return traces;
+    }
+
+    public void setTraces(List<Trace> traces) {
+        this.traces = traces;
+    }
+    
+        
+    public String getCurrentAction() {
+        return this.currentAction;
+    }
+    
+    public void setCurrentAction(String currentAction){
+        this.currentAction = currentAction;
+    }
+
+    public Double getGoPosX() {
+        return goPosX;
+    }
+
+    public void setGoPosX(Double goPosX) {
+        this.goPosX = goPosX;
+    }
+
+    public Double getGoPosY() {
+        return goPosY;
+    }
+
+    public void setGoPosY(Double goPosY) {
+        this.goPosY = goPosY;
+    }
+
+    public Double getGoPosZ() {
+        return goPosZ;
+    }
+
+    public void setGoPosZ(Double goPosZ) {
+        this.goPosZ = goPosZ;
+    }
+
+    public Boolean getMovingX() {
+        return movingX;
+    }
+
+    public void setMovingX(Boolean movingX) {
+        this.movingX = movingX;
+    }
+
+    public Boolean getMovingY() {
+        return movingY;
+    }
+
+    public void setMovingY(Boolean movingY) {
+        this.movingY = movingY;
+    }
+
+    public Boolean getMovingZ() {
+        return movingZ;
+    }
+
+    public void setMovingZ(Boolean movingZ) {
+        this.movingZ = movingZ;
+    }
+
+    
+
 
 }
