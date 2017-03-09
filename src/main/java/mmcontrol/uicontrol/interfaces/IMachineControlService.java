@@ -60,5 +60,5 @@ public interface IMachineControlService {
     public boolean probeDistanceParallelPlanes() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
     public boolean cancelOperation();
     public boolean finishOperation();
-
+    
 }

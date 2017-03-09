@@ -122,5 +122,53 @@ a:focus {
 /* ======================= FOOTER ======================= */
 
 #footer {
-        margin-top: 20px;
+    margin-top: 20px;
+}
+
+
+.actionButton {
+    height:100px;
+    width:100px;
+}
+
+.actionButton[disabled] {
+    opacity: 0.3;
+    background-color: darkgrey;
+}
+
+.actionTooltip {
+    width:200px;   
+}
+
+.moveButton {
+    height:50px;
+    width:50px;
+}
+.moveButton[disabled] {
+    opacity: 0.3;
+}
+
+.axisImage {
+    height:100px;
+    width:100px;
+}
+
+.goPosInputtext {
+    width:50px;
+}
+
+.goButton {
+    
+}
+
+.outPosLabel {
+    font-size: large;
+}
+.pointPosOutText {
+    width: 50px;
+}
+
+.outPosOutText {
+    width: 80px;
+    font-size: large;
 }
