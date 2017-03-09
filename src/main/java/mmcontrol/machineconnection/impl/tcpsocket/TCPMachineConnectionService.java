@@ -206,7 +206,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
         try {
             this.informActiveMachines(EConnectionEvent.MACHINE_CONNECTED, machineId);
         } catch (NotBoundException | IOException | NumberFormatException ex) {
-            System.out.println("Server unreachable! Not informed about activation of machine " + machineId + "!");
+            System.err.println("Server unreachable! Not informed about activation of machine " + machineId + "!");
             return;
         }
 
@@ -220,7 +220,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
         try {
             this.informActiveMachines(EConnectionEvent.MACHINE_DISCONNECTED, machineId);
         } catch (NotBoundException | IOException | NumberFormatException ex) {
-            System.out.println("Server unreachable! Not informed about shutdown of machine " + machineId + "!");
+            System.err.println("Server unreachable! Not informed about shutdown of machine " + machineId + "!");
             return;
         }
 
@@ -235,9 +235,11 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
     @Override
     public void pullActiveMachines() throws RemoteException {
         try {
-            this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0);
-        } catch (IOException | NotBoundException | NumberFormatException ex) {
-            System.err.println("SUS: SUS has not been informed!");
+            if(!this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0))
+                this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0); //retry once if server was unreachable
+        } catch (NotBoundException | IOException| NumberFormatException ex) {
+            System.err.println("Server unreachable! Not informed about active machines!");
+            return;
         }
     }
     
@@ -250,7 +252,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
      * @throws NotBoundException
      * @throws NumberFormatException 
      */
-    private void informActiveMachines(EConnectionEvent event, long machineId) 
+    private boolean informActiveMachines(EConnectionEvent event, long machineId) 
             throws IOException, NotBoundException, NumberFormatException {
         
         if(stateUpdateService == null) {
@@ -289,9 +291,12 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                     break;
             }
             System.out.println(" ...informed!");
+            return true;
+            
         } catch (NoSuchObjectException e) {
             stateUpdateService = null;
-            System.out.println("SUS NOT FOUND! Object has been reset!\n");
+            System.out.println("SUS NOT FOUND! Object has been reset!");
+            return false;
         }
     
     }

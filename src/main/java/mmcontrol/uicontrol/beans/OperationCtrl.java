@@ -1,6 +1,5 @@
 package mmcontrol.uicontrol.beans;
 
-
 import java.util.Iterator;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -31,7 +30,6 @@ import org.icefaces.application.PushRenderer;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import mmcontrol.uicontrol.model.Trace;
-
 
 //TODO: Implement more functionality (geometric calculations); suggestion: use a geometry library!
 
@@ -104,8 +102,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @PostConstruct
     private void init() {
-        
-//TODO descomentar        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
+        System.out.println("OperationCtrl constructed!");
+//        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
 //        this.machine = this.mainCtrl.getMachineMgmt().getMachines().get(this.session.getMachineId());
 //        this.communication = this.machine.getCurrentSession().getCommunicationService();
     }
@@ -1210,6 +1208,30 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return true;
     }
 
+    public boolean isXFastMoving() {
+        return this.xfLastMove < 0;
+    }
+    
+    public boolean isXSlowMoving() {
+        return this.xsLastMove < 0;
+    }
+
+    public boolean isYFastMoving() {
+        return this.yfLastMove < 0;
+    }
+    
+    public boolean isYSlowMoving() {
+        return this.ysLastMove < 0;
+    }
+
+    public boolean isZFastMoving() {
+        return this.zfLastMove < 0;
+    }
+    
+    public boolean isZSlowMoving() {
+        return this.zsLastMove < 0;
+    }
+
     public Machine getMachine() {
         return this.machine;
     }
@@ -1236,7 +1258,6 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public void setTraces(List<Trace> traces) {
         this.traces = traces;
     }
-    
         
     public String getCurrentAction() {
         return this.currentAction;
@@ -1293,8 +1314,5 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public void setMovingZ(Boolean movingZ) {
         this.movingZ = movingZ;
     }
-
-    
-
 
 }
