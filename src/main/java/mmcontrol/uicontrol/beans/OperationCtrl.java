@@ -33,7 +33,7 @@ import org.icefaces.application.PushRenderer;
  * @author Michael Zawrel
  */
 @ManagedBean(name="operationCtrl")
-@SessionScoped //TODO: find the right Scope or a way to destroy object when Probe is ended!
+@ViewScoped
 public class OperationCtrl implements Serializable, IMachineControlService {
     
     @ManagedProperty(value="#{mainCtrl}")
@@ -77,13 +77,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             if(move) {
                 /* Check whether current state of machine actuators allows actuator activation */
-                if(!comp.get(19).getValueAsString().equals("0")) return false;   /* CHECK sensing head contact */
+                if(comp.get(19).getValueAsString().equals("1")) return false;   /* CHECK sensing head contact */
                 if(comp.get(18).getValueAsString().equals("0")) return false;    /* CHECK no air pressure */
-                if(!comp.get(1).getValueAsString().equals("0")) return false;    /* CHECK fast moving backwards */
-                if(!comp.get(2).getValueAsString().equals("0")) return false;    /* CHECK slow moving forward */
-                if(!comp.get(3).getValueAsString().equals("0")) return false;    /* CHECK slow moving backwards */
-                if(comp.get(20).getValueAsString().equals("0")) return false;    /* CHECK clip fast opened */
-                if(!comp.get(21).getValueAsString().equals("0")) return false;   /* CHECK clip slow closed */
+                if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
+                if(!this.moveXSlowForward(false)) return false;     /* STOP slow moving forward */
+                if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
+                if(!this.setXFastConnected(true)) return false;     /* CLOSE clip fast */
+                if(!this.setXSlowConnected(false)) return false;    /* OPEN clip slow */
             }
             
             if(this.xfLastMove >= 0 && move) {
@@ -91,13 +91,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
-            this.communication.setDigitalPin(0, move);
+            this.communication.setDigitalPin(0, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xfLastMove < 0 && !move) {
                 this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
-            
+            System.out.println("moveXFastForward terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -113,13 +113,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             if(move) {
-                if(!comp.get(19).getValueAsString().equals("0")) return false;   /* CHECK sensing head contact */
-                if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(0).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
-                if(!comp.get(2).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
-                if(!comp.get(3).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                if(comp.get(20).getValueAsString().equals("0")) return false;     /* CHECK clip fast opened */
-                if(!comp.get(21).getValueAsString().equals("0")) return false;    /* CHECK clip slow closed */
+                /* Check whether current state of machine actuators allows actuator activation */
+                if(comp.get(19).getValueAsString().equals("1")) return false;   /* CHECK sensing head contact */
+                if(comp.get(18).getValueAsString().equals("0")) return false;    /* CHECK no air pressure */
+                if(!this.moveXFastForward(false)) return false;     /* STOP fast moving forward */
+                if(!this.moveXSlowForward(false)) return false;     /* STOP slow moving forward */
+                if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
+                if(!this.setXFastConnected(true)) return false;     /* CLOSE clip fast */
+                if(!this.setXSlowConnected(false)) return false;    /* OPEN clip slow */
             }
 
             if(this.xfLastMove >= 0 && move) {
@@ -127,13 +128,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
-            this.communication.setDigitalPin(1, move);
+            this.communication.setDigitalPin(1, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xfLastMove < 0 && !move) {
                 this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
-
+            System.out.println("moveXFastBackwards terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -149,26 +150,33 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             if(move) {
-                if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(0).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
-                if(!comp.get(1).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                if(!comp.get(3).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                if(!comp.get(20).getValueAsString().equals("0")) return false;     /* CHECK clip fast closed */
-                if(comp.get(21).getValueAsString().equals("0")) return false;    /* CHECK clip slow opened */
+                /* Check whether current state of machine actuators allows actuator activation */
+                if(comp.get(18).getValueAsString().equals("0")) return false;    /* CHECK no air pressure */
+                //System.out.print("SlowForward: Trying to stop other movements...");
+                if(!this.moveXFastForward(false)) return false;     /* STOP fast moving forward */
+                //System.out.print("ff...");
+                if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
+                //System.out.print("fb...");
+                if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
+                //System.out.println("sb!");
+                //System.out.print("SlowForward: Other movements stopped, trying to set clips...");
+                if(!this.setXSlowConnected(true)) return false;     /* CLOSE clip slow */
+                if(!this.setXFastConnected(false)) return false;   /* OPEN clip fast */
+                //System.out.println("done!");
             }
-            
+
             if(this.xsLastMove >= 0 && move) {
                 this.session.getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
-            this.communication.setDigitalPin(2, move);
+            this.communication.setDigitalPin(2, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xsLastMove < 0 && !move) {
                 this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
-
+            System.out.println("moveXSlowForward terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -184,12 +192,19 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             if(move) {
-                if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(0).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
-                if(!comp.get(1).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                if(!comp.get(2).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
-                if(!comp.get(20).getValueAsString().equals("0")) return false;     /* CHECK clip fast closed */
-                if(comp.get(21).getValueAsString().equals("0")) return false;    /* CHECK clip slow opened */
+                /* Check whether current state of machine actuators allows actuator activation */
+                if(comp.get(18).getValueAsString().equals("0")) return false;    /* CHECK no air pressure */
+                System.out.print("SlowBackwards: Trying to stop other movements...");
+                if(!this.moveXFastForward(false)) return false;     /* STOP fast moving forward */
+                System.out.print("ff...");
+                if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
+                System.out.print("fb...");
+                if(!this.moveXSlowForward(false)) return false;   /* STOP slow moving forward */
+                System.out.println("sf!");
+                System.out.print("SlowBackwards: Other movements stopped, trying to set clips...");
+                if(!this.setXSlowConnected(true)) return false;     /* CLOSE clip slow */
+                if(!this.setXFastConnected(false)) return false;   /* OPEN clip fast */
+                System.out.println("done!");
             }
             
             if(this.xsLastMove >= 0 && move) {
@@ -197,13 +212,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
-            this.communication.setDigitalPin(3, move);
+            this.communication.setDigitalPin(3, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xsLastMove < 0 && !move) {
                 this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
-
+            System.out.println("moveXSlowBackwards terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -497,35 +512,34 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return false;
     }
 
+    //TODO: SOMETIMES CHANGE IN DIRECTION IS NOT PERFORMED, PROBABLY BECAUSE CLIP-STATE DIDN'T CHANGE IN TIME -> Add longer Thread.sleep?
     @Override
     public boolean setXFastConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         if(this.communication == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
+            if(comp.get(20).getValueAsString().equals("1") == connected) return true;   /* CHECK if already in desired state */
+            System.out.println("Change in Clip xFast required!");
             if(connected) {
+                System.out.println("Connecting Clip xFast required!");
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(0).getValueAsString().equals("0")) return false;     /* CHECK fast moving forward */
-                if(!comp.get(1).getValueAsString().equals("0")) return false;     /* CHECK fast moving backwards */
-                this.communication.setDigitalPin(2, false);             /* STOP slow moving forward */
-                Thread.sleep(100);  //TODO: instead of a fixed sleep timer, check machine state for success before performing next step
-                this.communication.setDigitalPin(3, false);             /* STOP slow moving backwards */
-                Thread.sleep(100);
+                if(!this.moveXSlowForward(false)) return false;     /* STOP slow moving forward */
+                if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
             }
-            else {
-                this.communication.setDigitalPin(0, false);
-                Thread.sleep(100);
-                this.communication.setDigitalPin(1, false);
-                Thread.sleep(100);
-            }
-            
+            System.out.println("Stop fast movements!");
+            if(!this.moveXFastForward(false)) return false;     /* STOP fast moving forward */
+            if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
+            System.out.println("Fast movements stopped!");
+
+            Thread.sleep(100);
             this.communication.setDigitalPin(12, connected);
-            
+            System.out.println("Clip xFast set to: " +connected);
+
             return true;
 
         } catch (IncompatiblePinException | RemoteException | InterruptedException ex) {
             Logger.getLogger(OperationCtrl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return false;
     }
 
@@ -534,30 +548,28 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.communication == null) throw new MachineUnreachableException();
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
+            if(comp.get(21).getValueAsString().equals("1") == connected) return true;   /* CHECK if already in desired state */
+            System.out.println("Change in Clip xSlow required!");
             if(connected) {
+                System.out.println("Connecting Clip xSlow required!");
                 if(comp.get(18).getValueAsString().equals("0")) return false;     /* CHECK no air pressure */
-                if(!comp.get(2).getValueAsString().equals("0")) return false;     /* CHECK slow moving forward */
-                if(!comp.get(3).getValueAsString().equals("0")) return false;     /* CHECK slow moving backwards */
-                this.communication.setDigitalPin(0, false);             /* STOP fast moving forward */
-                Thread.sleep(100);
-                this.communication.setDigitalPin(1, false);             /* STOP fast moving backwards */
-                Thread.sleep(100);
+                if(!this.moveXFastForward(false)) return false;     /* STOP fast moving forward */
+                if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
             }
-            else {
-                this.communication.setDigitalPin(2, false);
-                Thread.sleep(100);
-                this.communication.setDigitalPin(3, false);
-                Thread.sleep(100);
-            }
+            System.out.println("Stop slow movements!");
+            if(!this.moveXSlowForward(false)) return false;     /* STOP slow moving forward */
+            if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
+            System.out.println("Slow movements stopped!");
             
+            Thread.sleep(100);
             this.communication.setDigitalPin(13, connected);
+            System.out.println("Clip xSlow set to: " +connected);
             
             return true;
 
         } catch (IncompatiblePinException | RemoteException | InterruptedException ex) {
             Logger.getLogger(OperationCtrl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return false;
     }
 
@@ -706,17 +718,17 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             
-            if(!comp.get(19).getValueAsString().equals("0")) { System.out.println("X"); return false; }   /* CHECK sensing head contact */
-            if(comp.get(18).getValueAsString().equals("0")) { System.out.println("A"); return false; }    /* CHECK no air pressure */
-            if(!comp.get(0).getValueAsString().equals("0")) { System.out.println("B"); return false; }    /* CHECK fast moving forward */
-            if(!comp.get(1).getValueAsString().equals("0")) { System.out.println("C"); return false; }    /* CHECK fast moving backwards */
-            if(!comp.get(2).getValueAsString().equals("0")) { System.out.println("D"); return false; }    /* CHECK slow moving forward */
-            if(!comp.get(3).getValueAsString().equals("0")) { System.out.println("E"); return false; }    /* CHECK slow moving backwards */
+            /* Check whether current state of machine actuators allows actuator activation */
+            if(comp.get(19).getValueAsString().equals("1")) return false;   /* CHECK sensing head contact */
+            if(comp.get(18).getValueAsString().equals("0")) return false;    /* CHECK no air pressure */
+            if(!this.moveXFastForward(false)) return false;   /* STOP fast moving forward */
+            if(!this.moveXFastBackwards(false)) return false;   /* STOP fast moving backwards */
+            if(!this.moveXSlowForward(false)) return false;     /* STOP slow moving forward */
+            if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
+            if(!this.setXFastConnected(true)) return false;     /* CLOSE clip fast */
+            if(!this.setXSlowConnected(false)) return false;    /* OPEN clip slow */
 
-            this.communication.setDigitalPin(12, true);
-            Thread.sleep(100);
-            this.communication.setDigitalPin(13, false);
-            Thread.sleep(100);
+            Thread.sleep(500);
             this.communication.setAnalogValue("X", position);
 
             this.session.getProtocol().addLine("move x-position from " +this.getComponentValue(26) +" to " +position);

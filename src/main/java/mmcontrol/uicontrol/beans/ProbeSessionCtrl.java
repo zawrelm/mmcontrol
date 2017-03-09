@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import mmcontrol.uicontrol.model.Probe;
 import mmcontrol.uicontrol.model.ProbeProgram;
 import mmcontrol.uicontrol.model.ProbeProgramExecution;
@@ -67,6 +68,7 @@ public class ProbeSessionCtrl implements Serializable {
         this.loginCtrl.getSelectedMachine().setState(EMachineState.CONNECTED);
         this.loginCtrl.setSelectedMachine(null);
         this.activeSession = null;
+        FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("operationCtrl");
         PushRenderer.render("session");
     }
 
