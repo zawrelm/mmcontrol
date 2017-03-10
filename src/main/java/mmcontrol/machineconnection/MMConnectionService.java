@@ -28,8 +28,9 @@ public class MMConnectionService {
                 Logger.getLogger(MMConnectionService.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            System.out.println("Exiting...");
-
+            System.out.println("Trying to shut down connected machines: " 
+                    +((TCPMachineConnectionService) server).printConnectedMachineNumbers());
+            
             server.shutdown();
         } catch (RemoteException ex) {
             System.out.println("Unable to start!");

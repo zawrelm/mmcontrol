@@ -76,7 +76,7 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
                     registry = LocateRegistry.getRegistry(host, port);
 
                     registry.rebind(bindingNameCS+this.machineId, this);
-                    System.out.print(bindingNameCS+this.machineId +" running!");
+                    System.out.println(bindingNameCS+this.machineId +" running.");
                     
                     try {
                         String response;

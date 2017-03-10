@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -86,14 +87,17 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                         bindingName = props.getProperty("registry.connectionService");
                         this.bindingNameSUS = props.getProperty("registry.stateUpdateService");
                         
-                        try {
-                            registry = LocateRegistry.createRegistry(regPort);
-                        } catch (RemoteException ex) {
-                            registry = LocateRegistry.getRegistry(host, regPort);
-                        }
                         connectionService = this;
-                        registry.rebind(bindingName, connectionService);
-                        System.out.println("Waiting for connection...");
+                        try {
+                            registry = LocateRegistry.getRegistry(host, regPort);
+                            registry.rebind(bindingName, connectionService);
+                            System.out.println("RMI-Registry found on host '" +host +":" +regPort +"\'");
+                        } catch (RemoteException ex) {
+                            registry = LocateRegistry.createRegistry(regPort);
+                            registry.rebind(bindingName, connectionService);
+                            System.out.println("RMI-Registry on host \'" +host +":" +regPort +"\' not found, created local registry");
+                        }
+                        System.out.println("Waiting for machines to connect...");
                         
                         while (running) {
                             try {
@@ -129,13 +133,13 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                                                 this.activeMachines.get(id).shutdownMachine();
                                                 //TODO: remove thread from executorservice-pool?
                                                 this.removeFromActiveMachinesList(id);
-                                                System.out.println("Machine with ID " + id + " is now inactive!");
+                                                System.out.println("Machine with ID " + id + " is now inactive.");
                                             }
                                         }
 
                                         TCPMachineCommunicationService communication = new TCPMachineCommunicationService(id, socket, this);
                                         pool.execute(communication);
-                                        System.out.println("Machine with ID " + id + " is now active!");
+                                        System.out.println("Machine with ID " + id + " is now active.");
                                         this.addToActiveMachinesList(id, communication);
                                     } else {
                                         System.out.println("ERROR: Unknown response format!");
@@ -143,7 +147,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                             } catch (ConnectionHandshakeFailedException ex) {
                                 System.out.println("ERROR: Handshake failed, machine not connected!");
                             } catch (IOException ex) {
-                                System.out.println("ERROR: Interruption while connecting machine!");
+                                System.out.println("ERROR: Interruption while waiting for machine connection!");
                             } catch (Exception ex) {
                                 System.out.println("ERROR: Unknown response format!");
                             }
@@ -174,7 +178,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                 registry.unbind(bindingName);
             } catch (NullPointerException | RemoteException | NotBoundException ex) { }
         }
-        System.out.println("The service has been shut down successfully!");
+        System.out.println("The ConnectionService has been stopped!");
     }
     
     @Override
@@ -210,7 +214,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
             return;
         }
 
-        System.out.println("Server informed about activation of machine " + machineId + "!");
+        System.out.println("Server informed about activation of machine " + machineId + ".");
     }
 
     @Override
@@ -224,7 +228,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
             return;
         }
 
-        System.out.println("Server informed about shutdown of machine " +machineId +"!");
+        System.out.println("Server informed about shutdown of machine " +machineId +".");
     }
     
     @Override
@@ -239,7 +243,6 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                 this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0); //retry once if server was unreachable
         } catch (NotBoundException | IOException| NumberFormatException ex) {
             System.err.println("Server unreachable! Not informed about active machines!");
-            return;
         }
     }
     
@@ -301,4 +304,14 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
     
     }
 
+    public String printConnectedMachineNumbers() {
+        Iterator<Long> it = this.activeMachines.keySet().iterator();
+        if(!it.hasNext()) return "no machines are connected";
+        String list = "" +it.next();
+        while(it.hasNext()) {
+            list += ", " +it.next();
+        }
+        return list;
+    }
+    
 }

@@ -35,7 +35,7 @@ public class StoredMachines {
     
     String bindingNameSUS;  //StateUpdateService
     String bindingNameCS;   //CommunicationService
-    private static Registry registry;
+    private static Registry registry = null; //Registry needs to be statically referenced in order to not be distributedly garbage collected!
     
     MainCtrl main;
     
@@ -66,15 +66,18 @@ public class StoredMachines {
                     this.bindingNameCS = props.getProperty("registry.communicationService");
                     String bindingNameConS = props.getProperty("registry.connectionService");
 
+                    sus = new MachineStateUpdateServiceImpl(this);
+                    
                     try {
-                        registry = LocateRegistry.createRegistry(port);
-                    } catch (RemoteException ex) {
                         registry = LocateRegistry.getRegistry(host, port);
+                        registry.rebind(this.bindingNameSUS, sus);
+                        System.out.println("RMI-Registry found on host '" +host +":" +port +"\'");
+                    } catch (RemoteException ex) {
+                        registry = LocateRegistry.createRegistry(port);
+                        registry.rebind(this.bindingNameSUS, sus);
+                        System.out.println("RMI-Registry on host \'" +host +":" +port +"\' not found, created local registry");
                     }
 
-                    sus = new MachineStateUpdateServiceImpl(this);
-                    registry.rebind(this.bindingNameSUS, sus);
-                    
                     IPullMachineStateUpdateService activeMachines = (IPullMachineStateUpdateService) registry.lookup(bindingNameConS);
                     activeMachines.pullActiveMachines();
 
@@ -86,7 +89,7 @@ public class StoredMachines {
                     System.err.println("Could not reach registry: " + ex.getCause().getMessage());
                     ex.printStackTrace();
                 } catch (NotBoundException ex) {
-                    Logger.getLogger(StoredMachines.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println("");
                 }
             } catch (IOException ex) {
                 System.err.println("Could not read properties file.");
