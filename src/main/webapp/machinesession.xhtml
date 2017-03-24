@@ -56,12 +56,13 @@
                         <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">                            
 <!--                            #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
 -->
-                                <h:panelGrid columns="6">
+                            <h:outputText value="#{msg.calibrating}" rendered="#{currentMachine.operation == 'CALIBRATION'}" />
+                            <h:panelGrid columns="6" rendered="#{currentMachine.operation != 'CALIBRATION'}" >
                                 <!-- <div id="buttons">-->
-                                    <!--<h:commandButton value="#{msg.plane_in3}"/>-->
                                     <h:commandButton 
                                         id="cbPlane" 
-                                        image="resources/img/button_plane.jpg"                                         
+                                        image="resources/img/button_plane.jpg"
+                                        value="#{msg.plane_in3}"
                                         action="#{operationCtrl.probePlane()}"
                                         disabled="#{operationCtrl.currentAction != null}"
                                         styleClass="actionButton"/>
@@ -144,7 +145,7 @@
                                 
                                 <h:panelGrid columns="1">
                                     <h:panelGrid columns="2">
-                                        <h:outputLabel id="olCurrentAction" value="#{msg.curentAction}"/>
+                                        <h:outputLabel id="olCurrentAction" value="#{msg.currentAction}: #{operationCtrl.currentAction}"/>
                                         
                                         <h:outputText id="otCurrentAction" value="#{operationCtrl.currentAction}" style="width: 50px"/>
                                     </h:panelGrid>
@@ -182,9 +183,11 @@
                                         
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
-                                        <h:commandButton id="cbCalculate" value="Calcular" />
                                         <!--<h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" disabled="#{operationCtrl.currentAction==null}" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;"/>  -->
-                                        <h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{operationCtrl.currentAction == null}"/> 
+                                        <h:commandButton id="cbCancel" value="#{msg.cancel}" action="#{operationCtrl.cancelOperation()}" 
+                                                         type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{operationCtrl.currentAction == null}"/> 
+                                        <h:commandButton id="cbMeasure" value="Medir" action="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
+                                        <h:commandButton id="cbCalculate" value="Calcular" action="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
 
                                         
                                         <ace:confirmationDialog id="cdCancel" binding="#{cbCancel}"
@@ -245,7 +248,7 @@
 
                                             <h:commandButton 
                                                 id="cbPosSlowX" image="resources/img/arrowSlowPosX.png" 
-                                                action="#{operationCtrl.moveXSlowBackForward(true)}" 
+                                                action="#{operationCtrl.moveXSlowForward(true)}" 
                                                 actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="x"/>
@@ -255,7 +258,7 @@
 
                                             <h:commandButton 
                                                 id="cbPosFastX" image="resources/img/arrowFastPosX.png" 
-                                                action="#{operationCtrl.moveXSlowBackForward(true)}" 
+                                                action="#{operationCtrl.moveXFastForward(true)}" 
                                                 actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="x"/>
