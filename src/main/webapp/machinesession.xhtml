@@ -23,7 +23,7 @@
                                     <f:selectItems value="#{inventoryCtrl.heads}" />
                                 </h:selectOneMenu><br />
                             </span-->
-<!--                            <span>
+                            <span>
                                 <h:outputLabel value="#{msg.machine}: " for="machineselection" />
                                 <a href="machinesession.xhtml"></a> 
                                 <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
@@ -49,12 +49,11 @@
                                                      action="#{sessionCtrl.stopProbe()}" 
                                                      rendered="#{!empty sessionCtrl.activeSession}" /></li>
                             </ul>
-    -->                    </h:form>
+                        </h:form>
                     <div id="controlpanel">
                         <hr/>
                         <h3>#{msg.probefunctions}</h3>
-                        <!--<h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">-->
-                        <h:form id="operations">                            
+                        <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">                            
 <!--                            #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
 -->
                                 <h:panelGrid columns="6">
@@ -209,91 +208,165 @@
                                      
                                         
                                     </h:panelGrid>
-                                    <h:panelGrid id="pgMovs" columns="2" >
-                                        <h:panelGrid columns="1">                            
-<!--
-                                            <h:commandButton id="cbSlow" image="resources/img/button_slow.png" style="height: 52px; width: 105px" />
-                                            <h:commandButton id="cbFast" image="resources/img/button_fast.png" style="height: 52px; width: 105px" />
--->
-                                        </h:panelGrid>
-                                        <h:panelGrid columns="5"> 
+                                    <h:panelGrid id="pgMovs" columns="3" >
+                                        <h:panelGrid columns="8"> 
+
+                                            <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
+
                                             <h:commandButton 
-                                                id="cbMinX" 
-                                                image="resources/img/ArrrowNegX.png" 
-                                                action="#{operationCtrl.moveXSlowBackwards(true)}" 
+                                                id="cbMinFastX" 
+                                                image="resources/img/arrowFastMinX.png" 
+                                                action="#{operationCtrl.moveXFastBackwards(true)}" 
                                                 actionListener="#{operationCtrl.move}"
-                                                disabled="#{operationCtrl.movingX == true and operationCtrl.axis == 'x' and operationCtrl.orientation != '-'}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="x"/>
                                                 <f:attribute name="orientation" value="-"/>
                                                 <f:attribute name="speed" value="fast"/>
                                             </h:commandButton>
 
-                                            <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
                                             <h:commandButton 
-                                                id="cbPosX" image="resources/img/ArrrowPosX.png" 
+                                                id="cbMinSlowX" 
+                                                image="resources/img/arrowSlowMinX.png" 
+                                                action="#{operationCtrl.moveXFastBackwards(true)}" 
+                                                actionListener="#{operationCtrl.move}"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="x"/>
+                                                <f:attribute name="orientation" value="-"/>
+                                                <f:attribute name="speed" value="slow"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbMinStopX" 
+                                                image="resources/img/stop.png" 
+                                                actionListener="#{operationCtrl.stop}"
+                                                styleClass="stopButton">
+                                                <f:attribute name="axis" value="x"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbPosSlowX" image="resources/img/arrowSlowPosX.png" 
                                                 action="#{operationCtrl.moveXSlowBackForward(true)}" 
                                                 actionListener="#{operationCtrl.move}"
-                                                disabled="#{operationCtrl.movingX == true and operationCtrl.axis == 'x' and operationCtrl.orientation != '+'}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="x"/>
                                                 <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="slow"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbPosFastX" image="resources/img/arrowFastPosX.png" 
+                                                action="#{operationCtrl.moveXSlowBackForward(true)}" 
+                                                actionListener="#{operationCtrl.move}"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="x"/>
+                                                <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="fast"/>
                                             </h:commandButton>
 
                                             <ace:textEntry id="tePosX" styleClass="goPosInputtext"/>
                                             <h:commandButton 
                                                 id="cbGoX" 
                                                 value="Go!" 
-                                                disabled="#{operationCtrl.movingX == true and operationCtrl.axis == 'x'}"
                                                 styleClass="goButton" />
 
+                                            <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
 
                                             <h:commandButton 
-                                                id="cbMinY" image="resources/img/ArrrowNegY.png" 
+                                                id="cbMinFastY" image="resources/img/arrowFastMinY.png" 
                                                 actionListener="#{operationCtrl.move}"
-                                                disabled="#{operationCtrl.movingY == true and operationCtrl.axis == 'y' and operationCtrl.orientation != '-'}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="y"/>
                                                 <f:attribute name="orientation" value="-"/>
+                                                <f:attribute name="speed" value="fast"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbMinSlowY" image="resources/img/arrowSlowMinY.png" 
+                                                actionListener="#{operationCtrl.move}"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="y"/>
+                                                <f:attribute name="orientation" value="-"/>
+                                                <f:attribute name="speed" value="slow"/>
                                             </h:commandButton>
                                             
-                                            <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
                                             <h:commandButton 
-                                                id="cbPosY" image="resources/img/ArrrowPosY.png" 
+                                                id="cbMinStopY" 
+                                                image="resources/img/stop.png" 
+                                                actionListener="#{operationCtrl.stop}"
+                                                styleClass="stopButton">
+                                                <f:attribute name="axis" value="y"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbPosSlowY" image="resources/img/arrowSlowPosY.png" 
                                                 actionListener="#{operationCtrl.move}"
-                                                disabled="#{operationCtrl.movingY == true and operationCtrl.axis == 'y' and operationCtrl.orientation != '+'}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="y"/>
                                                 <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="slow"/>
                                             </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbPosFastY" image="resources/img/arrowFastPosY.png" 
+                                                actionListener="#{operationCtrl.move}"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="y"/>
+                                                <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="fast"/>
+                                            </h:commandButton>
+                                            
                                             
                                             <ace:textEntry id="tePosY" styleClass="goPosInputtext"/>
                                             <h:commandButton 
                                                 id="cbGoY" 
                                                 value="Go!" 
-                                                disabled="#{operationCtrl.movingY == true and operationCtrl.axis == 'y'}"
                                                 styleClass="goButton"/>
 
+                                            <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
 
                                             <h:commandButton 
-                                                id="cbMinZ" image="resources/img/ArrrowNegZ.png" 
-                                                action="#{operationCtrl.moveXSlowBackwards(true)}" 
+                                                id="cbMinFastZ" image="resources/img/arrowFastMinZ.png" 
                                                 actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="z"/>
                                                 <f:attribute name="orientation" value="-"/>
+                                                <f:attribute name="speed" value="fast"/>
                                             </h:commandButton>
-                                            <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
 
                                             <h:commandButton 
-                                                id="cbPosZ" image="resources/img/ArrrowPosZ.png" 
+                                                id="cbMinSlowZ" image="resources/img/arrowSlowMinZ.png" 
                                                 actionListener="#{operationCtrl.move}"
-                                                onclick="operations.cbMinZ.disabled=true;"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="z"/>
+                                                <f:attribute name="orientation" value="-"/>
+                                                <f:attribute name="speed" value="slow"/>
+                                            </h:commandButton>
+                                            
+                                            <h:commandButton 
+                                                id="cbMinStopZ" 
+                                                image="resources/img/stop.png" 
+                                                actionListener="#{operationCtrl.stop}"
+                                                styleClass="stopButton">
+                                                <f:attribute name="axis" value="z"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton 
+                                                id="cbPosSlowZ" image="resources/img/arrowSlowPosZ.png" 
+                                                actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
                                                 <f:attribute name="axis" value="z"/>
                                                 <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="slow"/>
                                             </h:commandButton>
 
+                                            <h:commandButton 
+                                                id="cbPosFastZ" image="resources/img/arrowFastPosZ.png" 
+                                                actionListener="#{operationCtrl.move}"
+                                                styleClass="moveButton">
+                                                <f:attribute name="axis" value="z"/>
+                                                <f:attribute name="orientation" value="+"/>
+                                                <f:attribute name="speed" value="fast"/>
+                                            </h:commandButton>
 
                                             <ace:textEntry 
                                                 value="#{operationCtrl.goPosZ}" 
@@ -311,6 +384,19 @@
 
             
                                         </h:panelGrid>
+                                        <ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" />
+
+
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/>
+                                            <h:outputText id="otXPos" value="-0.00333" styleClass="outPosOutText"/>
+
+                                            <h:outputLabel id="olYPos" value="Y:" styleClass="outPosLabel"/>
+                                            <h:outputText id="otYPos" value="0.0325" styleClass="outPosOutText"/>
+
+                                            <h:outputLabel id="olZPos" value="Z:" styleClass="outPosLabel"/>
+                                            <h:outputText id="otZPos" value="0.0003" styleClass="outPosOutText"/>
+                                        </h:panelGrid>
 
                                     </h:panelGrid>
     <!--                            <h:panelGrid columns="2">
@@ -327,18 +413,10 @@
                                 </h:panelGrid>   
 
     -->
+
+    
                                 </h:panelGrid>
-
-                                <h:panelGrid columns="2">
-                                    <h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/>
-                                    <h:outputText id="otXPos" value="-0.00333" styleClass="outPosOutText"/>
-
-                                    <h:outputLabel id="olYPos" value="Y:" styleClass="outPosLabel"/>
-                                    <h:outputText id="otYPos" value="0.0325" styleClass="outPosOutText"/>
-
-                                    <h:outputLabel id="olZPos" value="Z:" styleClass="outPosLabel"/>
-                                    <h:outputText id="otZPos" value="0.0003" styleClass="outPosOutText"/>
-                                </h:panelGrid>
+                                
                             </h:panelGrid>
 
                                             <ace:growlMessages  id="allMsgsGrowl" autoHide="false"

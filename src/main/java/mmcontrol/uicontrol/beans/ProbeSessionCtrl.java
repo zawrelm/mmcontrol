@@ -6,6 +6,7 @@
 package mmcontrol.uicontrol.beans;
 
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -63,6 +64,7 @@ public class ProbeSessionCtrl implements Serializable {
         PushRenderer.render("session");
     }
     
+    @PreDestroy
     public void stopProbe() {
         this.loginCtrl.getUser().getCurrentSession().endUserMachineSession();
         this.loginCtrl.getSelectedMachine().setState(EMachineState.CONNECTED);

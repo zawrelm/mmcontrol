@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -103,9 +104,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     @PostConstruct
     private void init() {
         System.out.println("OperationCtrl constructed!");
-//        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
-//        this.machine = this.mainCtrl.getMachineMgmt().getMachines().get(this.session.getMachineId());
-//        this.communication = this.machine.getCurrentSession().getCommunicationService();
+        this.session = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
+        this.machine = this.mainCtrl.getMachineMgmt().getMachines().get(this.session.getMachineId());
+        this.communication = this.machine.getCurrentSession().getCommunicationService();
+    }
+    
+    @PreDestroy
+    private void cleanup() {
+        System.out.println("OperationCtrl destroyed");
     }
     
     @Override

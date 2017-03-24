@@ -49,6 +49,11 @@ public class LoginCtrl implements Serializable {
      */
     public String login() {
         
+        //TODO: REMOVE! This is just while testing!
+        this.email = "john@doe.com";
+        this.password = "test";
+        //END REMOVE
+        
         this.loginfailed = true;
         
         try {
