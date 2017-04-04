@@ -271,6 +271,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                     for(int i = 0; i < 10; i++) { // Retry until CommunicationService is registered
                         try {
                             stateUpdateService.informMachineConnected(machineId);
+                            stateUpdateService.informStateChange(machineId, this.activeMachines.get(machineId).getStatus());
                             i = 10;
                         } catch (RemoteException e) {
                             try {
@@ -290,6 +291,9 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                         stateUpdateService.informActiveMachines(null);
                     } else {
                         stateUpdateService.informActiveMachines(new HashSet(this.activeMachines.keySet()));
+                        for(long mid : this.activeMachines.keySet()) {
+                            stateUpdateService.informStateChange(mid, this.activeMachines.get(mid).getStatus());
+                        }
                     }
                     break;
             }

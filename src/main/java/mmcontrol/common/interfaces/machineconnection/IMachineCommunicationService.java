@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import mmcontrol.common.exceptions.IncompatiblePinException;
 import mmcontrol.common.exceptions.MachineUnreachableException;
+import mmcontrol.common.model.StatusMessage;
 
 /**
  * Implementation of the protocol between Server and Controller of Machine.
@@ -21,6 +22,8 @@ public interface IMachineCommunicationService extends Remote {   //Implementatio
     public void shutdownMachine() throws RemoteException;
 
     public long getMachineId() throws RemoteException;
+    
+    public StatusMessage getStatus() throws RemoteException;
     
     /* --> push to callback interface at changes instead of those methods
     public boolean getDigitalSensorValue(int pin) throws MachineUnreachableException, IncompatiblePinException;

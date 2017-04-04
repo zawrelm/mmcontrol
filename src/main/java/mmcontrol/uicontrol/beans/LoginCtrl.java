@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import mmcontrol.uicontrol.exceptions.UserNotFoundException;
 import mmcontrol.uicontrol.model.Machine;
 import mmcontrol.uicontrol.model.User;
+import mmcontrol.uicontrol.model.enums.EOperation;
 import org.icefaces.application.PushRenderer;
 
 /**
@@ -53,6 +54,7 @@ public class LoginCtrl implements Serializable {
         this.email = "john@doe.com";
         this.password = "test";
         //END REMOVE
+        if(this.user != null) return "/machinesession.xhtml";   //TODO: change to display a message that logout is needed first
         
         this.loginfailed = true;
         
@@ -80,8 +82,10 @@ public class LoginCtrl implements Serializable {
      * @return Returns the user to the startpage.
      */
     public String logout() {
-        
         try {
+            if(this.selectedMachine != null) {
+                this.selectedMachine.setOperation(EOperation.WAITING_FOR_CALIBRATION);
+            }
             this.main.getUserMgmt().getUser(this.user.getEmail()).endSession();
         } catch (UserNotFoundException ex) {
             Logger.getLogger(LoginCtrl.class.getName()).log(Level.SEVERE, null, ex);

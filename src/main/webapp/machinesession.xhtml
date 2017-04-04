@@ -7,6 +7,7 @@
       xmlns:icecore="http://www.icefaces.org/icefaces/core"
       xmlns:ace="http://www.icefaces.org/icefaces/components"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head></h:head>
     <h:body>
         <ui:composition template="./WEB-INF/includes/template.xhtml">
 
@@ -54,37 +55,35 @@
                         <hr/>
                         <h3>#{msg.probefunctions}</h3>
                         <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">                            
-<!--                            #{msg.probe_state} <h:outputText value="#{operationCtrl.machine.operation} - #{operationCtrl.machine.operationState}" /><br/>
--->
-                            <h:outputText value="#{msg.calibrating}" rendered="#{currentMachine.operation == 'CALIBRATION'}" />
-                            <h:panelGrid columns="6" rendered="#{currentMachine.operation != 'CALIBRATION'}" >
+                            <h:outputText value="#{msg.calibrating}" rendered="#{loginCtrl.selectedMachine.operation == 'CALIBRATION'}" />
+                            <h:panelGrid columns="6" rendered="#{loginCtrl.selectedMachine.operation != 'CALIBRATION'}" >
                                 <!-- <div id="buttons">-->
                                     <h:commandButton 
                                         id="cbPlane" 
                                         image="resources/img/button_plane.jpg"
                                         value="#{msg.plane_in3}"
                                         action="#{operationCtrl.probePlane()}"
-                                        disabled="#{operationCtrl.currentAction != null}"
+                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
                                         styleClass="actionButton"/>
                                         
                                     
                                     <h:commandButton 
                                         id="cbDiameter" 
                                         image="resources/img/button_diameter.jpg" 
-                                        styleClass="actionButton" 
-                                        disabled="#{operationCtrl.currentAction != null}"/>
+                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                        styleClass="actionButton"/>
                                     
                                     <h:commandButton 
                                         id="cbDistance" 
                                         image="resources/img/button_distance.jpg" 
-                                        styleClass="actionButton" 
-                                        disabled="#{operationCtrl.currentAction != null}"/>
+                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                        styleClass="actionButton"/>
                                     
                                     <h:commandButton 
                                         id="cbPoint" 
                                         image="resources/img/button_point.jpg" 
-                                        styleClass="actionButton" 
-                                        disabled="#{operationCtrl.currentAction != null}" />
+                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                        styleClass="actionButton"/>
                                     
                                     <ace:tooltip id="ttPlaneAction"
                                                   for="cbPlane"
@@ -145,9 +144,9 @@
                                 
                                 <h:panelGrid columns="1">
                                     <h:panelGrid columns="2">
-                                        <h:outputLabel id="olCurrentAction" value="#{msg.currentAction}: #{operationCtrl.currentAction}"/>
-                                        
-                                        <h:outputText id="otCurrentAction" value="#{operationCtrl.currentAction}" style="width: 50px"/>
+                                        <h:outputLabel id="olCurrentAction" value="#{msg.currentAction}: "/>
+                                        <h:outputText id="otCurrentAction" value="#{loginCtrl.selectedMachine.operation} 
+                                                      - #{loginCtrl.selectedMachine.operationState}" style="width: 50px"/>
                                     </h:panelGrid>
                                     <h:panelGrid columns="7">
                                         <h:outputLabel id="olXPoint1" value="#{msg.point} 1 - "/>
@@ -185,7 +184,7 @@
                                     <h:panelGrid columns="2">
                                         <!--<h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" disabled="#{operationCtrl.currentAction==null}" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;"/>  -->
                                         <h:commandButton id="cbCancel" value="#{msg.cancel}" action="#{operationCtrl.cancelOperation()}" 
-                                                         type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{operationCtrl.currentAction == null}"/> 
+                                                         type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{loginCtrl.selectedMachine.operation == 'WAITING_ALREADY_CALIBRATED'}"/> 
                                         <h:commandButton id="cbMeasure" value="Medir" action="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
                                         <h:commandButton id="cbCalculate" value="Calcular" action="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
 
@@ -220,57 +219,51 @@
                                                 id="cbMinFastX" 
                                                 image="resources/img/arrowFastMinX.png" 
                                                 action="#{operationCtrl.moveXFastBackwards(true)}" 
-                                                actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="x"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <!--f:attribute name="move" value="true"/-->
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
                                                 id="cbMinSlowX" 
                                                 image="resources/img/arrowSlowMinX.png" 
-                                                action="#{operationCtrl.moveXFastBackwards(true)}" 
-                                                actionListener="#{operationCtrl.move}"
+                                                action="#{operationCtrl.moveXSlowBackwards(true)}" 
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="x"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <!--f:attribute name="move" value="true"/-->
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
                                                 id="cbMinStopX" 
                                                 image="resources/img/stop.png" 
-                                                actionListener="#{operationCtrl.stop}"
+                                                action="#{operationCtrl.stopX()}"
                                                 styleClass="stopButton">
-                                                <f:attribute name="axis" value="x"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
                                                 id="cbPosSlowX" image="resources/img/arrowSlowPosX.png" 
                                                 action="#{operationCtrl.moveXSlowForward(true)}" 
-                                                actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="x"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
                                                 id="cbPosFastX" image="resources/img/arrowFastPosX.png" 
                                                 action="#{operationCtrl.moveXFastForward(true)}" 
-                                                actionListener="#{operationCtrl.move}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="x"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
-                                            <ace:textEntry id="tePosX" styleClass="goPosInputtext"/>
+                                            <ace:textEntry id="tePosX" binding="#{xGoPos}" styleClass="goPosInputtext"/>
                                             <h:commandButton 
                                                 id="cbGoX" 
                                                 value="Go!" 
-                                                styleClass="goButton" />
+                                                action="#{operationCtrl.moveXToPosition(xGoPos.value)}"
+                                                styleClass="goButton">
+                                                <f:ajax execute="@form" render="@none" />
+                                            </h:commandButton>
+                                                
 
                                             <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
 

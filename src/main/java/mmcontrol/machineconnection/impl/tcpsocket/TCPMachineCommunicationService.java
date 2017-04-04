@@ -169,6 +169,11 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
         return this.machineId;
     }
     
+    @Override
+    public StatusMessage getStatus() {
+        return this.status;
+    }
+    
     private void close() throws IOException {
 	this.out.close();
 	this.in.close();
@@ -207,7 +212,7 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
         this.status.setCurrent(response);
         try {
             if (this.status.changed()) {
-                System.out.println("updateSensorValues - change=true!");
+                System.out.println("updateSensorValues - " +this.status.getCurrent());
                 try {
                     if (this.stateUpdateService == null) {
                         this.stateUpdateService = (IMachineStateUpdateService) registry.lookup(this.bindingNameSUS);
