@@ -235,6 +235,18 @@ public class Machine implements Serializable {
         this.posZZero = posZZero;
     }
 
+    public double getPosXAbs() {
+        return ((SensorAnalog) this.components.get(26)).getValue();
+    }
+    
+    public double getPosYAbs() {
+        return ((SensorAnalog) this.components.get(27)).getValue();
+    }
+
+    public double getPosZAbs() {
+        return ((SensorAnalog) this.components.get(28)).getValue();
+    }
+
     @Override
     public String toString() {
         return "ID: " +this.id +", " +this.name + " (" +this.type +")";

@@ -210,8 +210,8 @@
                                      
                                         
                                     </h:panelGrid>
-                                    <h:panelGrid id="pgMovs" columns="3" >
-                                        <h:panelGrid columns="8"> 
+                                    <h:panelGrid id="pgMovs" columns="2" >
+                                        <h:panelGrid columns="9"> 
 
                                             <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
 
@@ -220,7 +220,6 @@
                                                 image="resources/img/arrowFastMinX.png" 
                                                 action="#{operationCtrl.moveXFastBackwards(true)}" 
                                                 styleClass="moveButton">
-                                                <!--f:attribute name="move" value="true"/-->
                                                 <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
@@ -229,7 +228,6 @@
                                                 image="resources/img/arrowSlowMinX.png" 
                                                 action="#{operationCtrl.moveXSlowBackwards(true)}" 
                                                 styleClass="moveButton">
-                                                <!--f:attribute name="move" value="true"/-->
                                                 <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
@@ -242,14 +240,16 @@
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosSlowX" image="resources/img/arrowSlowPosX.png" 
-                                                action="#{operationCtrl.moveXSlowForward(true)}" 
+                                                id="cbPosSlowX"
+                                                image="resources/img/arrowSlowPosX.png" 
+                                                action="#{operationCtrl.moveXSlowForward(true)}"
                                                 styleClass="moveButton">
                                                 <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosFastX" image="resources/img/arrowFastPosX.png" 
+                                                id="cbPosFastX"
+                                                image="resources/img/arrowFastPosX.png" 
                                                 action="#{operationCtrl.moveXFastForward(true)}" 
                                                 styleClass="moveButton">
                                                 <f:ajax execute="@form" render="@none" />
@@ -263,105 +263,107 @@
                                                 styleClass="goButton">
                                                 <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
-                                                
+
+                                            <!--h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/-->
+                                            <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText"/>
+                                            
 
                                             <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
 
                                             <h:commandButton 
-                                                id="cbMinFastY" image="resources/img/arrowFastMinY.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbMinFastY"
+                                                image="resources/img/arrowFastMinY.png" 
+                                                action="#{operationCtrl.moveYFastBackwards(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="y"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbMinSlowY" image="resources/img/arrowSlowMinY.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbMinSlowY"
+                                                image="resources/img/arrowSlowMinY.png" 
+                                                action="#{operationCtrl.moveYSlowBackwards(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="y"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
                                             
                                             <h:commandButton 
                                                 id="cbMinStopY" 
                                                 image="resources/img/stop.png" 
-                                                actionListener="#{operationCtrl.stop}"
+                                                action="#{operationCtrl.stopY()}"
                                                 styleClass="stopButton">
-                                                <f:attribute name="axis" value="y"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosSlowY" image="resources/img/arrowSlowPosY.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbPosSlowY"
+                                                image="resources/img/arrowSlowPosY.png" 
+                                                action="#{operationCtrl.moveYSlowForward(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="y"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosFastY" image="resources/img/arrowFastPosY.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbPosFastY"
+                                                image="resources/img/arrowFastPosY.png" 
+                                                action="#{operationCtrl.moveYFastForward(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="y"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
                                             
                                             
                                             <ace:textEntry id="tePosY" styleClass="goPosInputtext"/>
                                             <h:commandButton 
-                                                id="cbGoY" 
-                                                value="Go!" 
-                                                styleClass="goButton"/>
+                                                id="cbGoY"
+                                                value="Go!"
+                                                action="#{operationCtrl.moveYToPosition(position)}"
+                                                styleClass="goButton">
+                                                <f:ajax execute="@form" render="@none" />
+                                            </h:commandButton>
 
+                                            <!--h:outputLabel id="olYPos" value="Y:" styleClass="outPosLabel"/-->
+                                            <h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/>
+
+                                            
                                             <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
 
                                             <h:commandButton 
-                                                id="cbMinFastZ" image="resources/img/arrowFastMinZ.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbMinFastZ"
+                                                image="resources/img/arrowFastMinZ.png" 
+                                                action="#{operationCtrl.moveZFastBackwards(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="z"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbMinSlowZ" image="resources/img/arrowSlowMinZ.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbMinSlowZ"
+                                                image="resources/img/arrowSlowMinZ.png" 
+                                                action="#{operationCtrl.moveZSlowBackwards(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="z"/>
-                                                <f:attribute name="orientation" value="-"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
                                             
                                             <h:commandButton 
                                                 id="cbMinStopZ" 
                                                 image="resources/img/stop.png" 
-                                                actionListener="#{operationCtrl.stop}"
+                                                action="#{operationCtrl.stopZ()}"
                                                 styleClass="stopButton">
-                                                <f:attribute name="axis" value="z"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosSlowZ" image="resources/img/arrowSlowPosZ.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbPosSlowZ"
+                                                image="resources/img/arrowSlowPosZ.png" 
+                                                action="#{operationCtrl.moveZSlowForward(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="z"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="slow"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <h:commandButton 
-                                                id="cbPosFastZ" image="resources/img/arrowFastPosZ.png" 
-                                                actionListener="#{operationCtrl.move}"
+                                                id="cbPosFastZ"
+                                                image="resources/img/arrowFastPosZ.png" 
+                                                action="#{operationCtrl.moveZFastForward(true)}"
                                                 styleClass="moveButton">
-                                                <f:attribute name="axis" value="z"/>
-                                                <f:attribute name="orientation" value="+"/>
-                                                <f:attribute name="speed" value="fast"/>
+                                                <f:ajax execute="@form" render="@none" />
                                             </h:commandButton>
 
                                             <ace:textEntry 
@@ -369,30 +371,22 @@
                                                 id="tePosZ" 
                                                 converterMessage="Please enter digits only."
                                                 converter="javax.faces.Double"
-                                                styleClass="goPosInputtext"
-                                                />
+                                                styleClass="goPosInputtext"/>
 
                                             <h:commandButton 
                                                 id="cbGoZ" 
                                                 value="#{msg.goPos}" 
-                                                styleClass="goButton"/>
+                                                styleClass="goButton">
+                                                <f:ajax execute="@form" render="@none" />
+                                            </h:commandButton>
 
-
+                                            <!--h:outputLabel id="olZPos" value="Z:" styleClass="outPosLabel"/-->
+                                            <h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/>
+                                            
             
                                         </h:panelGrid>
                                         <ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" />
 
-
-                                        <h:panelGrid columns="2">
-                                            <h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/>
-                                            <h:outputText id="otXPos" value="-0.00333" styleClass="outPosOutText"/>
-
-                                            <h:outputLabel id="olYPos" value="Y:" styleClass="outPosLabel"/>
-                                            <h:outputText id="otYPos" value="0.0325" styleClass="outPosOutText"/>
-
-                                            <h:outputLabel id="olZPos" value="Z:" styleClass="outPosLabel"/>
-                                            <h:outputText id="otZPos" value="0.0003" styleClass="outPosOutText"/>
-                                        </h:panelGrid>
 
                                     </h:panelGrid>
     <!--                            <h:panelGrid columns="2">

@@ -149,7 +149,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                             } catch (IOException ex) {
                                 System.out.println("ERROR: Interruption while waiting for machine connection!");
                             } catch (Exception ex) {
-                                System.out.println("ERROR: Unknown response format!");
+                                System.out.println("ERROR: Unknown response format or unspecified error!\n" +ex.getMessage());
                             }
                         }
 
