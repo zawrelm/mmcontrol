@@ -3,6 +3,8 @@ package mmcontrol.uicontrol.beans;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -17,6 +19,7 @@ import org.icefaces.application.PushRenderer;
 
 /**
  * The LoginController manages registered users, it performs login and logout.
+ * Objects of this class represent HTTP sessions.
  */
 @ManagedBean(name="loginCtrl")
 @SessionScoped
@@ -38,10 +41,25 @@ public class LoginCtrl implements Serializable {
     Machine selectedMachine = null;
 
     public LoginCtrl() {
-
+        
         // on creation, add this session to the push group
         PushRenderer.addCurrentSession("session");
 
+    }
+
+    @PostConstruct
+    private void init() {
+        System.out.println("LoginCtrl constructed");
+    }
+    
+    @PreDestroy
+    private void cleanup() {
+        try {
+            this.main.getUserMgmt().setUserHTTPSessionObject(null);
+        } catch (UserNotFoundException ex) {
+            Logger.getLogger(LoginCtrl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("LoginCtrl destroyed");
     }
     
     /**
@@ -54,22 +72,25 @@ public class LoginCtrl implements Serializable {
         this.email = "john@doe.com";
         this.password = "test";
         //END REMOVE
-        if(this.user != null) return "/machinesession.xhtml";   //TODO: change to display a message that logout is needed first
+        if(this.user != null) 
+            this.logout();
+            //return "/machinesession.xhtml";   //TODO: change to display a message that logout is needed first
         
         this.loginfailed = true;
         
         try {
-            User toCompare = main.getUserMgmt().getUser(this.getEmail()); // fetch user matching email from the userstore
+            User toCompare = this.main.getUserMgmt().getUser(this.getEmail()); // fetch user matching email from the userstore
             if(toCompare.getPassword().equals(this.password)) { // compare against password
-                this.loginfailed = false;
-                this.main.getUserMgmt().getUser(this.getEmail()).startSession();
                 this.user = toCompare;
+                this.main.getUserMgmt().setUserHTTPSessionObject(this);
+                this.main.getUserMgmt().getUser(this.getEmail()).startSession();
+                this.loginfailed = false;
                 PushRenderer.render("session");
                 return "/machinesession.xhtml"; // if email/password matches an existing user, return machine control page
             }
             
         } catch(UserNotFoundException e) {
-            
+            System.err.println("User not found - login failed!");
         }
         
         /* if the login has failed, redirect user to the initial page */
@@ -97,6 +118,10 @@ public class LoginCtrl implements Serializable {
  	final HttpServletRequest request = (HttpServletRequest)ec.getRequest();
         request.getSession(false).invalidate();
         return "/start.xhtml";
+    }
+
+    public void setMain(MainCtrl main) {
+        this.main = main;
     }
 
     public User getUser() {
@@ -141,8 +166,12 @@ public class LoginCtrl implements Serializable {
         PushRenderer.render("session");
     }
 
-    public void setMain(MainCtrl main) {
-        this.main = main;
+    public void updateMachineValues() {
+        System.out.println("Position: X=" +this.selectedMachine.getPosXAbs() +", Y=" +this.selectedMachine.getPosYAbs() 
+                +", Z=" +this.selectedMachine.getPosZAbs());
+        System.out.println("Machine Values updated!!!");
+        PushRenderer.render("session");
+        //FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("foo:bar");
     }
     
 }

@@ -2,6 +2,9 @@ package mmcontrol.uicontrol.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mmcontrol.uicontrol.exceptions.UserNotFoundException;
 import mmcontrol.uicontrol.model.User;
 
@@ -10,15 +13,24 @@ import mmcontrol.uicontrol.model.User;
  */
 public class StoredUsers implements Serializable {
     
-    private ArrayList<User> userlist;
+    private HashMap<User, LoginCtrl> users;
     
     /**
      * The constructor initializes the ArrayList.
      */
     public StoredUsers() {
-        this.userlist = new ArrayList<>();
+        this.users = new HashMap<>();
         
         //TODO: read list of existing users from database
+        /**for(int i = 1; i < 100; i++) {
+            User user = new User(i+"@manejo", "test");
+            user.setId(i);
+            user.setFirstname("John");
+            user.setLastname("Doe");
+            user.setTitle("PhD.");
+            this.addUser(user);
+        }*/
+        
         User user = new User("john@doe.com", "test");
         user.setId(1);
         user.setFirstname("John");
@@ -33,50 +45,74 @@ public class StoredUsers implements Serializable {
      * @param user The user to be added.
      */
     public void addUser(User user) {
-        this.userlist.add(user);
+        this.users.put(user, null);
     }
     
     /**
      * Finds and returns a User-object by the email-address.
      * @param email The email-address to be found.
-     * @return 
+     * @return User having the parameter-given email-address
      * @throws UserNotFoundException 
      */
     public User getUser(String email) throws UserNotFoundException {
-        if(this.userlist != null) {
-            for(int i = 0; i<= this.userlist.size(); i++) {
-                if(this.userlist.get(i).getEmail().equals(email)) {
-                    return this.userlist.get(i);
+        if(this.users != null) {
+            for(User user : this.users.keySet()) {
+                if(user.getEmail().equals(email)) {
+                    return user;
                 }
             }
         }
         throw new UserNotFoundException();
     }
     
-    public void setUserlist(ArrayList<User> userlist) {
-        this.userlist = userlist;
+    /**
+     * Finds and returns a User-object by the email-address.
+     * @param userId The userId to be found.
+     * @return User having the parameter-given userId
+     * @throws UserNotFoundException 
+     */
+    public User getUser(long userId) throws UserNotFoundException {
+        if(this.users != null) {
+            for(User user : this.users.keySet()) {
+                if(user.getId() == userId) {
+                    return user;
+                }
+            }
+        }
+        throw new UserNotFoundException();
+    }
+
+    public void setUsers(HashMap<User, LoginCtrl> users) {
+        this.users = users;
     }
     
-    public ArrayList<User> getUserlist() {
-        return this.userlist;
+    public HashMap<User, LoginCtrl> getUsers() {
+        return this.users;
     }
     
     /**
-     * Finds the User with an open UserMachineSession on the given Machine.
+     * Returns the SessionBean of a logged-in User connected to the given Machine.
      * 
      * @param machineId
      * @return user
      * @throws mmcontrol.uicontrol.exceptions.UserNotFoundException
      */
-    public User getOperator(long machineId) throws UserNotFoundException {
-        for(int i = 0; i < this.userlist.size(); i++) {
-            if(this.userlist.get(i).getCurrentSession() != null && this.userlist.get(i).getCurrentSession().getCurrentSession() != null) {
-                if(this.userlist.get(i).getCurrentSession().getCurrentSession().getMachineId() == machineId) {
-                    return this.userlist.get(i);
-                }
+    public LoginCtrl getUserHTTPSessionObject(long machineId) throws UserNotFoundException {
+        for(User user : this.users.keySet()) {
+            LoginCtrl loginObj = this.users.get(user);
+            if(loginObj != null && loginObj.getSelectedMachine() != null 
+                    && loginObj.getSelectedMachine().getId() == machineId) {
+                return loginObj;
             }
         }
         throw new UserNotFoundException();
+    }
+    
+    public void setUserHTTPSessionObject(LoginCtrl sessionBean) throws UserNotFoundException {
+        if(this.users.containsKey(sessionBean.getUser())) {
+            this.users.put(sessionBean.getUser(), sessionBean);
+        }
+        else throw new UserNotFoundException();
     }
     
 }

@@ -66,7 +66,7 @@ public class StoredMachines {
                     this.bindingNameCS = props.getProperty("registry.communicationService");
                     String bindingNameConS = props.getProperty("registry.connectionService");
 
-                    sus = new MachineStateUpdateServiceImpl(this);
+                    sus = new MachineStateUpdateServiceImpl(main);
                     
                     try {
                         registry = LocateRegistry.getRegistry(host, port);
@@ -175,7 +175,7 @@ public class StoredMachines {
     public void endMachineSession(long machineId) {
         if(this.machines.containsKey(machineId)) { //if machine exists
             try {
-                User user = this.main.getUserMgmt().getOperator(machineId); //get operator of current UserMachineSession
+                User user = this.main.getUserMgmt().getUserHTTPSessionObject(machineId).getUser(); //get operator of current UserMachineSession
                 this.main.getUserMgmt().getUser(user.getEmail()).getCurrentSession().endUserMachineSession(); //close UMS
             } catch(NullPointerException | UserNotFoundException ex) {}
 

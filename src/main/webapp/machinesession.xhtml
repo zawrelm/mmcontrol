@@ -14,7 +14,7 @@
             <ui:define name="content">
                 <div id="main">
                     <h2>#{msg.session}</h2>
-                        <h:form id="session">
+                    <h:form id="session">
                             <span>#{msg.user}: #{loginCtrl.user.title}, #{loginCtrl.user.firstname} #{loginCtrl.user.lastname}" 
                                 (#{msg.since} #{loginCtrl.user.currentSession.beginTime})</span><br/>
                             <!--span>#{msg.observers} (#{msg.invite}): Dr. Jorge Bauer, Dr. Numan Durakbasa </span><br/-->
@@ -40,21 +40,22 @@
                                 <br />
                             </span>
                             <span>#{msg.mountobject}</span><br/>
-                            <ul>
+                            <ul id="sessionmanagement">
                                 <li><h:commandButton id="startProbeNoRec" value="#{msg.probe_norecord}" 
                                                      action="#{sessionCtrl.startProbeWithoutRecording()}" 
-                                                     rendered="#{!empty loginCtrl.selectedMachine}" /></li>
-                                <li>Not implemented: #{msg.probe_withrecord}</li>
-                                <li>Not implemented: #{msg.probe_automatically}</li>
+                                                     rendered="#{!empty loginCtrl.selectedMachine and empty sessionCtrl.activeSession}"
+                                                     /></li>
+                                <!--li>Not implemented: #{msg.probe_withrecord}</li>
+                                <li>Not implemented: #{msg.probe_automatically}</li-->
                                 <li><h:commandButton id="stopProbe" value="#{msg.probe_stop}" 
                                                      action="#{sessionCtrl.stopProbe()}" 
                                                      rendered="#{!empty sessionCtrl.activeSession}" /></li>
                             </ul>
                         </h:form>
                     <div id="controlpanel">
-                        <hr/>
-                        <h3>#{msg.probefunctions}</h3>
                         <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">                            
+                            <hr/>
+                            <h3>#{msg.probefunctions}</h3>
                             <h:outputText value="#{msg.calibrating}" rendered="#{loginCtrl.selectedMachine.operation == 'CALIBRATION'}" />
                             <h:panelGrid columns="6" rendered="#{loginCtrl.selectedMachine.operation != 'CALIBRATION'}" >
                                 <!-- <div id="buttons">-->
@@ -265,7 +266,7 @@
                                             </h:commandButton>
 
                                             <!--h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/-->
-                                            <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText"/>
+                                            <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" />
                                             
 
                                             <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
@@ -467,14 +468,15 @@
                                     #{msg.contact}: 0
                                 </div>
                             </h:form> -->
-                     </h:form>
-                     
                         <hr/>
                     <br/>
                     <br/>
     Aca va el video de lo que se va filmando???
                     <br/>
                     <br/>
+
+                     </h:form>
+                     
                     <h:form id="fTrace">
                         
                         

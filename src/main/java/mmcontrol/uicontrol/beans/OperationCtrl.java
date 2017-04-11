@@ -89,6 +89,9 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         this.facesMessageZ = null;
         
         this.measuredPoints = new ArrayList<>();
+        
+        // on creation, add this bean to the push group
+        PushRenderer.addCurrentSession("session");
     }
 
     @PostConstruct

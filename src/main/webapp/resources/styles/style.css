@@ -118,13 +118,13 @@ a:focus {
         border-color: #EAEAEA;
 }
 
-
-/* ======================= FOOTER ======================= */
-
-#footer {
-    margin-top: 20px;
+#session ul {
+    list-style: none
 }
 
+#session ul il {
+    display: inline-block
+}
 
 .actionButton {
     height:100px;
@@ -182,3 +182,11 @@ a:focus {
     width: 60px;
     font-size: large;
 }
+
+
+/* ======================= FOOTER ======================= */
+
+#footer {
+    margin-top: 20px;
+}
+
