@@ -118,6 +118,12 @@ a:focus {
         border-color: #EAEAEA;
 }
 
+#session\:buttonRefresh {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
 #session ul {
     list-style: none
 }

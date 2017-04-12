@@ -35,6 +35,7 @@ public class StoredMachines {
     
     String bindingNameSUS;  //StateUpdateService
     String bindingNameCS;   //CommunicationService
+    String bindingNameConS; //ConnectionService/PullService
     private static Registry registry = null; //Registry needs to be statically referenced in order to not be distributedly garbage collected!
     
     MainCtrl main;
@@ -64,7 +65,7 @@ public class StoredMachines {
                     String host = props.getProperty("registry.host");
                     this.bindingNameSUS = props.getProperty("registry.stateUpdateService");
                     this.bindingNameCS = props.getProperty("registry.communicationService");
-                    String bindingNameConS = props.getProperty("registry.connectionService");
+                    this.bindingNameConS = props.getProperty("registry.connectionService");
 
                     sus = new MachineStateUpdateServiceImpl(main);
                     
@@ -78,8 +79,7 @@ public class StoredMachines {
                         System.out.println("RMI-Registry on host \'" +host +":" +port +"\' not found, created local registry");
                     }
 
-                    IPullMachineStateUpdateService activeMachines = (IPullMachineStateUpdateService) registry.lookup(bindingNameConS);
-                    activeMachines.pullActiveMachines();
+                    this.pullActiveMachines();
 
                     System.out.println("JSF application started!");
                     
@@ -89,7 +89,7 @@ public class StoredMachines {
                     System.err.println("Could not reach registry: " + ex.getCause().getMessage());
                     ex.printStackTrace();
                 } catch (NotBoundException ex) {
-                    System.err.println("");
+                    System.err.println();
                 }
             } catch (IOException ex) {
                 System.err.println("Could not read properties file.");
@@ -130,6 +130,11 @@ public class StoredMachines {
             }
         }
         return cm;
+    }
+    
+    public void pullActiveMachines() throws RemoteException, NotBoundException {
+        IPullMachineStateUpdateService activeMachines = (IPullMachineStateUpdateService) registry.lookup(this.bindingNameConS);
+        activeMachines.pullActiveMachines();
     }
     
     /**

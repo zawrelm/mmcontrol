@@ -6,6 +6,7 @@
 package mmcontrol.uicontrol.beans;
 
 import java.io.Serializable;
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -30,13 +31,25 @@ public class ProbeSessionCtrl implements Serializable {
     @ManagedProperty(value="#{loginCtrl}")
     private LoginCtrl loginCtrl;
     
-    private UserMachineSession activeSession = null;
+    private UserMachineSession activeSession;
     
     public ProbeSessionCtrl() {
 
+        this.activeSession = null;
+        
         // on load, add this session to the session push group
         PushRenderer.addCurrentSession("session");
 
+    }
+
+        @PostConstruct
+    private void init() {
+        System.out.println("ProbeSessionCtrl constructed");
+    }
+    
+    @PreDestroy
+    private void cleanup() {
+        System.out.println("ProbeSessionCtrl destroyed");
     }
 
     public void startProbeWithoutRecording() {

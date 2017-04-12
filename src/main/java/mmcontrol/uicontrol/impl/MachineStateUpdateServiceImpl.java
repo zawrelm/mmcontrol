@@ -1,5 +1,6 @@
 package mmcontrol.uicontrol.impl;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -65,6 +66,17 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
     @Override
     public void informStateChange(long machineId, StatusMessage status) throws RemoteException {
 
+        if(!this.control.getMachineMgmt().getMachines().containsKey(machineId)) {
+            System.out.print("Change in machine state received but machine-id is unknown! Refreshing Machine list...");
+            try {
+                this.control.getMachineMgmt().pullActiveMachines();
+                System.out.println("done!");
+            } catch (NotBoundException ex) {
+                System.out.println("failed!");
+                return;
+            }
+        }
+
         if(this.control.getMachineMgmt().getMachines().containsKey(machineId)) {
             //Get machine object (from database or a list of active machines) and set values of its actuators/sensors
             try {
@@ -82,7 +94,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
             System.out.println("CHANGE IN STATE OF MACHINE " + machineId + " RECEIVED VIA RMI!");
         }
         else {
-            System.err.println("Change in machine state received but machine-id is unknown!");
+            System.out.println("State update of unknown machine is ignored.");
         }
     }
 

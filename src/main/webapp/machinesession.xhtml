@@ -13,10 +13,13 @@
 
             <ui:define name="content">
                 <div id="main">
-                    <h2>#{msg.session}</h2>
                     <h:form id="session">
-                            <span>#{msg.user}: #{loginCtrl.user.title}, #{loginCtrl.user.firstname} #{loginCtrl.user.lastname}" 
-                                (#{msg.since} #{loginCtrl.user.currentSession.beginTime})</span><br/>
+                        <h:commandButton id="buttonRefresh" value="#{msg.refresh}">
+                            <f:ajax execute="@this" render="@all"/>
+                        </h:commandButton>
+                        <h2>#{msg.session}</h2>
+                        <span>#{msg.user}: #{loginCtrl.user.title}, #{loginCtrl.user.firstname} #{loginCtrl.user.lastname}" 
+                            (#{msg.since} #{loginCtrl.user.currentSession.beginTime})</span><br/>
                             <!--span>#{msg.observers} (#{msg.invite}): Dr. Jorge Bauer, Dr. Numan Durakbasa </span><br/-->
                             <!--span>
                                 <h:outputLabel value="#{msg.whichprobinghead}" for="probinghead" />
@@ -26,7 +29,7 @@
                             </span-->
                             <span>
                                 <h:outputLabel value="#{msg.machine}: " for="machineselection" />
-                                <a href="machinesession.xhtml"></a> 
+                                <!--a href="machinesession.xhtml"></a--> 
                                 <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
                                                          value="#{loginCtrl.selectedMachine}" rendered="#{empty loginCtrl.selectedMachine}">
                                     <ace:ajax />
@@ -51,9 +54,9 @@
                                                      action="#{sessionCtrl.stopProbe()}" 
                                                      rendered="#{!empty sessionCtrl.activeSession}" /></li>
                             </ul>
-                        </h:form>
+                    </h:form>
                     <div id="controlpanel">
-                        <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">                            
+                        <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">
                             <hr/>
                             <h3>#{msg.probefunctions}</h3>
                             <h:outputText value="#{msg.calibrating}" rendered="#{loginCtrl.selectedMachine.operation == 'CALIBRATION'}" />
@@ -137,8 +140,6 @@
                                         </h:panelGrid>
                                     </ace:tooltip>
                                     
-                                <!--</div>-->
-
                                 </h:panelGrid>
 
                             <h:panelGrid columns="2"  style="width: 100%;">
