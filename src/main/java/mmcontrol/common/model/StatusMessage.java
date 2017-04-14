@@ -61,16 +61,15 @@ public class StatusMessage implements Serializable {
 
             Double deltaX = Double.parseDouble(valuesPrevious[valuesPrevious.length-5]) 
                     - Double.parseDouble(valuesCurrent[valuesCurrent.length-5]);
-            if(Math.abs(deltaX) > 0.0000005d) return true;  //has to be higher than distance moved by motor slow per update cycle
-            //TODO: make motor slow way slower!
-
+            if(Math.abs(deltaX) > 0.000001d) return true;  //has to be higher than distance moved by motor slow per update cycle
+            
             Double deltaY = Double.parseDouble(valuesPrevious[valuesPrevious.length-3]) 
                     - Double.parseDouble(valuesCurrent[valuesCurrent.length-3]);
-            if(Math.abs(deltaY) > 0.0000005d) return true;
+            if(Math.abs(deltaY) > 0.000001d) return true;
 
             Double deltaZ = Double.parseDouble(valuesPrevious[valuesPrevious.length-1]) 
                     - Double.parseDouble(valuesCurrent[valuesCurrent.length-1]);
-            if(Math.abs(deltaZ) > 0.00005d) return true;
+            if(Math.abs(deltaZ) > 0.0001d) return true;
         }
         return false;
     }

@@ -167,9 +167,8 @@ public class LoginCtrl implements Serializable {
     }
 
     public void updateMachineValues() {
-        System.out.println("Position: X=" +this.selectedMachine.getPosXAbs() +", Y=" +this.selectedMachine.getPosYAbs() 
-                +", Z=" +this.selectedMachine.getPosZAbs());
-        System.out.println("Machine Values updated!!!");
+        System.out.println("Machine with ID " +this.selectedMachine.getId() +": Position X=" +this.selectedMachine.getPosXAbs() 
+                +", Y=" +this.selectedMachine.getPosYAbs() +", Z=" +this.selectedMachine.getPosZAbs());
         PushRenderer.render("session");
         //FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("foo:bar");
     }

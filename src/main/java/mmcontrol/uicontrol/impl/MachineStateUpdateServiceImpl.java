@@ -71,7 +71,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
             try {
                 this.control.getMachineMgmt().pullActiveMachines();
                 System.out.println("done!");
-            } catch (NotBoundException ex) {
+            } catch (RemoteException | NotBoundException ex) {
                 System.out.println("failed!");
                 return;
             }
@@ -91,7 +91,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
             try {
                 this.control.getUserMgmt().getUserHTTPSessionObject(machineId).updateMachineValues();
             } catch (Exception ex) {}
-            System.out.println("CHANGE IN STATE OF MACHINE " + machineId + " RECEIVED VIA RMI!");
+            //System.out.println("CHANGE IN STATE OF MACHINE " + machineId + " RECEIVED VIA RMI!");
         }
         else {
             System.out.println("State update of unknown machine is ignored.");

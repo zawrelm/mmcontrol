@@ -91,9 +91,9 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
                                 }
                                 catch(ServerNotFoundException | IncompatiblePinException e) {
                                     //System.out.print(".");
+                                    }
                                 }
                             }
-                        }
                         this.socket.close();
                     } catch (IOException ex) {
                     }
@@ -212,13 +212,16 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
         this.status.setCurrent(response);
         try {
             if (this.status.changed()) {
-                System.out.println("updateSensorValues - " +this.status.getCurrent());
                 try {
                     if (this.stateUpdateService == null) {
+                        //System.out.println("Re-Look up stateUpdateService in registry");
                         this.stateUpdateService = (IMachineStateUpdateService) registry.lookup(this.bindingNameSUS);
                     }
                     this.stateUpdateService.informStateChange(this.machineId, this.status);
+                    System.out.println("updateSensorValues done - " +this.status.getCurrent());
                 } catch (RemoteException | NotBoundException ex) {
+                    this.stateUpdateService = null;
+                    this.status.setCurrent(null); //induces re-sending at next cycle, even if nothing changed
                     throw new ServerNotFoundException();
                 }
             }
