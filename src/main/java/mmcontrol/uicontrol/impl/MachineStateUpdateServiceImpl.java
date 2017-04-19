@@ -24,6 +24,7 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
     private static final long serialVersionUID = 1;
 
     MainCtrl control;
+    private static int updateCounter = 0;
     
     public MachineStateUpdateServiceImpl() throws RemoteException {
         System.out.println("WARNING: Default constructor called and machine list thus not initialized!");
@@ -79,8 +80,9 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
 
         if(this.control.getMachineMgmt().getMachines().containsKey(machineId)) {
             //Get machine object (from database or a list of active machines) and set values of its actuators/sensors
+            String temp = status.getCurrent().substring(3);
             try {
-                String[] values = status.getCurrent().substring(3).split(" ");
+                String[] values = temp.split(" ");
                 for (int i = 0; i < values.length; i = i + 2) {
                     this.control.getMachineMgmt().getMachines().get(machineId).getComponents()
                             .get(Integer.parseInt(values[i])).setValue(values[i + 1]);
@@ -89,7 +91,12 @@ public class MachineStateUpdateServiceImpl extends java.rmi.server.UnicastRemote
                 System.out.println("Illegal message format received by machine!");
             }
             try {
-                this.control.getUserMgmt().getUserHTTPSessionObject(machineId).updateMachineValues();
+                //TODO: remove if-condition in practice (and test whether it still works
+                if(updateCounter%100 == 0 || temp.startsWith("0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0")) {
+                    this.control.getUserMgmt().getUserHTTPSessionObject(machineId).render();
+                    updateCounter = 0;
+                }
+                updateCounter++;
             } catch (Exception ex) {}
             //System.out.println("CHANGE IN STATE OF MACHINE " + machineId + " RECEIVED VIA RMI!");
         }

@@ -218,7 +218,7 @@ public class TCPMachineCommunicationService extends java.rmi.server.UnicastRemot
                         this.stateUpdateService = (IMachineStateUpdateService) registry.lookup(this.bindingNameSUS);
                     }
                     this.stateUpdateService.informStateChange(this.machineId, this.status);
-                    System.out.println("updateSensorValues done - " +this.status.getCurrent());
+                    //System.out.println("updateSensorValues done - " +this.status.getCurrent());
                 } catch (RemoteException | NotBoundException ex) {
                     this.stateUpdateService = null;
                     this.status.setCurrent(null); //induces re-sending at next cycle, even if nothing changed

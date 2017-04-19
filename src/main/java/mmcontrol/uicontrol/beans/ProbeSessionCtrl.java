@@ -53,7 +53,7 @@ public class ProbeSessionCtrl implements Serializable {
     }
 
     public void startProbeWithoutRecording() {
-        long machineId = this.loginCtrl.selectedMachine.getId();
+        long machineId = this.loginCtrl.getSelectedMachine().getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new Probe(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_WITHOUT_RECORDING);
         this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
@@ -62,7 +62,7 @@ public class ProbeSessionCtrl implements Serializable {
     }
     
     public void startProbeWithRecording() {
-        long machineId = this.loginCtrl.selectedMachine.getId();
+        long machineId = this.loginCtrl.getSelectedMachine().getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgram(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_AND_RECORDING);
         this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();
@@ -70,7 +70,7 @@ public class ProbeSessionCtrl implements Serializable {
     }
 
     public void startProbeProgramExecution(ProbeProgram program) {
-        long machineId = this.loginCtrl.selectedMachine.getId();
+        long machineId = this.loginCtrl.getSelectedMachine().getId();
         this.loginCtrl.getUser().getCurrentSession().startUserMachineSession(new ProbeProgramExecution(machineId));
         this.loginCtrl.getSelectedMachine().setState(EMachineState.PROBING_PROGRAM_RUNNING);
         this.activeSession = this.loginCtrl.getUser().getCurrentSession().getCurrentSession();

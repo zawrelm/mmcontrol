@@ -15,6 +15,7 @@ import mmcontrol.uicontrol.exceptions.UserNotFoundException;
 import mmcontrol.uicontrol.model.Machine;
 import mmcontrol.uicontrol.model.User;
 import mmcontrol.uicontrol.model.enums.EOperation;
+import org.icefaces.application.PortableRenderer;
 import org.icefaces.application.PushRenderer;
 
 /**
@@ -35,16 +36,18 @@ public class LoginCtrl implements Serializable {
     private User user = null;
     
     /* if true, error messages is displayed in the login component */
-    boolean loginfailed = false;
+    private boolean loginfailed = false;
     
     /* Machine selected to start a session on */
-    Machine selectedMachine = null;
-
+    private Machine selectedMachine = null;
+    
+    private PortableRenderer portableRenderer;  //will be called by MachineStateUpdateService
+    
     public LoginCtrl() {
         
         // on creation, add this session to the push group
         PushRenderer.addCurrentSession("session");
-
+        portableRenderer = PushRenderer.getPortableRenderer();
     }
 
     @PostConstruct
@@ -166,11 +169,18 @@ public class LoginCtrl implements Serializable {
         PushRenderer.render("session");
     }
 
-    public void updateMachineValues() {
-        System.out.println("Machine with ID " +this.selectedMachine.getId() +": Position X=" +this.selectedMachine.getPosXAbs() 
-                +", Y=" +this.selectedMachine.getPosYAbs() +", Z=" +this.selectedMachine.getPosZAbs());
-        PushRenderer.render("session");
-        //FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("foo:bar");
+    public void render() {
+        /**System.out.println("Machine with ID " +this.selectedMachine.getId() +": Position X=" +this.selectedMachine.getPosXAbs() 
+                +", Y=" +this.selectedMachine.getPosYAbs() +", Z=" +this.selectedMachine.getPosZAbs());*/
+        this.portableRenderer.render("session");
     }
+
+/**    public void updateMachineValues() {
+        //System.out.println("Machine with ID " +this.selectedMachine.getId() +": Position X=" +this.selectedMachine.getPosXAbs() 
+        //        +", Y=" +this.selectedMachine.getPosYAbs() +", Z=" +this.selectedMachine.getPosZAbs());
+        
+        PushRenderer.render("session");
+        //FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("fOperation:otXPos");
+    }*/
     
 }

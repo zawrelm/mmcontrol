@@ -19,178 +19,166 @@
                         </h:commandButton>
                         <h2>#{msg.session}</h2>
                         <span>#{msg.user}: #{loginCtrl.user.title}, #{loginCtrl.user.firstname} #{loginCtrl.user.lastname}" 
-                            (#{msg.since} #{loginCtrl.user.currentSession.beginTime})</span><br/>
-                            <!--span>#{msg.observers} (#{msg.invite}): Dr. Jorge Bauer, Dr. Numan Durakbasa </span><br/-->
-                            <!--span>
-                                <h:outputLabel value="#{msg.whichprobinghead}" for="probinghead" />
-                                <h:selectOneMenu id="probinghead" label="#{msg.whichprobinghead}" required="true"> <value="#{sessionCtrl.head}"> converter="ProbingHeadConverter">
-                                    <f:selectItems value="#{inventoryCtrl.heads}" />
-                                </h:selectOneMenu><br />
-                            </span-->
-                            <span>
-                                <h:outputLabel value="#{msg.machine}: " for="machineselection" />
-                                <!--a href="machinesession.xhtml"></a--> 
-                                <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
-                                                         value="#{loginCtrl.selectedMachine}" rendered="#{empty loginCtrl.selectedMachine}">
-                                    <ace:ajax />
-                                    <f:converter binding="#{machineConverter}"/>
-                                    <f:selectItem itemLabel="-Select-" itemValue="None" noSelectionOption="true" />
-                                    <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
-                                        <f:selectItem itemValue="#{currentMachine}"/>
-                                    </c:forEach>
-                                </ace:simpleSelectOneMenu>
-                                <h:outputText value="#{loginCtrl.selectedMachine}" rendered="#{!empty loginCtrl.selectedMachine}" />
-                                <br />
-                            </span>
-                            <span>#{msg.mountobject}</span><br/>
-                            <ul id="sessionmanagement">
-                                <li><h:commandButton id="startProbeNoRec" value="#{msg.probe_norecord}" 
-                                                     action="#{sessionCtrl.startProbeWithoutRecording()}" 
-                                                     rendered="#{!empty loginCtrl.selectedMachine and empty sessionCtrl.activeSession}"
-                                                     /></li>
-                                <!--li>Not implemented: #{msg.probe_withrecord}</li>
-                                <li>Not implemented: #{msg.probe_automatically}</li-->
-                                <li><h:commandButton id="stopProbe" value="#{msg.probe_stop}" 
-                                                     action="#{sessionCtrl.stopProbe()}" 
-                                                     rendered="#{!empty sessionCtrl.activeSession}" /></li>
-                            </ul>
+                            (#{msg.since} #{loginCtrl.user.currentSession.beginTime})<br/>
+                        </span>
+                        <!--span>#{msg.observers} (#{msg.invite}): Dr. Jorge Bauer, Dr. Numan Durakbasa </span><br/-->
+                        <!--span>
+                            <h:outputLabel value="#{msg.whichprobinghead}" for="probinghead" />
+                            <h:selectOneMenu id="probinghead" label="#{msg.whichprobinghead}" required="true"> <value="#{sessionCtrl.head}"> converter="ProbingHeadConverter">
+                                <f:selectItems value="#{inventoryCtrl.heads}" />
+                            </h:selectOneMenu><br />
+                        </span-->
+                        <span>
+                            <h:outputLabel value="#{msg.machine}: " for="machineselection" />
+                            <ace:simpleSelectOneMenu id="machineselection" label="#{msg.machine}" required="true" 
+                                                value="#{loginCtrl.selectedMachine}" rendered="#{empty loginCtrl.selectedMachine}">
+                                <ace:ajax />
+                                <f:converter binding="#{machineConverter}"/>
+                                <f:selectItem itemLabel="-Select-" itemValue="None" noSelectionOption="true" />
+                                <c:forEach items="#{mainCtrl.machineMgmt.listOfConnectedMachines}" var="currentMachine">
+                                    <f:selectItem itemValue="#{currentMachine}"/>
+                                </c:forEach>
+                            </ace:simpleSelectOneMenu>
+                            <h:outputText value="#{loginCtrl.selectedMachine}" rendered="#{!empty loginCtrl.selectedMachine}" />
+                            <br />
+                        </span>
+                        <span>#{msg.mountobject}<br/>
+                        </span>
+                        <ul id="sessionmanagement">
+                            <li><h:commandButton id="startProbeNoRec" value="#{msg.probe_norecord}" 
+                                                 actionListener="#{sessionCtrl.startProbeWithoutRecording()}" 
+                                                 rendered="#{!empty loginCtrl.selectedMachine and empty sessionCtrl.activeSession}"
+                                                 /></li>
+                            <!--li>Not implemented: #{msg.probe_withrecord}</li>
+                            <li>Not implemented: #{msg.probe_automatically}</li-->
+                            <li><h:commandButton id="stopProbe" value="#{msg.probe_stop}" 
+                                                 actionListener="#{sessionCtrl.stopProbe()}" 
+                                                 rendered="#{!empty sessionCtrl.activeSession}" /></li>
+                        </ul>
                     </h:form>
                     <div id="controlpanel">
-                        <h:form id="operations" rendered="#{!empty sessionCtrl.activeSession}">
+                        <h:form id="fOperation" rendered="#{!empty sessionCtrl.activeSession}">
                             <hr/>
                             <h3>#{msg.probefunctions}</h3>
-                            <h:outputText value="#{msg.calibrating}" rendered="#{loginCtrl.selectedMachine.operation == 'CALIBRATION'}" />
-                            <h:panelGrid columns="6" rendered="#{loginCtrl.selectedMachine.operation != 'CALIBRATION'}" >
-                                <!-- <div id="buttons">-->
-                                    <h:commandButton 
-                                        id="cbPlane" 
-                                        image="resources/img/button_plane.jpg"
-                                        value="#{msg.plane_in3}"
-                                        action="#{operationCtrl.probePlane()}"
-                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
-                                        styleClass="actionButton"/>
-                                        
-                                    
-                                    <h:commandButton 
-                                        id="cbDiameter" 
-                                        image="resources/img/button_diameter.jpg" 
-                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
-                                        styleClass="actionButton"/>
-                                    
-                                    <h:commandButton 
-                                        id="cbDistance" 
-                                        image="resources/img/button_distance.jpg" 
-                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
-                                        styleClass="actionButton"/>
-                                    
-                                    <h:commandButton 
-                                        id="cbPoint" 
-                                        image="resources/img/button_point.jpg" 
-                                        disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
-                                        styleClass="actionButton"/>
-                                    
-                                    <ace:tooltip id="ttPlaneAction"
-                                                  for="cbPlane"
-                                                  showEffect="grow"
-                                                  hideEffect="grow"
-                                                  position="topLeft"
-                                                  targetPosition="bottomLeft"
-                                                  styleClass="actionTooltip"
-                                                  >
-                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
-                                            <h:outputText id="otttPlane" value="#{msg.ttPlaneAction}"/>
-                                        </h:panelGrid>
-                                    </ace:tooltip>
+                            <h:outputText id="otCalibration" value="#{msg.calibrating}" rendered="#{loginCtrl.selectedMachine.operation == 'CALIBRATION'}" />
 
-                                    <ace:tooltip id="ttDiameterAction"
-                                                  for="cbDiameter"
-                                                  showEffect="grow"
-                                                  hideEffect="grow"
-                                                  position="topLeft"
-                                                  targetPosition="bottomLeft"
-                                                  styleClass="actionTooltip"
-                                                  >
-                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
-                                            <h:outputText id="otttDiameter" value="#{msg.ttDiameterAction}"/>
-                                        </h:panelGrid>
-                                    </ace:tooltip>
-
-                                    <ace:tooltip id="ttDistanceAction"
-                                                  for="cbDistance"
-                                                  showEffect="grow"
-                                                  hideEffect="grow"
-                                                  position="topLeft"
-                                                  targetPosition="bottomLeft"
-                                                  styleClass="actionTooltip"
-                                                  >
-                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
-                                            <h:outputText id="otttDistance" value="#{msg.ttDistanceAction}"/>
-                                        </h:panelGrid>
-                                    </ace:tooltip>
-                                    <ace:tooltip id="ttPointAction"
-                                                  for="cbPoint"
-                                                  showEffect="grow"
-                                                  hideEffect="grow"
-                                                  position="topLeft"
-                                                  targetPosition="bottomLeft"
-                                                  styleClass="actionTooltip"
-                                                  >
-                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
-                                            <h:outputText id="otttPoint" value="#{msg.ttPointAction}"/>
-                                        </h:panelGrid>
-                                    </ace:tooltip>
+                            <h:panelGrid id="pgFunctions" columns="6" rendered="#{loginCtrl.selectedMachine.operation != 'CALIBRATION'}" >
+                                <h:commandButton 
+                                    id="cbPlane" 
+                                    image="resources/img/button_plane.jpg"
+                                    value="#{msg.plane_in3}"
+                                    actionListener="#{operationCtrl.probePlane()}"
+                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                    styleClass="actionButton"/>
                                     
-                                </h:panelGrid>
+                                <h:commandButton 
+                                    id="cbDiameter" 
+                                    image="resources/img/button_diameter.jpg" 
+                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                    styleClass="actionButton"/>
+                                    
+                                <h:commandButton 
+                                    id="cbDistance" 
+                                    image="resources/img/button_distance.jpg" 
+                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                    styleClass="actionButton"/>
+                                    
+                                <h:commandButton 
+                                    id="cbPoint" 
+                                    image="resources/img/button_point.jpg" 
+                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                    styleClass="actionButton"/>
+                                    
+                                <ace:tooltip id="ttPlaneAction"
+                                        for="cbPlane"
+                                        showEffect="grow"
+                                        hideEffect="grow"
+                                        position="topLeft"
+                                        targetPosition="bottomLeft"
+                                        styleClass="actionTooltip">
+                                    <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                        <h:outputText id="otttPlane" value="#{msg.ttPlaneAction}"/>
+                                    </h:panelGrid>
+                                </ace:tooltip>
 
-                            <h:panelGrid columns="2"  style="width: 100%;">
+                                <ace:tooltip id="ttDiameterAction"
+                                        for="cbDiameter"
+                                        showEffect="grow"
+                                        hideEffect="grow"
+                                        position="topLeft"
+                                        targetPosition="bottomLeft"
+                                        styleClass="actionTooltip">
+                                    <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                        <h:outputText id="otttDiameter" value="#{msg.ttDiameterAction}"/>
+                                    </h:panelGrid>
+                                </ace:tooltip>
+
+                                <ace:tooltip id="ttDistanceAction"
+                                        for="cbDistance"
+                                        showEffect="grow"
+                                        hideEffect="grow"
+                                        position="topLeft"
+                                        targetPosition="bottomLeft"
+                                        styleClass="actionTooltip">
+                                    <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                        <h:outputText id="otttDistance" value="#{msg.ttDistanceAction}"/>
+                                    </h:panelGrid>
+                                </ace:tooltip>
+
+                                <ace:tooltip id="ttPointAction"
+                                        for="cbPoint"
+                                        showEffect="grow"
+                                        hideEffect="grow"
+                                        position="topLeft"
+                                        targetPosition="bottomLeft"
+                                        styleClass="actionTooltip">
+                                    <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                        <h:outputText id="otttPoint" value="#{msg.ttPointAction}"/>
+                                    </h:panelGrid>
+                                </ace:tooltip>
+                                    
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2">
                                 
-                                <h:panelGrid columns="1">
+                                <h:panelGroup id="pgOperationState">
+
                                     <h:panelGrid columns="2">
                                         <h:outputLabel id="olCurrentAction" value="#{msg.currentAction}: "/>
                                         <h:outputText id="otCurrentAction" value="#{loginCtrl.selectedMachine.operation} 
                                                       - #{loginCtrl.selectedMachine.operationState}" style="width: 50px"/>
                                     </h:panelGrid>
+
                                     <h:panelGrid columns="7">
                                         <h:outputLabel id="olXPoint1" value="#{msg.point} 1 - "/>
                                         <h:outputLabel id="olXPointX1" value="X:"/>
                                         <h:outputText id="otXPos1" value="-0.00333" styleClass="pointPosOutText"/>
-
                                         <h:outputLabel id="olXPointY1" value="Y:"/>
                                         <h:outputText id="otYPos1" value="-0.00333" styleClass="pointPosOutText" />
-
                                         <h:outputLabel id="olXPointZ1" value="Z:"/>
                                         <h:outputText id="otZPos1" value="-0.00333" styleClass="pointPosOutText"/>
 
                                         <h:outputLabel id="olXPoint2" value="#{msg.point} 2 - "/>
                                         <h:outputLabel id="olXPointX2" value="X:"/>
                                         <h:outputText id="otXPos2" value="-0.00333" styleClass="pointPosOutText"/>
-
                                         <h:outputLabel id="olXPointY2" value="Y:"/>
                                         <h:outputText id="otYPos2" value="-0.00333" styleClass="pointPosOutText" />
-
                                         <h:outputLabel id="olXPointZ2" value="Z:"/>
                                         <h:outputText id="otZPos2" value="-0.00333" styleClass="pointPosOutText"/>
-
 
                                         <h:outputLabel id="olXPoint3" value="#{msg.point} 3 - "/>
                                         <h:outputLabel id="olXPointX3" value="X:"/>
                                         <h:outputText id="otXPos3" value="-0.00333" styleClass="pointPosOutText"/>
-
                                         <h:outputLabel id="olXPointY3" value="Y:"/>
                                         <h:outputText id="otYPos3" value="-0.00333" styleClass="pointPosOutText" />
-
                                         <h:outputLabel id="olXPointZ3" value="Z:"/>
                                         <h:outputText id="otZPos3" value="-0.00333" styleClass="pointPosOutText"/>
-                                        
                                     </h:panelGrid>
-                                    <h:panelGrid columns="2">
-                                        <!--<h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" disabled="#{operationCtrl.currentAction==null}" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;"/>  -->
-                                        <h:commandButton id="cbCancel" value="#{msg.cancel}" action="#{operationCtrl.cancelOperation()}" 
-                                                         type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{loginCtrl.selectedMachine.operation == 'WAITING_ALREADY_CALIBRATED'}"/> 
-                                        <h:commandButton id="cbMeasure" value="Medir" action="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
-                                        <h:commandButton id="cbCalculate" value="Calcular" action="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
 
-                                        
+                                    <h:panelGrid columns="3">
+                                        <!--<h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" disabled="#{operationCtrl.currentAction==null}" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;"/>  -->
+                                        <h:commandButton id="cbCancel" value="#{msg.cancel}" actionListener="#{operationCtrl.cancelOperation()}" 
+                                                         type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{loginCtrl.selectedMachine.operation == 'WAITING_ALREADY_CALIBRATED'}"/> 
                                         <ace:confirmationDialog id="cdCancel" binding="#{cbCancel}"
                                                                 message="#{msg.cancelTextConfDialog}"
                                                                 header="#{msg.cancelHeaderConfDialog}"
@@ -198,8 +186,7 @@
                                                                 position="center"
                                                                 width="250"
                                                                 height="130"
-                                                                >
-
+                                        >
                                             <h:panelGrid columns="2" styleClass="centeredPanelGrid">
                                                 <h:commandButton id="yes" value="Yes" onclick="ice.ace.instance('#{cdCancel.clientId}').hide();">
                                                     <f:ajax execute="@this" render="@all"/>
@@ -209,213 +196,213 @@
                                                 </h:commandButton>
                                             </h:panelGrid>
                                         </ace:confirmationDialog>                                        
-                                     
-                                        
+
+                                        <h:commandButton id="cbMeasure" value="Medir" actionListener="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
+
+                                        <h:commandButton id="cbCalculate" value="Calcular" actionListener="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
                                     </h:panelGrid>
-                                    <h:panelGrid id="pgMovs" columns="2" >
-                                        <h:panelGrid columns="9"> 
 
-                                            <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
-
-                                            <h:commandButton 
-                                                id="cbMinFastX" 
-                                                image="resources/img/arrowFastMinX.png" 
-                                                action="#{operationCtrl.moveXFastBackwards(true)}" 
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbMinSlowX" 
-                                                image="resources/img/arrowSlowMinX.png" 
-                                                action="#{operationCtrl.moveXSlowBackwards(true)}" 
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbMinStopX" 
-                                                image="resources/img/stop.png" 
-                                                action="#{operationCtrl.stopX()}"
-                                                styleClass="stopButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosSlowX"
-                                                image="resources/img/arrowSlowPosX.png" 
-                                                action="#{operationCtrl.moveXSlowForward(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosFastX"
-                                                image="resources/img/arrowFastPosX.png" 
-                                                action="#{operationCtrl.moveXFastForward(true)}" 
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <ace:textEntry id="tePosX" binding="#{xGoPos}" styleClass="goPosInputtext"/>
-                                            <h:commandButton 
-                                                id="cbGoX" 
-                                                value="Go!" 
-                                                action="#{operationCtrl.moveXToPosition(xGoPos.value)}"
-                                                styleClass="goButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <!--h:outputLabel id="olXPos" value="X:" styleClass="outPosLabel"/-->
-                                            <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" />
-                                            
-
-                                            <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
-
-                                            <h:commandButton 
-                                                id="cbMinFastY"
-                                                image="resources/img/arrowFastMinY.png" 
-                                                action="#{operationCtrl.moveYFastBackwards(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbMinSlowY"
-                                                image="resources/img/arrowSlowMinY.png" 
-                                                action="#{operationCtrl.moveYSlowBackwards(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-                                            
-                                            <h:commandButton 
-                                                id="cbMinStopY" 
-                                                image="resources/img/stop.png" 
-                                                action="#{operationCtrl.stopY()}"
-                                                styleClass="stopButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosSlowY"
-                                                image="resources/img/arrowSlowPosY.png" 
-                                                action="#{operationCtrl.moveYSlowForward(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosFastY"
-                                                image="resources/img/arrowFastPosY.png" 
-                                                action="#{operationCtrl.moveYFastForward(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-                                            
-                                            
-                                            <ace:textEntry id="tePosY" styleClass="goPosInputtext"/>
-                                            <h:commandButton 
-                                                id="cbGoY"
-                                                value="Go!"
-                                                action="#{operationCtrl.moveYToPosition(position)}"
-                                                styleClass="goButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <!--h:outputLabel id="olYPos" value="Y:" styleClass="outPosLabel"/-->
-                                            <h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/>
-
-                                            
-                                            <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
-
-                                            <h:commandButton 
-                                                id="cbMinFastZ"
-                                                image="resources/img/arrowFastMinZ.png" 
-                                                action="#{operationCtrl.moveZFastBackwards(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbMinSlowZ"
-                                                image="resources/img/arrowSlowMinZ.png" 
-                                                action="#{operationCtrl.moveZSlowBackwards(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-                                            
-                                            <h:commandButton 
-                                                id="cbMinStopZ" 
-                                                image="resources/img/stop.png" 
-                                                action="#{operationCtrl.stopZ()}"
-                                                styleClass="stopButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosSlowZ"
-                                                image="resources/img/arrowSlowPosZ.png" 
-                                                action="#{operationCtrl.moveZSlowForward(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <h:commandButton 
-                                                id="cbPosFastZ"
-                                                image="resources/img/arrowFastPosZ.png" 
-                                                action="#{operationCtrl.moveZFastForward(true)}"
-                                                styleClass="moveButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <ace:textEntry 
-                                                value="#{operationCtrl.goPosZ}" 
-                                                id="tePosZ" 
-                                                converterMessage="Please enter digits only."
-                                                converter="javax.faces.Double"
-                                                styleClass="goPosInputtext"/>
-
-                                            <h:commandButton 
-                                                id="cbGoZ" 
-                                                value="#{msg.goPos}" 
-                                                styleClass="goButton">
-                                                <f:ajax execute="@form" render="@none" />
-                                            </h:commandButton>
-
-                                            <!--h:outputLabel id="olZPos" value="Z:" styleClass="outPosLabel"/-->
-                                            <h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/>
-                                            
-            
-                                        </h:panelGrid>
-                                        <ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" />
-
-
-                                    </h:panelGrid>
-    <!--                            <h:panelGrid columns="2">
-                                    <h:commandButton id="cbX" image="resources/img/button_x.png" style="height: 30px; width: 30px" />
-                                    <h:inputText id="itXPos"/>
-                                </h:panelGrid>                                
-                                <h:panelGrid columns="2">
-                                    <h:commandButton id="cbY" image="resources/img/button_y.png" style="height: 30px; width: 30px" />
-                                    <h:inputText id="itYPos"/>
-                                </h:panelGrid>                                
-                                <h:panelGrid columns="2">                            
-                                    <h:commandButton id="cbZ" image="resources/img/button_z.png" style="height: 30px; width: 30px" />
-                                    <h:inputText id="itZPos"/>
-                                </h:panelGrid>   
-
-    -->
-
-    
-                                </h:panelGrid>
+                                </h:panelGroup>
                                 
-                            </h:panelGrid>
+                                <ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" />
 
-                                            <ace:growlMessages  id="allMsgsGrowl" autoHide="false"
-                                                                for="@all"
-                                                                position="top-right"/>
+                            </h:panelGrid>
+                                
+                            <h:panelGroup id="pgMoves"> 
+
+                                <h:panelGrid id="pgAxisX" columns="9">
+                                    <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
+
+                                    <h:commandButton 
+                                        id="cbMinFastX" 
+                                        image="resources/img/arrowFastMinX.png" 
+                                        actionListener="#{operationCtrl.moveXFastBackwards(true)}" 
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbMinSlowX" 
+                                        image="resources/img/arrowSlowMinX.png" 
+                                        actionListener="#{operationCtrl.moveXSlowBackwards(true)}" 
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbMinStopX" 
+                                        image="resources/img/stop.png" 
+                                        actionListener="#{operationCtrl.stopX()}"
+                                        styleClass="stopButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosSlowX"
+                                        image="resources/img/arrowSlowPosX.png" 
+                                        actionListener="#{operationCtrl.moveXSlowForward(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosFastX"
+                                        image="resources/img/arrowFastPosX.png" 
+                                        actionListener="#{operationCtrl.moveXFastForward(true)}" 
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <ace:textEntry
+                                        id="tePosX"
+                                        binding="#{xGoPos}"
+                                        converterMessage="#{msg.digitOnly}"
+                                        converter="javax.faces.Double"
+                                        styleClass="goPosInputtext"/>
+
+                                    <h:commandButton 
+                                        id="cbGoX" 
+                                        value="#{msg.goPos}" 
+                                        actionListener="#{operationCtrl.moveXToPosition(xGoPos.value)}"
+                                        styleClass="goButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" />
+                                </h:panelGrid>
+
+                                
+                                <h:panelGrid id="pgAxisY" columns="9">
+                                    <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
+
+                                    <h:commandButton 
+                                        id="cbMinFastY"
+                                        image="resources/img/arrowFastMinY.png" 
+                                        actionListener="#{operationCtrl.moveYFastBackwards(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbMinSlowY"
+                                        image="resources/img/arrowSlowMinY.png" 
+                                        actionListener="#{operationCtrl.moveYSlowBackwards(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
                                             
-            
+                                    <h:commandButton 
+                                        id="cbMinStopY" 
+                                        image="resources/img/stop.png" 
+                                        actionListener="#{operationCtrl.stopY()}"
+                                        styleClass="stopButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosSlowY"
+                                        image="resources/img/arrowSlowPosY.png" 
+                                        actionListener="#{operationCtrl.moveYSlowForward(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosFastY"
+                                        image="resources/img/arrowFastPosY.png" 
+                                        actionListener="#{operationCtrl.moveYFastForward(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+                                            
+                                    <ace:textEntry
+                                        id="tePosY"
+                                        binding="#{yGoPos}"
+                                        converterMessage="#{msg.digitOnly}"
+                                        converter="javax.faces.Double"
+                                        styleClass="goPosInputtext"/>
+
+                                    <h:commandButton 
+                                        id="cbGoY"
+                                        value="#{msg.goPos}"
+                                        actionListener="#{operationCtrl.moveYToPosition(yGoPos.value)}"
+                                        styleClass="goButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/>
+                                </h:panelGrid>
+
+
+                                <h:panelGrid id="pgAxisZ" columns="9">
+                                    <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
+
+                                    <h:commandButton 
+                                        id="cbMinFastZ"
+                                        image="resources/img/arrowFastMinZ.png" 
+                                        actionListener="#{operationCtrl.moveZFastBackwards(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbMinSlowZ"
+                                        image="resources/img/arrowSlowMinZ.png" 
+                                        actionListener="#{operationCtrl.moveZSlowBackwards(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+                                            
+                                    <h:commandButton 
+                                        id="cbMinStopZ" 
+                                        image="resources/img/stop.png" 
+                                        actionListener="#{operationCtrl.stopZ()}"
+                                        styleClass="stopButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosSlowZ"
+                                        image="resources/img/arrowSlowPosZ.png" 
+                                        actionListener="#{operationCtrl.moveZSlowForward(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:commandButton 
+                                        id="cbPosFastZ"
+                                        image="resources/img/arrowFastPosZ.png" 
+                                        actionListener="#{operationCtrl.moveZFastForward(true)}"
+                                        styleClass="moveButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <ace:textEntry 
+                                        id="tePosZ" 
+                                        binding="#{zGoPos}" 
+                                        converterMessage="#{msg.digitOnly}"
+                                        converter="javax.faces.Double"
+                                        styleClass="goPosInputtext"/>
+
+                                    <h:commandButton 
+                                        id="cbGoZ" 
+                                        value="#{msg.goPos}" 
+                                        actionListener="#{operationCtrl.moveZToPosition(zGoPos.value)}"
+                                        styleClass="goButton">
+                                        <f:ajax execute="@form" render="@none" />
+                                    </h:commandButton>
+
+                                    <h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/>
+                                </h:panelGrid>
+                                    
+                            </h:panelGroup>
+
+                            <ace:growlMessages  id="allMsgsGrowl" autoHide="false" for="@all" position="top-right"/>
+                                            
+                            <!--hr/><br/><br/>Aca va el video de lo que se va filmando???<br/><br/-->
+
+                         </h:form>
+                                
 <!--
     <ace:panel> 
      <h:form id="selectForm">
@@ -428,8 +415,8 @@
          </h:selectOneMenu>          
         </h:form>
      </ace:panel>
--->
-   <!-- <ace:panel>
+
+    <ace:panel>
      <h:form id="stackPanelForm">
         <ace:panelStack id="stack1" selectedId="#{panelStackBean.currentId}">
             <ace:stackPane id="stackPane1" >
@@ -450,34 +437,6 @@
         </ace:panelStack>
      </h:form>
     </ace:panel>  -->
-    <!--                        <h:form id="moves" rendered="#{!empty sessionCtrl.activeSession}">
-                                <div id="buttons">
-                                    <h:commandButton value="#{msg.buttonfast}" /><br/>
-                                    <h:commandButton value="X-" action="#{operationCtrl.moveXSlowBackwards(true)}" /><br/>
-                                    <h:commandButton value="X+" action="#{operationCtrl.moveXSlowForward(true)}" /><br/>
-                                    <h:commandButton value="Y-" /><br/>
-                                    <h:commandButton value="Y+" /><br/>
-                                    <h:commandButton value="Z-" /><br/>
-                                    <h:commandButton value="Z+" /><br/>
-                                    <h:commandButton value="#{msg.buttonmeasure}" /><br/>
-                                    <h:commandButton value="#{msg.buttonstoreposition}" /><br/>
-                                </div>
-                                <div class="position">
-                                    X:<br/>
-                                    Y:<br/>
-                                    Z:<br/>
-                                    #{msg.contact}: 0
-                                </div>
-                            </h:form> -->
-                        <hr/>
-                    <br/>
-                    <br/>
-    Aca va el video de lo que se va filmando???
-                    <br/>
-                    <br/>
-
-                     </h:form>
-                     
                     <h:form id="fTrace">
                         
                         
@@ -513,7 +472,6 @@
                     </h:form>
 
                     </div>
-                    
                 </div>
             </ui:define>
         </ui:composition>
