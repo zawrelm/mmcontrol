@@ -84,6 +84,7 @@ public class ProbeSessionCtrl implements Serializable {
         this.loginCtrl.setSelectedMachine(null);
         this.activeSession = null;
         FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("operationCtrl");
+        System.out.println("Probe stopped on machine: " +this.loginCtrl.getSelectedMachine().getId());
         PushRenderer.render("session");
     }
 

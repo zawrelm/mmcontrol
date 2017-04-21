@@ -132,7 +132,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
-            System.out.println("moveXFastForward(" +move +") terminated with true");
+            //System.out.println("moveXFastForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -167,7 +167,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
                 this.xfLastMove = -this.xfLastMove;
             }
-            System.out.println("moveXFastBackwards(" +move +") terminated with true");
+            //System.out.println("moveXFastBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -216,7 +216,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
-            System.out.println("moveXSlowForward(" +move +") terminated with true");
+            //System.out.println("moveXSlowForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -250,7 +250,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
                 this.xsLastMove = -this.xsLastMove;
             }
-            System.out.println("moveXSlowBackwards(" +move +") terminated with true");
+            //System.out.println("moveXSlowBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -294,7 +294,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.yfLastMove = -this.yfLastMove;
             }
 
-            System.out.println("moveYFastForward(" +move +") terminated with true");
+            //System.out.println("moveYFastForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -330,7 +330,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.yfLastMove = -this.yfLastMove;
             }
 
-            System.out.println("moveYFastBackwards(" +move +") terminated with true");
+            //System.out.println("moveYFastBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -365,7 +365,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.ysLastMove = -this.ysLastMove;
             }
 
-            System.out.println("moveYSlowForward(" +move +") terminated with true");
+            //System.out.println("moveYSlowForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -400,7 +400,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.ysLastMove = -this.ysLastMove;
             }
 
-            System.out.println("moveYSlowBackwards(" +move +") terminated with true");
+            //System.out.println("moveYSlowBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -467,7 +467,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.zfLastMove = -this.zfLastMove;
             }
 
-            System.out.println("moveZFastForward(" +move +") terminated with true");
+            //System.out.println("moveZFastForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -503,7 +503,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.zfLastMove = -this.zfLastMove;
             }
 
-            System.out.println("moveZFastBackwards(" +move +") terminated with true");
+            //System.out.println("moveZFastBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -538,7 +538,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.zsLastMove = -this.zsLastMove;
             }
 
-            System.out.println("moveZSlowForward(" +move +") terminated with true");
+            //System.out.println("moveZSlowForward(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -573,7 +573,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.zsLastMove = -this.zsLastMove;
             }
 
-            System.out.println("moveZSlowBackwards(" +move +") terminated with true");
+            //System.out.println("moveZSlowBackwards(" +move +") terminated with true");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -607,7 +607,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(12, connected);
             Thread.sleep(500);
-            System.out.println("Clip xFast set to: " +connected);
+            //System.out.println("Clip xFast set to: " +connected);
 
             return true;
 
@@ -633,7 +633,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(13, connected);
             Thread.sleep(500);
-            System.out.println("Clip xSlow set to: " +connected);
+            //System.out.println("Clip xSlow set to: " +connected);
             
             return true;
 
@@ -659,7 +659,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(14, connected);
             Thread.sleep(500);
-            System.out.println("Clip yFast set to: " +connected);
+            //System.out.println("Clip yFast set to: " +connected);
             
             return true;
 
@@ -686,7 +686,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(15, connected);
             Thread.sleep(500);
-            System.out.println("Clip ySlow set to: " +connected);
+            //System.out.println("Clip ySlow set to: " +connected);
             
             return true;
 
@@ -718,7 +718,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(16, connected);
             Thread.sleep(500);
-            System.out.println("Clip zFast set to: " +connected);
+            //System.out.println("Clip zFast set to: " +connected);
             
             return true;
 
@@ -750,7 +750,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             Thread.sleep(100);
             this.communication.setDigitalPin(17, connected);
             Thread.sleep(500);
-            System.out.println("Clip zSlow set to: " +connected);
+            //System.out.println("Clip zSlow set to: " +connected);
             
             return true;
 
@@ -844,6 +844,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     
     @Override
     public boolean calibrateMachine() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+        System.out.println("Calibration activated. Previous Operation: " +this.machine.getOperation());
         if(this.machine.getOperation() == EOperation.WAITING_FOR_CALIBRATION) {
             this.machine.setOperation(EOperation.CALIBRATION);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
@@ -1062,6 +1063,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     
     @Override
     public boolean measurePosition() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+        System.out.println("Operation: " +this.machine.getOperation() +", state: " +this.machine.getOperationState()); // TODO eliminar
         switch(this.machine.getOperation()) {
             case WAITING_FOR_CALIBRATION:
             case WAITING_ALREADY_CALIBRATED:
@@ -1116,7 +1118,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             default:
                 break;
         }
-        System.out.println("Position measured!"); // TODO eliminar
+        System.out.println("Position measured! New operation: " +this.machine.getOperation()
+                                                +", new state: " +this.machine.getOperationState()); // TODO eliminar
         PushRenderer.render("session");
         return true;
     }
