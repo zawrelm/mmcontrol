@@ -6,7 +6,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:icecore="http://www.icefaces.org/icefaces/core"
       xmlns:ace="http://www.icefaces.org/icefaces/components"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <h:head></h:head>
     <h:body>
         <ui:composition template="./WEB-INF/includes/template.xhtml">
@@ -150,34 +151,44 @@
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="7">
-                                        <h:outputLabel id="olXPoint1" value="#{msg.point} 1 - "/>
-                                        <h:outputLabel id="olXPointX1" value="X:"/>
-                                        <h:outputText id="otXPos1" value="-0.00333" styleClass="pointPosOutText"/>
-                                        <h:outputLabel id="olXPointY1" value="Y:"/>
-                                        <h:outputText id="otYPos1" value="-0.00333" styleClass="pointPosOutText" />
-                                        <h:outputLabel id="olXPointZ1" value="Z:"/>
-                                        <h:outputText id="otZPos1" value="-0.00333" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPoint1" value="#{msg.point} 1 - " rendered="#{fn:length(operationCtrl.measuredPoints) > 0}"/>
+                                        <h:outputLabel id="olXPointX1" value="X:" rendered="#{fn:length(operationCtrl.measuredPoints) > 0}"/>
+                                        <h:outputText id="otXPos1" value="#{operationCtrl.measuredPoints.get(0).x}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 0}" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPointY1" value="Y:" rendered="#{fn:length(operationCtrl.measuredPoints) > 0}"/>
+                                        <h:outputText id="otYPos1" value="#{operationCtrl.measuredPoints.get(0).y}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 0}" styleClass="pointPosOutText" />
+                                        <h:outputLabel id="olXPointZ1" value="Z:" rendered="#{fn:length(operationCtrl.measuredPoints) > 0}"/>
+                                        <h:outputText id="otZPos1" value="#{operationCtrl.measuredPoints.get(0).z}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 0}" styleClass="pointPosOutText"/>
 
-                                        <h:outputLabel id="olXPoint2" value="#{msg.point} 2 - "/>
-                                        <h:outputLabel id="olXPointX2" value="X:"/>
-                                        <h:outputText id="otXPos2" value="-0.00333" styleClass="pointPosOutText"/>
-                                        <h:outputLabel id="olXPointY2" value="Y:"/>
-                                        <h:outputText id="otYPos2" value="-0.00333" styleClass="pointPosOutText" />
-                                        <h:outputLabel id="olXPointZ2" value="Z:"/>
-                                        <h:outputText id="otZPos2" value="-0.00333" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPoint2" value="#{msg.point} 2 - " rendered="#{fn:length(operationCtrl.measuredPoints) > 1}"/>
+                                        <h:outputLabel id="olXPointX2" value="X:" rendered="#{fn:length(operationCtrl.measuredPoints) > 1}"/>
+                                        <h:outputText id="otXPos2" value="#{operationCtrl.measuredPoints.get(1).x}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 1}" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPointY2" value="Y:" rendered="#{fn:length(operationCtrl.measuredPoints) > 1}"/>
+                                        <h:outputText id="otYPos2" value="#{operationCtrl.measuredPoints.get(1).y}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 1}" styleClass="pointPosOutText" />
+                                        <h:outputLabel id="olXPointZ2" value="Z:" rendered="#{fn:length(operationCtrl.measuredPoints) > 1}"/>
+                                        <h:outputText id="otZPos2" value="#{operationCtrl.measuredPoints.get(1).z}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 1}" styleClass="pointPosOutText"/>
 
-                                        <h:outputLabel id="olXPoint3" value="#{msg.point} 3 - "/>
-                                        <h:outputLabel id="olXPointX3" value="X:"/>
-                                        <h:outputText id="otXPos3" value="-0.00333" styleClass="pointPosOutText"/>
-                                        <h:outputLabel id="olXPointY3" value="Y:"/>
-                                        <h:outputText id="otYPos3" value="-0.00333" styleClass="pointPosOutText" />
-                                        <h:outputLabel id="olXPointZ3" value="Z:"/>
-                                        <h:outputText id="otZPos3" value="-0.00333" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPoint3" value="#{msg.point} 3 - " rendered="#{fn:length(operationCtrl.measuredPoints) > 2}"/>
+                                        <h:outputLabel id="olXPointX3" value="X:" rendered="#{fn:length(operationCtrl.measuredPoints) > 2}"/>
+                                        <h:outputText id="otXPos3" value="#{operationCtrl.measuredPoints.get(2).x}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 2}" styleClass="pointPosOutText"/>
+                                        <h:outputLabel id="olXPointY3" value="Y:" rendered="#{fn:length(operationCtrl.measuredPoints) > 2}"/>
+                                        <h:outputText id="otYPos3" value="#{operationCtrl.measuredPoints.get(2).y}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 2}" styleClass="pointPosOutText" />
+                                        <h:outputLabel id="olXPointZ3" value="Z:" rendered="#{fn:length(operationCtrl.measuredPoints) > 2}"/>
+                                        <h:outputText id="otZPos3" value="#{operationCtrl.measuredPoints.get(2).z}" 
+                                                      rendered="#{fn:length(operationCtrl.measuredPoints) > 2}" styleClass="pointPosOutText"/>
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="3">
-                                        <!--<h:commandButton id="cbCancel" value="#{msg.cancel}"  type="button" disabled="#{operationCtrl.currentAction==null}" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;"/>  -->
                                         <h:commandButton id="cbCancel" value="#{msg.cancel}" actionListener="#{operationCtrl.cancelOperation()}" 
+                                                         disabled="#{loginCtrl.selectedMachine.operation == 'WAITING_ALREADY_CALIBRATED'}"/>
+                                        <!--h:commandButton id="cbCancel" value="#{msg.cancel}" actionListener="#{operationCtrl.cancelOperation()}" 
                                                          type="button" onclick="ice.ace.instance('#{cdCancel.clientId}').show();return false;" disabled="#{loginCtrl.selectedMachine.operation == 'WAITING_ALREADY_CALIBRATED'}"/> 
                                         <ace:confirmationDialog id="cdCancel" binding="#{cbCancel}"
                                                                 message="#{msg.cancelTextConfDialog}"
@@ -195,16 +206,16 @@
                                                     <f:ajax execute="@this" render="@all"/>
                                                 </h:commandButton>
                                             </h:panelGrid>
-                                        </ace:confirmationDialog>                                        
+                                        </ace:confirmationDialog-->
 
-                                        <h:commandButton id="cbMeasure" value="Medir" actionListener="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
+                                        <h:commandButton id="cbMeasure" value="#{msg.measure}" actionListener="#{operationCtrl.measurePosition()}" rendered="#{!operationCtrl.operationTerminable}" />
 
-                                        <h:commandButton id="cbCalculate" value="Calcular" actionListener="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
+                                        <h:commandButton id="cbCalculate" value="#{msg.calculate}" actionListener="#{operationCtrl.finishOperation()}" rendered="#{operationCtrl.operationTerminable}" />
                                     </h:panelGrid>
 
                                 </h:panelGroup>
                                 
-                                <ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" />
+                                <!--ace:graphicImage id="imgVideo" value="resources/img/video.png" styleClass="videoImage" /-->
 
                             </h:panelGrid>
                                 
@@ -398,12 +409,23 @@
                             </h:panelGroup>
 
                             <ace:growlMessages  id="allMsgsGrowl" autoHide="false" for="@all" position="top-right"/>
-                                            
-                            <!--hr/><br/><br/>Aca va el video de lo que se va filmando???<br/><br/-->
 
+                            <hr/>
+                            <div class="protocol">
+                                <h2>#{msg.protocol}</h2>
+                                <h:outputText id="otProtocol" value="#{operationCtrl.protocolAsString}" />
+                            </div>
+                            <hr/>
                          </h:form>
                                 
-<!--
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
+<!-- EXTENDED PROTOCOLLING
     <ace:panel> 
      <h:form id="selectForm">
               <h:outputLabel for="selectPane"  value="Select a pane to open: "/>
@@ -437,10 +459,9 @@
         </ace:panelStack>
      </h:form>
     </ace:panel>  -->
-                    <h:form id="fTrace">
+                    <!--h:form id="fTrace">
                         
-                        
-<!--                        <ace:dataTable 
+                        <ace:dataTable 
                             id="tTrace"
                             value="#{operationCtrl.traces}"
                             var="trace"
@@ -459,21 +480,10 @@
                                   <h:outputText value="#{trace.desc}"/>
                               </ace:column>
 
-                          </ace:dataTable>                        
-    -->                    <div class="protocol">
-                            <h2>#{msg.protocol}</h2>
-                            <h:outputText id="otProtocol" value="0: ....1:...." />
-                        </div>
+                          </ace:dataTable>
 
-                        <!-- TODO - Ver formato de datos de tabla de traceo -->
-                        <!-- <h:commandButton id="cbDownload" value="#{msg.download}" action="#{operationCtrl.downloadFile}operationCtrl." /> -->
-                        <!--<ace:dataExporter id="dataExporter" label="#{msg.download}" type="xls" target="tTrace" fileName="#{operationCtrl.fileName}"/> -->
+                        <! TODO - Ver formato de datos de tabla de traceo >
+                        <! <h:commandButton id="cbDownload" value="#{msg.download}" action="#{operationCtrl.downloadFile}operationCtrl." />
+                        <!<ace:dataExporter id="dataExporter" label="#{msg.download}" type="xls" target="tTrace" fileName="#{operationCtrl.fileName}"/>
                         <hr/>
-                    </h:form>
-
-                    </div>
-                </div>
-            </ui:define>
-        </ui:composition>
-    </h:body>
-</html>
+                    </h:form-->

@@ -57,7 +57,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     private int xfLastMove, xsLastMove, yfLastMove, ysLastMove, zfLastMove, zsLastMove; //protocol line number of last move; negative when still moving
 
     private ArrayList<Position> measuredPoints;
-    
+
     private boolean operationTerminable;    //has a sufficient amount of points been measured to finish the operation?
 
     private Double goPosX, goPosY, goPosZ;
@@ -949,7 +949,9 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public boolean finishOperation() {
         switch(this.machine.getOperation()) {
             case CALIBRATION:
+                System.out.print("Finishing operation CALIBRATION...");
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
+                    System.out.print("storing 0-coordinates...");
                     this.machine.setPosXZero(this.measuredPoints.get(0).getX());
                     this.machine.setPosYZero(this.measuredPoints.get(1).getY());
                     this.machine.setPosZZero(this.measuredPoints.get(2).getZ());
@@ -1086,7 +1088,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                                 Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28))));
                         this.machine.setOperationState(EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED);
                         this.operationTerminable = true;
-                        this.finishOperation();
+                        //this.finishOperation();
                         break;
                 }
                 break;
@@ -1105,7 +1107,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                     case SHAPE1_2_POINTS_MEASURED:
                         this.machine.setOperationState(EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED);
                         this.operationTerminable = true;
-                        this.finishOperation(); //TODO: IMPLEMENT FUNCTIONALITY TO CALCULATE SHAPE WITH MORE POINTS MEASURED!!
+                        //this.finishOperation(); //TODO: IMPLEMENT FUNCTIONALITY TO CALCULATE SHAPE WITH MORE POINTS MEASURED!!
                         break;
                     default:
                         break;
@@ -1175,14 +1177,6 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         this.traces = traces;
     }
         
-/*    public String getCurrentAction() {
-        return this.currentAction;
-    }
-    
-    public void setCurrentAction(String currentAction){
-        this.currentAction = currentAction;
-    }*/
-
     public boolean isOperationTerminable() {
         return operationTerminable;
     }
@@ -1226,7 +1220,15 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public double getPosZ() {
         return this.machine.getPosZZero() + this.machine.getPosZAbs();
     }
+    
+    public ArrayList<Position> getMeasuredPoints() {
+        return measuredPoints;
+    }
 
+    public String getProtocolAsString() {
+        return this.session.getProtocol().toString();
+    }
+    
 /**    public void move(ActionEvent event) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         String axis;
         String orientation;

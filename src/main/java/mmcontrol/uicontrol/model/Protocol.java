@@ -38,7 +38,7 @@ public class Protocol implements Serializable {
             String text = "";
             Iterator<String> it = this.protocol.iterator();
             while(it.hasNext()) {
-                text += "\n" + it.next();
+                text += "<br />" + it.next();
             }
             
             return text;
