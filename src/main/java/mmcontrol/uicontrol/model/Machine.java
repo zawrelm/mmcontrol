@@ -53,7 +53,7 @@ public class Machine implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "machine")
     private ArrayList<MachineSession> sessions;
     
-    private double posXZero, posYZero, posZZero;
+    private double posXZero, posYZero, posZZero; //zero coordinates (set at calibration)
     
     public Machine(long id) {
         //TODO: read from database of config file!
@@ -245,6 +245,46 @@ public class Machine implements Serializable {
 
     public double getPosZAbs() {
         return ((SensorAnalog) this.components.get(28)).getValue();
+    }
+
+    public double getPosX() {
+        return this.getPosXAbs() - this.getPosXZero();
+    }
+
+    public double getPosY() {
+        return this.getPosYAbs() - this.getPosYZero();
+    }
+
+    public double getPosZ() {
+        return this.getPosZAbs() - this.getPosZZero();
+    }
+    
+    public boolean isTouching() {
+        return ((SensorDigital) this.components.get(19)).isValue();
+    }
+
+    public boolean isClipXFastClosed() {
+        return ((SensorDigital) this.components.get(20)).isValue();
+    }
+        
+    public boolean isClipXSlowClosed() {
+        return ((SensorDigital) this.components.get(21)).isValue();
+    }
+
+    public boolean isClipYFastClosed() {
+        return ((SensorDigital) this.components.get(22)).isValue();
+    }
+
+    public boolean isClipYSlowClosed() {
+        return ((SensorDigital) this.components.get(23)).isValue();
+    }
+
+    public boolean isClipZFastClosed() {
+        return ((SensorDigital) this.components.get(24)).isValue();
+    }
+
+    public boolean isClipZSlowClosed() {
+        return ((SensorDigital) this.components.get(25)).isValue();
     }
 
     @Override

@@ -65,28 +65,29 @@
 
                             <h:panelGrid id="pgFunctions" columns="6" rendered="#{loginCtrl.selectedMachine.operation != 'CALIBRATION'}" >
                                 <h:commandButton 
+                                    id="cbPoint" 
+                                    image="resources/img/button_point.jpg" 
+                                    actionListener="#{operationCtrl.probePoint()}"
+                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
+                                    styleClass="actionButton"/>
+                                    
+                                <h:commandButton 
                                     id="cbPlane" 
                                     image="resources/img/button_plane.jpg"
                                     value="#{msg.plane_in3}"
-                                    actionListener="#{operationCtrl.probePlane()}"
                                     disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
                                     styleClass="actionButton"/>
                                     
                                 <h:commandButton 
                                     id="cbDiameter" 
                                     image="resources/img/button_diameter.jpg" 
+                                    actionListener="#{operationCtrl.probeInnerDiameter()}"
                                     disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
                                     styleClass="actionButton"/>
                                     
                                 <h:commandButton 
                                     id="cbDistance" 
                                     image="resources/img/button_distance.jpg" 
-                                    disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
-                                    styleClass="actionButton"/>
-                                    
-                                <h:commandButton 
-                                    id="cbPoint" 
-                                    image="resources/img/button_point.jpg" 
                                     disabled="#{loginCtrl.selectedMachine.operation != 'WAITING_ALREADY_CALIBRATED'}"
                                     styleClass="actionButton"/>
                                     
@@ -219,9 +220,10 @@
 
                             </h:panelGrid>
                                 
+                            <h:panelGrid id="pgActuators" columns="2">
                             <h:panelGroup id="pgMoves"> 
 
-                                <h:panelGrid id="pgAxisX" columns="9">
+                                <h:panelGrid id="pgAxisX" columns="8">
                                     <ace:graphicImage id="imgXAxis" value="resources/img/AxisX.png" styleClass="axisImage" />
 
                                     <h:commandButton 
@@ -279,11 +281,11 @@
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
 
-                                    <h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" />
+                                    <!--h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" /-->
                                 </h:panelGrid>
 
                                 
-                                <h:panelGrid id="pgAxisY" columns="9">
+                                <h:panelGrid id="pgAxisY" columns="8">
                                     <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
 
                                     <h:commandButton 
@@ -341,11 +343,11 @@
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
 
-                                    <h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/>
+                                    <!--h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/-->
                                 </h:panelGrid>
 
 
-                                <h:panelGrid id="pgAxisZ" columns="9">
+                                <h:panelGrid id="pgAxisZ" columns="8">
                                     <ace:graphicImage id="imgZAxis" value="resources/img/AxisZ.png" styleClass="axisImage" />
 
                                     <h:commandButton 
@@ -403,17 +405,33 @@
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
 
-                                    <h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/>
+                                    <!--h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/-->
                                 </h:panelGrid>
                                     
                             </h:panelGroup>
+                                <h:panelGrid id="pgActuatorStates">
+                                    <h:outputText id="otTouching" value="#{msg.contact}: #{operationCtrl.machine.touching}" styleClass="outPosOutText" />
+                                    
+                                    <h:outputText id="otXClipFast" value="X #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipXFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otXClipSlow" value="X #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipXSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otXPos" value="X: #{operationCtrl.machine.posX}" styleClass="outPosOutText" />
+                                    
+                                    <h:outputText id="otYClipFast" value="Y #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipYFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otYClipSlow" value="Y #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipYSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otYPos" value="Y: #{operationCtrl.machine.posY}" styleClass="outPosOutText" />
+                                    
+                                    <h:outputText id="otZClipFast" value="Z #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipZFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otZClipSlow" value="Z #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipZSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otZPos" value="Z: #{operationCtrl.machine.posZ}" styleClass="outPosOutText" />
+                                </h:panelGrid>
+                            </h:panelGrid>
 
                             <ace:growlMessages  id="allMsgsGrowl" autoHide="false" for="@all" position="top-right"/>
 
                             <hr/>
-                            <div class="protocol">
-                                <h2>#{msg.protocol}</h2>
-                                <h:outputText id="otProtocol" value="#{operationCtrl.protocolAsString}" />
+                            <div id="protocol">
+                                <h3>#{msg.protocol}</h3>
+                                <h:inputTextarea id="itaProtocol" readonly="true" value="#{operationCtrl.protocolAsString}" />
                             </div>
                             <hr/>
                          </h:form>

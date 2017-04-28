@@ -177,18 +177,28 @@ a:focus {
     
 }
 
-.outPosLabel {
+/*.outPosLabel {
     font-size: large;
-}
+}*/
+
 .pointPosOutText {
     width: 50px;
 }
 
 .outPosOutText {
-    width: 60px;
-    font-size: large;
+    width: 50px;
 }
 
+#protocol {
+    padding:5px;
+}
+
+#fOperation\:itaProtocol {
+    width:100%;
+    height:300px;
+    border:0;
+    resize:none;
+}
 
 /* ======================= FOOTER ======================= */
 

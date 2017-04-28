@@ -122,7 +122,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x rapidly from " +this.getComponentValue(26));
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
@@ -133,6 +133,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xfLastMove = -this.xfLastMove;
             }
             //System.out.println("moveXFastForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -157,7 +158,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x rapidly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x rapidly from " +this.getComponentValue(26));
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
             //try { Thread.sleep(500); } catch (InterruptedException ex) { }
@@ -168,6 +169,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xfLastMove = -this.xfLastMove;
             }
             //System.out.println("moveXFastBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -206,7 +208,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x slowly from " +this.getComponentValue(26));
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
@@ -217,6 +219,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xsLastMove = -this.xsLastMove;
             }
             //System.out.println("moveXSlowForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -240,7 +243,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move x slowly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x slowly from " +this.getComponentValue(26));
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -251,6 +254,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                 this.xsLastMove = -this.xsLastMove;
             }
             //System.out.println("moveXSlowBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -265,6 +269,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(!this.moveXFastBackwards(false)) return false;
         if(!this.moveXSlowForward(false)) return false;
         if(!this.moveXSlowBackwards(false)) return false;
+        PushRenderer.render("session");
         return true;
     }
     
@@ -283,7 +288,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y rapidly from " +this.getComponentValue(27));
                 this.yfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -295,6 +300,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveYFastForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -319,7 +325,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y rapidly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y rapidly from " +this.getComponentValue(27));
                 this.yfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -331,6 +337,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveYFastBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -354,7 +361,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y slowly from " +this.getComponentValue(27));
                 this.ysLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -366,6 +373,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveYSlowForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -389,7 +397,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move y slowly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y slowly from " +this.getComponentValue(27));
                 this.ysLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -401,6 +409,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveYSlowBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -415,6 +424,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(!this.moveYFastBackwards(false)) return false;
         if(!this.moveYSlowForward(false)) return false;
         if(!this.moveYSlowBackwards(false)) return false;
+        PushRenderer.render("session");
         return true;
     }
 
@@ -456,7 +466,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z rapidly from " +this.getComponentValue(28));
                 this.zfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -468,6 +478,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveZFastForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -492,7 +503,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z rapidly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z rapidly from " +this.getComponentValue(28));
                 this.zfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -504,6 +515,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveZFastBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -527,7 +539,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z slowly from " +this.getComponentValue(28));
                 this.zsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -539,6 +551,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveZSlowForward(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -562,7 +575,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("move z slowly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z slowly from " +this.getComponentValue(28));
                 this.zsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
@@ -574,6 +587,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             //System.out.println("moveZSlowBackwards(" +move +") terminated with true");
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException ex) {
@@ -588,6 +602,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(!this.moveZFastBackwards(false)) return false;
         if(!this.moveZSlowForward(false)) return false;
         if(!this.moveZSlowBackwards(false)) return false;
+        PushRenderer.render("session");
         return true;
     }
 
@@ -762,9 +777,10 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     }
 
     @Override
-    public boolean moveXToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        System.out.println("move x-position from " +this.getComponentValue(26) +" to " +position);
+    public boolean moveXToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         if(this.communication == null) throw new MachineUnreachableException();
+        double absoluteTargetPos = relativeTargetPos + this.machine.getPosXZero();
+        System.out.println("move x-position from " +this.machine.getPosX() +" to " +relativeTargetPos);
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             
@@ -777,10 +793,11 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!this.moveXSlowBackwards(false)) return false;   /* STOP slow moving backwards */
 
             Thread.sleep(500);
-            this.communication.setAnalogValue("X", this.machine.getPosXZero() + position);
+            this.communication.setAnalogValue("X", absoluteTargetPos);
 
-            this.session.getProtocol().addLine("move x-position from " +this.getComponentValue(26) +" to " +position);
+            this.session.getProtocol().addLine("\tmove x-position from " +this.machine.getPosX() +" to " +relativeTargetPos);
 
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException | InterruptedException ex) {
@@ -791,8 +808,10 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     }
 
     @Override
-    public boolean moveYToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+    public boolean moveYToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         if(this.communication == null) throw new MachineUnreachableException();
+        double absoluteTargetPos = relativeTargetPos + this.machine.getPosYZero();
+        System.out.println("move y-position from " +this.machine.getPosY() +" to " +relativeTargetPos);
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             
@@ -803,10 +822,11 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!this.moveYSlowBackwards(false)) return false;   /* STOP slow moving backwards */
 
             Thread.sleep(500);
-            this.communication.setAnalogValue("Y", this.machine.getPosYZero() + position);
+            this.communication.setAnalogValue("Y", absoluteTargetPos);
 
-            this.session.getProtocol().addLine("move y-position from " +this.getComponentValue(27) +" to " +position);
+            this.session.getProtocol().addLine("\tmove y-position from " +this.machine.getPosY() +" to " +relativeTargetPos);
 
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException | InterruptedException ex) {
@@ -817,8 +837,10 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     }
 
     @Override
-    public boolean moveZToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
+    public boolean moveZToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         if(this.communication == null) throw new MachineUnreachableException();
+        double absoluteTargetPos = relativeTargetPos + this.machine.getPosZZero();
+        System.out.println("move z-position from " +this.machine.getPosZ() +" to " +relativeTargetPos);
         try {
             ArrayList<MachineComponent> comp = this.machine.getComponents();
             
@@ -829,10 +851,11 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             if(!this.moveZSlowBackwards(false)) return false;   /* STOP slow moving backwards */
 
             Thread.sleep(500);
-            this.communication.setAnalogValue("Z", this.machine.getPosZZero() + position);
+            this.communication.setAnalogValue("Z", absoluteTargetPos);
 
-            this.session.getProtocol().addLine("move z-position from " +this.getComponentValue(28) +" to " +position);
+            this.session.getProtocol().addLine("\tmove z-position from " +this.machine.getPosZ() +" to " +relativeTargetPos);
             
+            PushRenderer.render("session");
             return true;
 
         } catch (IncompatiblePinException | RemoteException | InterruptedException ex) {
@@ -848,6 +871,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_FOR_CALIBRATION) {
             this.machine.setOperation(EOperation.CALIBRATION);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.CALIBRATION +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -858,6 +883,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_POINT);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_POINT +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -868,6 +895,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_INNER_DIAMETER);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_INNER_DIAMETER +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -878,6 +907,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_OUTER_DIAMETER);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_OUTER_DIAMETER +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -885,12 +916,11 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean probePlane() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-                System.out.print("Operation: "); // TODO eliminar
-                //this.currentAction = "probePlane";
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_PLANE);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
-                System.out.println("probePlane"); // TODO eliminar
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_PLANE +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -901,6 +931,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_DISTANCE_PLANE_POINT);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_DISTANCE_PLANE_POINT +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -911,6 +943,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         if(this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
             this.machine.setOperation(EOperation.P3_PROBE_DISTANCE_PARALLEL_PLANES);
             this.machine.setOperationState(EOperationState.SHAPE1_0_POINTS_MEASURED);
+            this.session.getProtocol().addLine(EOperation.P3_PROBE_DISTANCE_PARALLEL_PLANES +" STARTED");
+            PushRenderer.render("session");
             return true;
         }
         else throw new MachineOperationTemporarilyForbiddenException();
@@ -923,19 +957,19 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         }
         else if(this.machine.getOperation() == EOperation.CALIBRATION) {
             this.machine.setOperation(EOperation.WAITING_FOR_CALIBRATION);
+            this.session.getProtocol().addLine("CALIBRATION OPERATION RESTARTED!");
             try {
                 this.calibrateMachine();
             } catch (MachineUnreachableException | MachineOperationTemporarilyForbiddenException ex) {}
-            this.session.getProtocol().addLine("THE CALIBRATION OPERATION HAS BEEN RESTARTED!");
         }
         else {
             this.machine.setOperation(EOperation.WAITING_ALREADY_CALIBRATED);
             this.machine.setOperationState(EOperationState.WAITING);
-            this.session.getProtocol().addLine("THE OPERATION HAS BEEN CANCELED!");
-            System.out.println("Operation: canceled!"); // TODO eliminar
+            this.session.getProtocol().addLine("OPERATION CANCELED!");
         }
         //TODO: ?IMPLEMENT A PROTOCOL COMMAND "DEF" THAT RE-SETS ALL MACHINE-ACTUATORS TO THEIR DEFAULT VALUES?
         this.measuredPoints.clear();
+        PushRenderer.render("session");
         return true;
     }
 
@@ -949,20 +983,18 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     public boolean finishOperation() {
         switch(this.machine.getOperation()) {
             case CALIBRATION:
-                System.out.print("Finishing operation CALIBRATION...");
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
-                    System.out.print("storing 0-coordinates...");
                     this.machine.setPosXZero(this.measuredPoints.get(0).getX());
                     this.machine.setPosYZero(this.measuredPoints.get(1).getY());
                     this.machine.setPosZZero(this.measuredPoints.get(2).getZ());
-                    this.session.getProtocol().addLine("Calibration finished, machines 0-positions set to (" 
+                    this.session.getProtocol().addLine(EOperation.CALIBRATION +" FINISHED, machines 0-positions set to (" 
                             +this.machine.getPosXZero() +" | " +this.machine.getPosYZero() 
                             +" | " +this.machine.getPosZZero() +")!");
                 }
                 break;
             case P3_PROBE_POINT:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
-                    this.session.getProtocol().addLine("Point probed, coordinates (" 
+                    this.session.getProtocol().addLine(EOperation.P3_PROBE_POINT +" FINISHED, coordinates (" 
                             +this.measuredPoints.get(0).getX() +" | " +this.measuredPoints.get(1).getY()
                             +" | " +this.measuredPoints.get(2).getZ() +")!");
                 }                
@@ -1029,8 +1061,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                     /* Step 6: Calculate radius of outer circle */
                     double radius = a.getValue() / (2 * Math.sin(alpha));
                     
-                    this.session.getProtocol().addLine("Diameter measured, circle with center (" +centerpoint.getX() +", "
-                            +centerpoint.getY() +", " +centerpoint.getZ() +") and diameter " +(radius*2) +"!");
+                    this.session.getProtocol().addLine(EOperation.P3_PROBE_INNER_DIAMETER +" FINISHED, circle with center (x: " 
+                            +centerpoint.getX() +", y: " +centerpoint.getY() +", z: " +centerpoint.getZ() +") and diameter " +(radius*2) +" meters!");
                 }
                 break;
             case P3_PROBE_OUTER_DIAMETER:
@@ -1065,27 +1097,24 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     
     @Override
     public boolean measurePosition() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
-        System.out.println("Operation: " +this.machine.getOperation() +", state: " +this.machine.getOperationState()); // TODO eliminar
+        //System.out.println("Operation: " +this.machine.getOperation() +", state: " +this.machine.getOperationState()); // TODO eliminar
+        Position position = new Position(Double.parseDouble(this.getComponentValue(26)), 
+                                Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28)));
         switch(this.machine.getOperation()) {
             case WAITING_FOR_CALIBRATION:
             case WAITING_ALREADY_CALIBRATED:
                 break;
             case CALIBRATION:
             case P3_PROBE_POINT:
+                this.measuredPoints.add(position);
                 switch(this.machine.getOperationState()) {
                     case SHAPE1_0_POINTS_MEASURED:
-                        this.measuredPoints.add(0, new Position(Double.parseDouble(this.getComponentValue(26)), 
-                                Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28))));
                         this.machine.setOperationState(EOperationState.SHAPE1_1_POINT_MEASURED);
                         break;
                     case SHAPE1_1_POINT_MEASURED:
-                        this.measuredPoints.add(1, new Position(Double.parseDouble(this.getComponentValue(26)), 
-                                Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28))));
                         this.machine.setOperationState(EOperationState.SHAPE1_2_POINTS_MEASURED);
                         break;
                     case SHAPE1_2_POINTS_MEASURED:
-                        this.measuredPoints.add(2, new Position(Double.parseDouble(this.getComponentValue(26)), 
-                                Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28))));
                         this.machine.setOperationState(EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED);
                         this.operationTerminable = true;
                         //this.finishOperation();
@@ -1095,8 +1124,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             case P3_PROBE_INNER_DIAMETER:
             case P3_PROBE_OUTER_DIAMETER:
             case P3_PROBE_PLANE:
-                this.measuredPoints.add(new Position(Double.parseDouble(this.getComponentValue(26)), 
-                        Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28))));
+                this.measuredPoints.add(position);
                 switch(this.machine.getOperationState()) {
                     case SHAPE1_0_POINTS_MEASURED:
                         this.machine.setOperationState(EOperationState.SHAPE1_1_POINT_MEASURED);
@@ -1120,8 +1148,9 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             default:
                 break;
         }
-        System.out.println("Position measured! New operation: " +this.machine.getOperation()
-                                                +", new state: " +this.machine.getOperationState()); // TODO eliminar
+        //System.out.println("Position measured! New operation: " +this.machine.getOperation()
+        //                                        +", new state: " +this.machine.getOperationState()); // TODO eliminar
+        this.session.getProtocol().addLine("\tPOSITION: " +position);
         PushRenderer.render("session");
         return true;
     }
@@ -1207,18 +1236,6 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     public void setGoPosZ(Double goPosZ) {
         this.goPosZ = goPosZ;
-    }
-    
-    public double getPosX() {
-        return this.machine.getPosXZero() + this.machine.getPosXAbs();
-    }
-
-    public double getPosY() {
-        return this.machine.getPosYZero() + this.machine.getPosYAbs();
-    }
-
-    public double getPosZ() {
-        return this.machine.getPosZZero() + this.machine.getPosZAbs();
     }
     
     public ArrayList<Position> getMeasuredPoints() {

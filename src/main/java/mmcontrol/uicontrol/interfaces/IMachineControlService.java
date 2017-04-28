@@ -44,9 +44,9 @@ public interface IMachineControlService {
     public boolean setZFastConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
     public boolean setZSlowConnected(boolean connected) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
     
-    public boolean moveXToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
-    public boolean moveYToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
-    public boolean moveZToPosition(double position) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
+    public boolean moveXToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
+    public boolean moveYToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
+    public boolean moveZToPosition(double relativeTargetPos) throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
     
     public boolean measurePosition() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException;
     
