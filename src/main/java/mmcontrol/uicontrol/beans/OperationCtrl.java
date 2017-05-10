@@ -1002,6 +1002,15 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             case P3_PROBE_INNER_DIAMETER:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
                     
+                    
+                    //TODO: MAKE IT WORK!
+                    /* Previous result: P3_PROBE_INNER_DIAMETER FINISHED, 
+                       circle with center (x: -0.005563722983189509, y: -0.2110267088262997, z: -0.194352) 
+                       and diameter 0.0022662852420681483 meters!
+                     */
+                    
+                    
+                    
                     /* Calculate outer circle central point and diameter */
                     /* SIMPLIFYING ASSUMPTION: Circle is assumed to be perfectly horizontally orientated (z-axis is ignored) */
                     /* Instructional example (German) here:

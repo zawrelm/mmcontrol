@@ -230,42 +230,47 @@
                                         id="cbMinFastX" 
                                         image="resources/img/arrowFastMinX.png" 
                                         actionListener="#{operationCtrl.moveXFastBackwards(true)}" 
+                                        accesskey="1"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <h:commandButton 
                                         id="cbMinSlowX" 
                                         image="resources/img/arrowSlowMinX.png" 
                                         actionListener="#{operationCtrl.moveXSlowBackwards(true)}" 
+                                        accesskey="4"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <h:commandButton 
-                                        id="cbMinStopX" 
+                                        id="cbStopX" 
                                         image="resources/img/stop.png" 
                                         actionListener="#{operationCtrl.stopX()}"
+                                        accesskey="2"
                                         styleClass="stopButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <h:commandButton 
                                         id="cbPosSlowX"
                                         image="resources/img/arrowSlowPosX.png" 
                                         actionListener="#{operationCtrl.moveXSlowForward(true)}"
+                                        accesskey="5"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <h:commandButton 
                                         id="cbPosFastX"
                                         image="resources/img/arrowFastPosX.png" 
                                         actionListener="#{operationCtrl.moveXFastForward(true)}" 
+                                        accesskey="3"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <ace:textEntry
                                         id="tePosX"
                                         binding="#{xGoPos}"
@@ -282,8 +287,42 @@
                                     </h:commandButton>
 
                                     <!--h:outputText id="otXPos" value="X: #{operationCtrl.posX}" styleClass="outPosOutText" /-->
-                                </h:panelGrid>
 
+                                    <ace:tooltip id="ttMinFastX" for="cbMinFastX" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinFastX" value="Alt+1"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+
+                                    <ace:tooltip id="ttMinSlowX" for="cbMinSlowX" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinSlowX" value="Alt+4"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+
+                                    <ace:tooltip id="ttStopX" for="cbStopX" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttStopX" value="Alt+2"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+
+                                    <ace:tooltip id="ttPosSlowX" for="cbPosSlowX" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosSlowX" value="Alt+5"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+
+                                    <ace:tooltip id="ttPosFastX" for="cbPosFastX" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosFastX" value="Alt+3"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                </h:panelGrid>
                                 
                                 <h:panelGrid id="pgAxisY" columns="8">
                                     <ace:graphicImage id="imgYAxis" value="resources/img/AxisY.png" styleClass="axisImage" />
@@ -292,22 +331,25 @@
                                         id="cbMinFastY"
                                         image="resources/img/arrowFastMinY.png" 
                                         actionListener="#{operationCtrl.moveYFastBackwards(true)}"
+                                        accesskey="q"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
-
+                                    
                                     <h:commandButton 
                                         id="cbMinSlowY"
                                         image="resources/img/arrowSlowMinY.png" 
                                         actionListener="#{operationCtrl.moveYSlowBackwards(true)}"
+                                        accesskey="r"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
                                             
                                     <h:commandButton 
-                                        id="cbMinStopY" 
+                                        id="cbStopY" 
                                         image="resources/img/stop.png" 
                                         actionListener="#{operationCtrl.stopY()}"
+                                        accesskey="w"
                                         styleClass="stopButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -316,6 +358,7 @@
                                         id="cbPosSlowY"
                                         image="resources/img/arrowSlowPosY.png" 
                                         actionListener="#{operationCtrl.moveYSlowForward(true)}"
+                                        accesskey="t"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -324,6 +367,7 @@
                                         id="cbPosFastY"
                                         image="resources/img/arrowFastPosY.png" 
                                         actionListener="#{operationCtrl.moveYFastForward(true)}"
+                                        accesskey="e"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -344,6 +388,37 @@
                                     </h:commandButton>
 
                                     <!--h:outputText id="otYPos" value="Y: #{operationCtrl.posY}" styleClass="outPosOutText"/-->
+
+                                    <ace:tooltip id="ttMinFastY" for="cbMinFastY" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinFastY" value="Alt+q"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttMinSlowY" for="cbMinSlowY" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinSlowY" value="Alt+r"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttStopY" for="cbStopY" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttStopY" value="Alt+w"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttPosSlowY" for="cbPosSlowY" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosSlowY" value="Alt+t"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttPosFastY" for="cbPosFastY" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosFastY" value="Alt+e"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
                                 </h:panelGrid>
 
 
@@ -354,6 +429,7 @@
                                         id="cbMinFastZ"
                                         image="resources/img/arrowFastMinZ.png" 
                                         actionListener="#{operationCtrl.moveZFastBackwards(true)}"
+                                        accesskey="a"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -362,14 +438,16 @@
                                         id="cbMinSlowZ"
                                         image="resources/img/arrowSlowMinZ.png" 
                                         actionListener="#{operationCtrl.moveZSlowBackwards(true)}"
+                                        accesskey="f"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
                                             
                                     <h:commandButton 
-                                        id="cbMinStopZ" 
+                                        id="cbStopZ" 
                                         image="resources/img/stop.png" 
                                         actionListener="#{operationCtrl.stopZ()}"
+                                        accesskey="s"
                                         styleClass="stopButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -378,6 +456,7 @@
                                         id="cbPosSlowZ"
                                         image="resources/img/arrowSlowPosZ.png" 
                                         actionListener="#{operationCtrl.moveZSlowForward(true)}"
+                                        accesskey="g"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -386,6 +465,7 @@
                                         id="cbPosFastZ"
                                         image="resources/img/arrowFastPosZ.png" 
                                         actionListener="#{operationCtrl.moveZFastForward(true)}"
+                                        accesskey="d"
                                         styleClass="moveButton">
                                         <f:ajax execute="@form" render="@none" />
                                     </h:commandButton>
@@ -406,22 +486,54 @@
                                     </h:commandButton>
 
                                     <!--h:outputText id="otZPos" value="Z: #{operationCtrl.posZ}" styleClass="outPosOutText"/-->
+
+                                    <ace:tooltip id="ttMinFastZ" for="cbMinFastZ" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinFastZ" value="Alt+a"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttMinSlowZ" for="cbMinSlowZ" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttMinSlowZ" value="Alt+f"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttStopZ" for="cbStopZ" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttStopZ" value="Alt+s"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttPosSlowZ" for="cbPosSlowZ" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosSlowZ" value="Alt+g"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
+                                    <ace:tooltip id="ttPosFastZ" for="cbPosFastZ" position="topLeft" 
+                                                 targetPosition="bottomLeft" styleClass="actionTooltip">
+                                        <h:panelGrid styleClass="tooltipBoxStyle"> 
+                                            <h:outputText id="otttPosFastZ" value="Alt+d"/>
+                                        </h:panelGrid>
+                                    </ace:tooltip>
                                 </h:panelGrid>
                                     
                             </h:panelGroup>
                                 <h:panelGrid id="pgActuatorStates">
-                                    <h:outputText id="otTouching" value="#{msg.contact}: #{operationCtrl.machine.touching}" styleClass="outPosOutText" />
+                                    <h:outputText id="otNotTouching" value="#{msg.noContact}" rendered="#{!operationCtrl.machine.touching}" styleClass="outPosOutText" />
+                                    <h:outputText id="otTouching" value="#{msg.contact}" rendered="#{operationCtrl.machine.touching}" styleClass="outPosOutText" />
                                     
-                                    <h:outputText id="otXClipFast" value="X #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipXFastClosed}" styleClass="outPosOutText" />
-                                    <h:outputText id="otXClipSlow" value="X #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipXSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otXClipFast" value="X #{msg.fast} #{msg.connected}" rendered="#{operationCtrl.machine.clipXFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otXClipSlow" value="X #{msg.slow} #{msg.connected}" rendered="#{operationCtrl.machine.clipXSlowClosed}" styleClass="outPosOutText" />
                                     <h:outputText id="otXPos" value="X: #{operationCtrl.machine.posX}" styleClass="outPosOutText" />
                                     
-                                    <h:outputText id="otYClipFast" value="Y #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipYFastClosed}" styleClass="outPosOutText" />
-                                    <h:outputText id="otYClipSlow" value="Y #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipYSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otYClipFast" value="Y #{msg.fast} #{msg.connected}" rendered="#{operationCtrl.machine.clipYFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otYClipSlow" value="Y #{msg.slow} #{msg.connected}" rendered="#{operationCtrl.machine.clipYSlowClosed}" styleClass="outPosOutText" />
                                     <h:outputText id="otYPos" value="Y: #{operationCtrl.machine.posY}" styleClass="outPosOutText" />
                                     
-                                    <h:outputText id="otZClipFast" value="Z #{msg.fast} #{msg.connected}: #{operationCtrl.machine.clipZFastClosed}" styleClass="outPosOutText" />
-                                    <h:outputText id="otZClipSlow" value="Z #{msg.slow} #{msg.connected}: #{operationCtrl.machine.clipZSlowClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otZClipFast" value="Z #{msg.fast} #{msg.connected}" rendered="#{operationCtrl.machine.clipZFastClosed}" styleClass="outPosOutText" />
+                                    <h:outputText id="otZClipSlow" value="Z #{msg.slow} #{msg.connected}" rendered="#{operationCtrl.machine.clipZSlowClosed}" styleClass="outPosOutText" />
                                     <h:outputText id="otZPos" value="Z: #{operationCtrl.machine.posZ}" styleClass="outPosOutText" />
                                 </h:panelGrid>
                             </h:panelGrid>
