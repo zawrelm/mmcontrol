@@ -24,7 +24,7 @@ import mmcontrol.uicontrol.model.Machine;
 import mmcontrol.uicontrol.model.MachineComponent;
 import mmcontrol.uicontrol.model.Position;
 import mmcontrol.uicontrol.model.UserMachineSession;
-import mmcontrol.uicontrol.model.Vector;
+import mmcontrol.uicontrol.model.Edge;
 import mmcontrol.uicontrol.model.enums.EOperation;
 import mmcontrol.uicontrol.model.enums.EOperationState;
 import org.icefaces.application.PushRenderer;
@@ -53,6 +53,8 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     private UserMachineSession session;
     private Machine machine;
     private IMachineCommunicationService communication;
+    
+    private double sensingHeadRadius = 0.005d;  //sensing head radius in meters; TODO: implement classes for sensing head configuration
     
     private int xfLastMove, xsLastMove, yfLastMove, ysLastMove, zfLastMove, zsLastMove; //protocol line number of last move; negative when still moving
 
@@ -122,14 +124,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove x rapidly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x rapidly from " +this.machine.getPosX());
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
             this.communication.setDigitalPin(0, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
+                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.machine.getPosX());
                 this.xfLastMove = -this.xfLastMove;
             }
             //System.out.println("moveXFastForward(" +move +") terminated with true");
@@ -158,14 +160,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.xfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove x rapidly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x rapidly from " +this.machine.getPosX());
                 this.xfLastMove = -(this.session.getProtocol().getLength()-1);
             }
             //try { Thread.sleep(500); } catch (InterruptedException ex) { }
             this.communication.setDigitalPin(1, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.getComponentValue(26));
+                this.session.getProtocol().appendToLine(-this.xfLastMove, " to " +this.machine.getPosX());
                 this.xfLastMove = -this.xfLastMove;
             }
             //System.out.println("moveXFastBackwards(" +move +") terminated with true");
@@ -208,14 +210,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove x slowly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x slowly from " +this.machine.getPosX());
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
             
             this.communication.setDigitalPin(2, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
+                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.machine.getPosX());
                 this.xsLastMove = -this.xsLastMove;
             }
             //System.out.println("moveXSlowForward(" +move +") terminated with true");
@@ -243,14 +245,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.xsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove x slowly from " +this.getComponentValue(26));
+                this.session.getProtocol().addLine("\tmove x slowly from " +this.machine.getPosX());
                 this.xsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(3, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.xsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.getComponentValue(26));
+                this.session.getProtocol().appendToLine(-this.xsLastMove, " to " +this.machine.getPosX());
                 this.xsLastMove = -this.xsLastMove;
             }
             //System.out.println("moveXSlowBackwards(" +move +") terminated with true");
@@ -288,14 +290,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove y rapidly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y rapidly from " +this.machine.getPosY());
                 this.yfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(4, move);  // this signal is always sent since we don't have a motor movement sensor
 
             if(this.yfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
+                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.machine.getPosY());
                 this.yfLastMove = -this.yfLastMove;
             }
 
@@ -325,14 +327,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.yfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove y rapidly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y rapidly from " +this.machine.getPosY());
                 this.yfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(5, move);
 
             if(this.yfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.getComponentValue(27));
+                this.session.getProtocol().appendToLine(-this.yfLastMove, " to " +this.machine.getPosY());
                 this.yfLastMove = -this.yfLastMove;
             }
 
@@ -361,14 +363,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove y slowly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y slowly from " +this.machine.getPosY());
                 this.ysLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(6, move);
 
             if(this.ysLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
+                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.machine.getPosY());
                 this.ysLastMove = -this.ysLastMove;
             }
 
@@ -397,14 +399,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.ysLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove y slowly from " +this.getComponentValue(27));
+                this.session.getProtocol().addLine("\tmove y slowly from " +this.machine.getPosY());
                 this.ysLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(7, move);
             
             if(this.ysLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.getComponentValue(27));
+                this.session.getProtocol().appendToLine(-this.ysLastMove, " to " +this.machine.getPosY());
                 this.ysLastMove = -this.ysLastMove;
             }
 
@@ -466,14 +468,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove z rapidly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z rapidly from " +this.machine.getPosZ());
                 this.zfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(8, move);  // this signal is always sent since we don't have a motor movement sensor
             
             if(this.zfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
+                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.machine.getPosZ());
                 this.zfLastMove = -this.zfLastMove;
             }
 
@@ -503,14 +505,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zfLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove z rapidly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z rapidly from " +this.machine.getPosZ());
                 this.zfLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(9, move);
             
             if(this.zfLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.getComponentValue(28));
+                this.session.getProtocol().appendToLine(-this.zfLastMove, " to " +this.machine.getPosZ());
                 this.zfLastMove = -this.zfLastMove;
             }
 
@@ -539,14 +541,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
             
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove z slowly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z slowly from " +this.machine.getPosZ());
                 this.zsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(10, move);
             
             if(this.zsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
+                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.machine.getPosZ());
                 this.zsLastMove = -this.zsLastMove;
             }
 
@@ -575,14 +577,14 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             }
 
             if(this.zsLastMove >= 0 && move) {
-                this.session.getProtocol().addLine("\tmove z slowly from " +this.getComponentValue(28));
+                this.session.getProtocol().addLine("\tmove z slowly from " +this.machine.getPosZ());
                 this.zsLastMove = -(this.session.getProtocol().getLength()-1);
             }
 
             this.communication.setDigitalPin(11, move);
             
             if(this.zsLastMove < 0 && !move) {
-                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.getComponentValue(28));
+                this.session.getProtocol().appendToLine(-this.zsLastMove, " to " +this.machine.getPosZ());
                 this.zsLastMove = -this.zsLastMove;
             }
 
@@ -1002,15 +1004,6 @@ public class OperationCtrl implements Serializable, IMachineControlService {
             case P3_PROBE_INNER_DIAMETER:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
                     
-                    
-                    //TODO: MAKE IT WORK!
-                    /* Previous result: P3_PROBE_INNER_DIAMETER FINISHED, 
-                       circle with center (x: -0.005563722983189509, y: -0.2110267088262997, z: -0.194352) 
-                       and diameter 0.0022662852420681483 meters!
-                     */
-                    
-                    
-                    
                     /* Calculate outer circle central point and diameter */
                     /* SIMPLIFYING ASSUMPTION: Circle is assumed to be perfectly horizontally orientated (z-axis is ignored) */
                     /* Instructional example (German) here:
@@ -1018,64 +1011,71 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                         http://www.arndt-bruenner.de/mathe/scripts/Dreiecksberechnung.htm
                        Instructions in English:
                         http://paulbourke.net/geometry/circlesphere/
+                        http://stackoverflow.com/questions/4103405/what-is-the-algorithm-for-finding-the-center-of-a-circle-from-three-points
                     */
+                    
+                    Position p1 = this.measuredPoints.get(0);
+                    Position p2 = this.measuredPoints.get(1);
+                    Position p3 = this.measuredPoints.get(2);
+                    /*
+                    double slopeA = (p2.getY() - p1.getY())/(p2.getX() - p1.getX());
+                    double slopeB = (p3.getY() - p2.getY())/(p3.getX() - p2.getX());
+                    
+                    double centerX = (slopeA*slopeB*(p1.getY()-p3.getY()) + slopeB*(p1.getX() + p2.getX()) 
+                            - slopeA*(p2.getX()+p3.getX()) )/(2* (slopeB - slopeA) );
+                    double centerY = -1*(centerX - (p1.getX()+p2.getX())/2)/slopeA + (p1.getY()+p2.getY())/2;
+
+                    double radius = Math.sqrt( (p2.getX()-centerX)*(p2.getX()-centerX) + (p2.getY()-centerY)*(p2.getY()-centerY));
+                    */
+                    
                     /* Step 1: Calculate length of triangle sides */
-                    Vector a, b, c;
-                    a = new Vector(
-                            (this.measuredPoints.get(2).getX() - this.measuredPoints.get(1).getX())*
-                            (this.measuredPoints.get(2).getX() - this.measuredPoints.get(1).getX()),
-                            (this.measuredPoints.get(2).getY() - this.measuredPoints.get(1).getY())*
-                            (this.measuredPoints.get(2).getY() - this.measuredPoints.get(1).getY())
-                    );
-                    b = new Vector(
-                            (this.measuredPoints.get(2).getX() - this.measuredPoints.get(0).getX())*
-                            (this.measuredPoints.get(2).getX() - this.measuredPoints.get(0).getX()),
-                            (this.measuredPoints.get(2).getY() - this.measuredPoints.get(0).getY())*
-                            (this.measuredPoints.get(2).getY() - this.measuredPoints.get(0).getY())
-                    );
-                    c = new Vector(
-                            (this.measuredPoints.get(1).getX() - this.measuredPoints.get(0).getX())*
-                            (this.measuredPoints.get(1).getX() - this.measuredPoints.get(0).getX()),
-                            (this.measuredPoints.get(1).getY() - this.measuredPoints.get(0).getY())*
-                            (this.measuredPoints.get(1).getY() - this.measuredPoints.get(0).getY())
-                    );
+
+                    Edge a = new Edge(p3.getX()-p2.getX(), p3.getY()-p2.getY());
+                    Edge b = new Edge(p3.getX()-p1.getX(), p3.getY()-p1.getY());
+                    Edge c = new Edge(p2.getX()-p1.getX(), p2.getY()-p1.getY());
+
+                    System.out.println("P1-P2: " +c.getLength() +"m, P2-P3: " +a.getLength() +"m, P3-P1: " +b.getLength() +"m;");
 
                     /* Step 2: Calculate bisectors of triangle sides */
-                    Position ha = new Position( 0.5*(this.measuredPoints.get(1).getX()+this.measuredPoints.get(2).getX()),
-                                                0.5*(this.measuredPoints.get(1).getY()+this.measuredPoints.get(2).getY()),
+                    Position ha = new Position( 0.5*(p2.getX()+p3.getX()),
+                                                0.5*(p2.getY()+p3.getY()),
                                                 0d);
-                    Position hb = new Position( 0.5*(this.measuredPoints.get(0).getX()+this.measuredPoints.get(2).getX()),
-                                                0.5*(this.measuredPoints.get(0).getY()+this.measuredPoints.get(2).getY()),
+                    Position hb = new Position( 0.5*(p1.getX()+p3.getX()),
+                                                0.5*(p1.getY()+p3.getY()),
                                                 0d);
                     
+                    System.out.println("ha(" +ha.getX() +"|" +ha.getY() +"), hb(" +hb.getX() +"|" +hb.getY() +")");
+
                     /* Step 3: Calculate normal vector towards bisectors */
-                    Vector na = new Vector(a.getX(), a.getY(), a.getX()*ha.getX()+a.getY()*ha.getY());
-                    Vector nb = new Vector(b.getX(), b.getY(), b.getX()*hb.getX()+b.getY()*hb.getY());
+                    double na = a.getdX()*ha.getX()+a.getdY()*ha.getY();
+                    double nb = b.getdX()*hb.getX()+b.getdY()*hb.getY();
+                    
+                    System.out.println("na = " +na +", nb = " +nb);
 
                     /* Step 4: Calculate position of intersection of normal vectors by resolving equation system */
-                    Vector step = new Vector(na.getX()*nb.getY()-na.getY()*nb.getX(), 
-                                             0d, 
-                                             na.getValue()*nb.getY()-na.getY()*nb.getValue()
-                    );
-                    double x = step.getValue()/step.getX();
-                    double y = (na.getValue()-na.getX()*x)/na.getY();
+                    double x = (na*b.getdY()-a.getdY()*nb) / (a.getdX()*b.getdY()-a.getdY()*b.getdX());
+                    double y = (na-a.getdX()*x) / a.getdY();
                     
-                    Position centerpoint = new Position(x,y,this.measuredPoints.get(0).getZ());
-                                                        
+                    Position centerpoint = new Position(x,y,p1.getZ());
                     
-                    /* Step 5: Calculate angle alpha */
-                    double alpha = Math.acos((a.getValue() * a.getValue() - b.getValue() * b.getValue() 
-                            - c.getValue() * c.getValue()) / (-2 * b.getValue() * c.getValue()));
+                    /* Step 5: Calculate angle alpha *
+                    double alpha = Math.acos((a.getLength() * a.getLength() - b.getLength() * b.getLength() 
+                            - c.getLength() * c.getLength()) / (-2 * b.getLength() * c.getLength()));
                     
                     /* Step 6: Calculate radius of outer circle */
-                    double radius = a.getValue() / (2 * Math.sin(alpha));
+                    //double radius = a.getLength() / (2 * Math.sin(alpha));
+                    double radius = Math.sqrt( (p2.getX()-centerpoint.getX())*(p2.getX()-centerpoint.getX())
+                            + (p2.getY()-centerpoint.getY())*(p2.getY()-centerpoint.getY())) + (2*this.sensingHeadRadius);
+                    
+                    System.out.println("x = " +x +", y = " +y +", r = " +radius);
                     
                     this.session.getProtocol().addLine(EOperation.P3_PROBE_INNER_DIAMETER +" FINISHED, circle with center (x: " 
                             +centerpoint.getX() +", y: " +centerpoint.getY() +", z: " +centerpoint.getZ() +") and diameter " +(radius*2) +" meters!");
                 }
                 break;
             case P3_PROBE_OUTER_DIAMETER:
-                break;
+                break;  //Difference to inner diameter is that the sensingHeadDiameter 
+                        //has to be subtracted from, instead of added to get the radius of the circle!
             case P3_PROBE_PLANE:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
                     
@@ -1107,8 +1107,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
     @Override
     public boolean measurePosition() throws MachineUnreachableException, MachineOperationTemporarilyForbiddenException {
         //System.out.println("Operation: " +this.machine.getOperation() +", state: " +this.machine.getOperationState()); // TODO eliminar
-        Position position = new Position(Double.parseDouble(this.getComponentValue(26)), 
-                                Double.parseDouble(this.getComponentValue(27)), Double.parseDouble(this.getComponentValue(28)));
+        Position position = new Position(this.machine.getPosX(), this.machine.getPosY(), this.machine.getPosZ());
         switch(this.machine.getOperation()) {
             case WAITING_FOR_CALIBRATION:
             case WAITING_ALREADY_CALIBRATED:
@@ -1192,12 +1191,12 @@ public class OperationCtrl implements Serializable, IMachineControlService {
         return this.machine;
     }
     
-    private String getComponentValue(int index) {
+    /*private String getComponentValue(int index) {
         ArrayList<MachineComponent> comp = this.machine.getComponents();
         if(index >= comp.size())
             return "INVALID COMPONENT NUMBER";
         return comp.get(index).getValueAsString();
-    }
+    }*/
 
     public void setLoginCtrl(LoginCtrl loginCtrl) {
         this.loginCtrl = loginCtrl;
