@@ -954,23 +954,28 @@ public class OperationCtrl implements Serializable, IMachineControlService {
 
     @Override
     public boolean cancelOperation() {
-        if(this.machine.getOperation() == EOperation.WAITING_FOR_CALIBRATION || this.machine.getOperation() == EOperation.WAITING_ALREADY_CALIBRATED) {
-            return false;
-        }
-        else if(this.machine.getOperation() == EOperation.CALIBRATION) {
-            this.machine.setOperation(EOperation.WAITING_FOR_CALIBRATION);
-            this.session.getProtocol().addLine("CALIBRATION OPERATION RESTARTED!");
-            try {
-                this.calibrateMachine();
-            } catch (MachineUnreachableException | MachineOperationTemporarilyForbiddenException ex) {}
-        }
-        else {
-            this.machine.setOperation(EOperation.WAITING_ALREADY_CALIBRATED);
-            this.machine.setOperationState(EOperationState.WAITING);
-            this.session.getProtocol().addLine("OPERATION CANCELED!");
+        switch(this.machine.getOperation()) {
+            case WAITING_FOR_CALIBRATION:
+            case WAITING_ALREADY_CALIBRATED:
+                return false;
+
+            case CALIBRATION:
+                this.machine.setOperation(EOperation.WAITING_FOR_CALIBRATION);
+                this.session.getProtocol().addLine("CALIBRATION OPERATION RESTARTED!");
+                try {
+                    this.calibrateMachine();
+                } catch (MachineUnreachableException | MachineOperationTemporarilyForbiddenException ex) {}
+                break;
+
+            default:
+                this.machine.setOperation(EOperation.WAITING_ALREADY_CALIBRATED);
+                this.machine.setOperationState(EOperationState.WAITING);
+                this.session.getProtocol().addLine("OPERATION CANCELED!");
+                break;
         }
         //TODO: ?IMPLEMENT A PROTOCOL COMMAND "DEF" THAT RE-SETS ALL MACHINE-ACTUATORS TO THEIR DEFAULT VALUES?
         this.measuredPoints.clear();
+        this.operationTerminable = false;
         PushRenderer.render("session");
         return true;
     }
@@ -1001,7 +1006,7 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                             +" | " +this.measuredPoints.get(2).getZ() +")!");
                 }                
                 break;
-            case P3_PROBE_INNER_DIAMETER:
+            case P3_PROBE_OUTER_DIAMETER:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
                     
                     /* Calculate outer circle central point and diameter */
@@ -1069,13 +1074,13 @@ public class OperationCtrl implements Serializable, IMachineControlService {
                     
                     System.out.println("x = " +x +", y = " +y +", r = " +radius);
                     
-                    this.session.getProtocol().addLine(EOperation.P3_PROBE_INNER_DIAMETER +" FINISHED, circle with center (x: " 
+                    this.session.getProtocol().addLine(EOperation.P3_PROBE_OUTER_DIAMETER +" FINISHED, circle with center (x: " 
                             +centerpoint.getX() +", y: " +centerpoint.getY() +", z: " +centerpoint.getZ() +") and diameter " +(radius*2) +" meters!");
                 }
                 break;
-            case P3_PROBE_OUTER_DIAMETER:
+            case P3_PROBE_INNER_DIAMETER:
                 break;  //Difference to inner diameter is that the sensingHeadDiameter 
-                        //has to be subtracted from, instead of added to get the radius of the circle!
+                        //has to be added instead of subtracted to get the radius of the circle!
             case P3_PROBE_PLANE:
                 if(this.machine.getOperationState() == EOperationState.SHAPE1_SUFFICIENT_POINTS_MEASURED) {
                     

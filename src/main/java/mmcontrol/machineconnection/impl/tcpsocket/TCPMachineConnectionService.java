@@ -150,6 +150,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                                 System.out.println("ERROR: Interruption while waiting for machine connection!");
                             } catch (Exception ex) {
                                 System.out.println("ERROR: Unknown response format or unspecified error!\n" +ex.getMessage());
+                                ex.printStackTrace();
                             }
                         }
 
@@ -210,7 +211,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
         try {
             this.informActiveMachines(EConnectionEvent.MACHINE_CONNECTED, machineId);
         } catch (NotBoundException | IOException | NumberFormatException ex) {
-            System.err.println("Server unreachable! Not informed about activation of machine " + machineId + "!");
+            System.err.println("Server unreachable! Not informed about activation of machine " + machineId + "! (" +ex.getLocalizedMessage() +")");
             return;
         }
 
@@ -224,7 +225,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
         try {
             this.informActiveMachines(EConnectionEvent.MACHINE_DISCONNECTED, machineId);
         } catch (NotBoundException | IOException | NumberFormatException ex) {
-            System.err.println("Server unreachable! Not informed about shutdown of machine " + machineId + "!");
+            System.err.println("Server unreachable! Not informed about shutdown of machine " + machineId + "! (" +ex.getLocalizedMessage() +")");
             return;
         }
 
@@ -242,7 +243,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
             if(!this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0))
                 this.informActiveMachines(EConnectionEvent.SERVER_PULL, 0); //retry once if server was unreachable
         } catch (NotBoundException | IOException| NumberFormatException ex) {
-            System.err.println("Server unreachable! Not informed about active machines!");
+            System.err.println("Server unreachable! Not informed about active machines! (" +ex.getLocalizedMessage() +")");
         }
     }
     
@@ -273,7 +274,7 @@ public class TCPMachineConnectionService extends java.rmi.server.UnicastRemoteOb
                             stateUpdateService.informMachineConnected(machineId);
                             stateUpdateService.informStateChange(machineId, this.activeMachines.get(machineId).getStatus());
                             i = 10;
-                        } catch (RemoteException e) {
+                        } catch (RemoteException | NullPointerException e) {
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ex) { }

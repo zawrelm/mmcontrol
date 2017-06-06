@@ -22,7 +22,7 @@ float zTarget = NULL;
 
 /* MACHINE CONFIGURATION */
 const float SPEED_FAST = 0.1f;
-const float SPEED_SLOW = 0.001f;
+const float SPEED_SLOW = 0.01f;
 const float LIMIT_X_MIN = -0.2f;
 const float X_POS_STANDARD = 0.0f;
 const float LIMIT_X_MAX = 0.2f;
@@ -274,34 +274,33 @@ void NumerexControl::firstTouchAction(int xMoved, int yMoved, int zMoved)
 	NumerexControl::haltMachine(true);
 	std::cout << "INFO: First touch action activated!\n";
 
-	//TODO: due to rapid reaction of simulation, this is not needed. On the physical machine it must be implemented!
-	/*while(pDevice_SensingHead->IsTutching()) {
+	while(pDevice_SensingHead->IsTutching()) {
 		if(xMoved != 0) {
 			moveX(false, (xMoved > 0), true);
-			moveX(false, false, false);
+			moveX(false, (xMoved > 0), false);
 		}
 		if(yMoved != 0) {
 			moveY(false, (yMoved > 0), true);
-			moveY(false, false, false);
+			moveY(false, (yMoved > 0), false);
 		}
 		if(zMoved != 0) {
 			moveZ(false, (zMoved > 0), true);
-			moveZ(false, false, false);
+			moveZ(false, (zMoved > 0), false);
 		}
 	}
 	
 	if(xMoved != 0) {
 		moveX(false, (xMoved < 0), true);
-		moveX(false, false, false);
+		moveX(false, (xMoved < 0), false);
 	}
 	if(yMoved != 0) {
 		moveY(false, (yMoved < 0), true);
-		moveY(false, false, false);
+		moveY(false, (yMoved < 0), false);
 	}
 	if(zMoved != 0) {
 		moveZ(false, (zMoved < 0), true);
-		moveZ(false, false, false);
-	}*/
+		moveZ(false, (zMoved < 0), false);
+	}
 
 	contact = 2;
 	std::cout << "INFO: First touch action finished!\n";
@@ -324,17 +323,17 @@ void NumerexControl::checkBoundaryReached()
 		std::cout << "INFO: Boundary z reached!\n";
 	}
 
-	if(xTarget != NULL && abs(xTarget - pDevice_AXCarro->GetPosition()) < 0.001f) { //&& abs(xMoving) == 2
+	if(xTarget != NULL && abs(xTarget - pDevice_AXCarro->GetPosition()) < 0.05f) { //&& abs(xMoving) == 2
 		NumerexControl::moveXToPosition(xTarget, false);	//slow down X
 		std::cout << "INFO: Slowly approaching target coordinate x!\n";
 	}
 
-	if(yTarget != NULL && abs(yTarget - pDevice_AYCarro->GetPosition()) < 0.001f) {
+	if(yTarget != NULL && abs(yTarget - pDevice_AYCarro->GetPosition()) < 0.05f) {
 		NumerexControl::moveYToPosition(yTarget, false);	//slow down Y
 		std::cout << "INFO: Slowly approaching target coordinate y!\n";
 	}
 
-	if(zTarget != NULL && abs(zTarget - pDevice_AZCarro->GetPosition()) < 0.001f) {
+	if(zTarget != NULL && abs(zTarget - pDevice_AZCarro->GetPosition()) < 0.05f) {
 		NumerexControl::moveZToPosition(zTarget, false);	//slow down Z
 		std::cout << "INFO: Slowly approaching target coordinate z!\n";
 	}
@@ -355,7 +354,7 @@ bool NumerexControl::moveX(bool fast, bool backward, bool move)
 		xMoving = 0;
 		return true;
 	}
-	if(pDevice_SXPinzaGrueso->IsTutching() && pDevice_SXPinzaFino->IsTutching()) {
+	else if(pDevice_SXPinzaGrueso->IsTutching() && pDevice_SXPinzaFino->IsTutching()) {
 		std::cout << "WARNING: X MOVING DESPITE CLOSED CLIPS ON BOTH MOTORS!\n";
 		//TODO: turn on error light in simulation
 	}
@@ -397,7 +396,7 @@ bool NumerexControl::moveY(bool fast, bool backward, bool move)
 		yMoving = 0;
 		return true;
 	}
-	if(pDevice_SYPinzaGrueso->IsTutching() && pDevice_SYPinzaFino->IsTutching()) {
+	else if(pDevice_SYPinzaGrueso->IsTutching() && pDevice_SYPinzaFino->IsTutching()) {
 		std::cout << "WARNING: Y MOVING DESPITE CLOSED CLIPS ON BOTH MOTORS!\n";
 		//TODO: turn on error light in simulation
 	}
@@ -439,7 +438,7 @@ bool NumerexControl::moveZ(bool fast, bool backward, bool move)
 		zMoving = 0;
 		return true;
 	}
-	if(pDevice_SZPinzaGrueso->IsTutching() && pDevice_SZPinzaFino->IsTutching()) {
+	else if(pDevice_SZPinzaGrueso->IsTutching() && pDevice_SZPinzaFino->IsTutching()) {
 		std::cout << "WARNING: Z MOVING DESPITE CLOSED CLIPS ON BOTH MOTORS!\n";
 		//TODO: turn on error light in simulation
 	}
@@ -636,7 +635,6 @@ void NumerexControl::moveZToPosition(float position, bool fast)
 	/* start movement towards target */
 	if(fast) {
 		NumerexControl::setZFastConnected(true);
-		Sleep(100);
 		NumerexControl::setZSlowConnected(false);
 		zMoving = (position < pDevice_AZCarro->GetPosition() ? -2 : 2);
 		zTarget = position;
@@ -645,7 +643,6 @@ void NumerexControl::moveZToPosition(float position, bool fast)
 	}
 	else {
 		NumerexControl::setZSlowConnected(true);
-		Sleep(100);
 		NumerexControl::setZFastConnected(false);
 		zMoving = (position < pDevice_AZCarro->GetPosition() ? -1 : 1);
 		zTarget = NULL;

@@ -6,12 +6,16 @@
 package mmcontrol.uicontrol.beans;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import mmcontrol.uicontrol.exceptions.UserNotFoundException;
 import mmcontrol.uicontrol.model.Probe;
 import mmcontrol.uicontrol.model.ProbeProgram;
 import mmcontrol.uicontrol.model.ProbeProgramExecution;
@@ -25,9 +29,12 @@ import org.icefaces.application.PushRenderer;
  * @author Michael Zawrel
  */
 @ManagedBean(name="sessionCtrl")
-@SessionScoped
+@ViewScoped
 public class ProbeSessionCtrl implements Serializable {
     
+    @ManagedProperty(value="#{mainCtrl}")
+    private MainCtrl main;
+
     @ManagedProperty(value="#{loginCtrl}")
     private LoginCtrl loginCtrl;
     
@@ -42,13 +49,21 @@ public class ProbeSessionCtrl implements Serializable {
 
     }
 
-        @PostConstruct
+    @PostConstruct
     private void init() {
-        System.out.println("ProbeSessionCtrl constructed");
+        try {
+            this.main.getUserMgmt().setUserProbeSessionBean(this);
+            System.out.println("ProbeSessionCtrl constructed");
+        } catch (UserNotFoundException ex) {
+            System.out.println("ProbeSessionCtrl constructed but probe management not activated");
+        }
     }
     
     @PreDestroy
     private void cleanup() {
+        try {
+            this.main.getUserMgmt().setUserProbeSessionBean(null);
+        } catch (UserNotFoundException ex) { }
         System.out.println("ProbeSessionCtrl destroyed");
     }
 
@@ -81,11 +96,26 @@ public class ProbeSessionCtrl implements Serializable {
     public void stopProbe() {
         this.loginCtrl.getUser().getCurrentSession().endUserMachineSession();
         this.loginCtrl.getSelectedMachine().setState(EMachineState.CONNECTED);
+        System.out.println("Probe stopped on machine: " +this.loginCtrl.getSelectedMachine().getId());
         this.loginCtrl.setSelectedMachine(null);
         this.activeSession = null;
+        System.out.print("Remove operationCtrl from context...");
         FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove("operationCtrl");
-        System.out.println("Probe stopped on machine: " +this.loginCtrl.getSelectedMachine().getId());
-        PushRenderer.render("session");
+        System.out.print("done! - ");
+        PushRenderer.getPortableRenderer().render("session");
+        System.out.println("rendered!");
+    }
+
+    public MainCtrl getMain() {
+        return this.main;
+    }
+
+    public void setMain(MainCtrl main) {
+        this.main = main;
+    }
+
+    public LoginCtrl getLoginCtrl() {
+        return this.loginCtrl;
     }
 
     public void setLoginCtrl(LoginCtrl loginCtrl) {

@@ -180,14 +180,21 @@ public class StoredMachines {
     public void endMachineSession(long machineId) {
         if(this.machines.containsKey(machineId)) { //if machine exists
             try {
-                User user = this.main.getUserMgmt().getUserHTTPSessionObject(machineId).getUser(); //get operator of current UserMachineSession
-                this.main.getUserMgmt().getUser(user.getEmail()).getCurrentSession().endUserMachineSession(); //close UMS
-            } catch(NullPointerException | UserNotFoundException ex) {}
+                System.out.println("Stop probe:1");
+                LoginCtrl userSession = this.main.getUserMgmt().getUserHTTPSessionObject(machineId);
+                System.out.println("Stop probe:2");
+                this.main.getUserMgmt().getUser(userSession.getUser().getEmail()).getCurrentSession().endUserMachineSession(); //close UMS
+                System.out.println("Stop probe:3");
+                this.main.getUserMgmt().getProbeSessionBean(machineId).stopProbe();
+            } catch(NullPointerException | UserNotFoundException ex) {
+                System.out.println("Couldn't end user session for machine with ID " +machineId 
+                        + " or no user session was active! (" +ex.getLocalizedMessage() +")");
+            }
 
             this.machines.get(machineId).endSession();
         }
         else {
-            System.out.println("Error at ending session for machine with ID " +machineId);
+            System.out.println("Machine with ID " +machineId +" tried to disconnect, but this machine is unknown.");
         }
     }
     

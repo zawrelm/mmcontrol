@@ -14,12 +14,14 @@ import mmcontrol.uicontrol.model.User;
 public class StoredUsers implements Serializable {
     
     private HashMap<User, LoginCtrl> users;
+    private HashMap<User, ProbeSessionCtrl> activeProbeSessions;
     
     /**
      * The constructor initializes the ArrayList.
      */
     public StoredUsers() {
         this.users = new HashMap<>();
+        this.activeProbeSessions = new HashMap<>();
         
         //TODO: read list of existing users from database
         /**for(int i = 1; i < 100; i++) {
@@ -32,7 +34,7 @@ public class StoredUsers implements Serializable {
         }*/
         
         User user = new User("john@doe.com", "test");
-        user.setId(1);
+        user.setId(users.size()+1);
         user.setFirstname("John");
         user.setLastname("Doe");
         user.setTitle("PhD.");
@@ -46,6 +48,7 @@ public class StoredUsers implements Serializable {
      */
     public void addUser(User user) {
         this.users.put(user, null);
+        this.activeProbeSessions.put(user, null);
     }
     
     /**
@@ -90,11 +93,19 @@ public class StoredUsers implements Serializable {
         return this.users;
     }
     
+    public void setActiveProbeSessions(HashMap<User, ProbeSessionCtrl> sessions) {
+        this.activeProbeSessions = sessions;
+    }
+    
+    public HashMap<User, ProbeSessionCtrl> getActiveProbeSessions() {
+        return this.activeProbeSessions;
+    }
+    
     /**
      * Returns the SessionBean of a logged-in User connected to the given Machine.
      * 
      * @param machineId
-     * @return user
+     * @return user session bean
      * @throws mmcontrol.uicontrol.exceptions.UserNotFoundException
      */
     public LoginCtrl getUserHTTPSessionObject(long machineId) throws UserNotFoundException {
@@ -114,5 +125,32 @@ public class StoredUsers implements Serializable {
         }
         else throw new UserNotFoundException();
     }
+
+    /**
+     * Returns the ProbeSessionBean of a User currently working on the given Machine.
+     * 
+     * @param machineId
+     * @return user probe bean
+     * @throws mmcontrol.uicontrol.exceptions.UserNotFoundException
+     */
+    public ProbeSessionCtrl getProbeSessionBean(long machineId) throws UserNotFoundException {
+        for(User user : this.activeProbeSessions.keySet()) {
+            ProbeSessionCtrl probeObj = this.activeProbeSessions.get(user);
+            if(probeObj != null && probeObj.getActiveSession() != null) {
+                return probeObj;
+            }
+        }
+        throw new UserNotFoundException();
+    }
     
+    public void setUserProbeSessionBean(ProbeSessionCtrl sessionBean) throws UserNotFoundException {
+        //System.out.print("Add ProbeSessionBean for User to list...");
+        if(this.users.containsKey(sessionBean.getLoginCtrl().getUser())) {
+            //System.out.print("User found...");
+            this.activeProbeSessions.put(sessionBean.getLoginCtrl().getUser(), sessionBean);
+            //System.out.println("done adding ProbeSessionBean!");
+        }
+        else throw new UserNotFoundException();
+    }
+
 }
